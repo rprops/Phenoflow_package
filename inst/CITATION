@@ -1,0 +1,13 @@
+year <- sub("-.*", "", meta$Date)
+note <- sprintf("R package version %s", meta$Version)
+
+bibentry(bibtype = "Manual",
+         title = "Phenoflow",
+         author = c(person("Ruben", "Props"),
+                    person("Pieter", "Monsieurs"),
+                    person("Mohamed", "Mysara"),
+                    person("Lieven", "Clement"),
+                    person("Nico", "Boon")),
+         year = year,
+         note = note,
+         url = "https://github.com/rprops/Phenoflow_package")

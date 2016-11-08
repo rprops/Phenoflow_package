@@ -1,7 +1,7 @@
 Package: Phenoflow
 Title: Advanced analysis of microbial flow cytometry data.
 Version: 1.0
-Authors@R: person("Ruben", "Props", email = "Ruben.Props@UGent.be", role = c("aut", "cre"))
+Authors@R: c(person("Ruben", "Props", email = "Ruben.Props@UGent.be", role = c("aut", "cre")),person("Frederiek-Maarten", "Kerckhof", email = "FrederiekMaarten.Kerckhof@UGent.be", role = "ctb"))
 BugReports: https://github.com/rprops/PhenoFlow/issues
 Description: Set of functions to calculate diversity estimates of microbial
     communities from FCM data (described in: doi: 10.1111/2041-210X.12607).
@@ -12,8 +12,12 @@ Imports:
     MESS,
     ggplot2,
     boot,
-    gridExtra
+    gridExtra,
+    flowCore,
+    flowViz,
+    easyGgplot2
 License: GPL-3 (GNU General Public License version 3)
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 5.0.1
+Date: 2016
