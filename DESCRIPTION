@@ -9,7 +9,8 @@ Remotes:
     kassambara/easyGgplot2
 Depends:
     R (>= 3.3.0)
-    setRepositories(ind=1:2)
+Imports:
+    setRepositories(ind=1:2),
     vegan,
     MESS,
     ggplot2,
@@ -18,8 +19,7 @@ Depends:
     devtools,
     biocViews : flowcytometry,
     flowViz,
-    flowCore
-Imports:  
+    flowCore 
     easyGgplot2
 License: GPL-3 (GNU General Public License version 3)
 Encoding: UTF-8
