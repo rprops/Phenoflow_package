@@ -5,7 +5,6 @@ Authors@R: c(person("Ruben", "Props", email = "Ruben.Props@UGent.be", role = c("
 BugReports: https://github.com/rprops/PhenoFlow/issues
 Description: Set of functions to calculate diversity estimates of microbial
     communities from FCM data (described in: doi: 10.1111/2041-210X.12607).
-biocViews:
 Remotes:
     kassambara/easyGgplot2
 Depends:
@@ -20,6 +19,7 @@ Imports:
     flowViz,
     flowCore, 
     easyGgplot2
+biocViews: Infrastructure, FlowCytometry, CellBasedAssays
 License: GPL-3 (GNU General Public License version 3)
 Encoding: UTF-8
 LazyData: true
