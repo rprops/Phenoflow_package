@@ -10,7 +10,6 @@ Remotes:
 Depends:
     R (>= 3.3.0)
 Imports:
-    setRepositories(ind=1:2),
     vegan,
     MESS,
     ggplot2,
@@ -19,7 +18,7 @@ Imports:
     devtools,
     biocViews : flowcytometry,
     flowViz,
-    flowCore 
+    flowCore, 
     easyGgplot2
 License: GPL-3 (GNU General Public License version 3)
 Encoding: UTF-8
