@@ -13,9 +13,11 @@ Imports:
     ggplot2,
     boot,
     gridExtra,
-    flowCore,
-    flowViz,
-    easyGgplot2
+    devtools,
+    source("https://bioconductor.org/biocLite.R"),
+    biocLite("flowCore"),
+    biocLite("flowViz"),
+    install_github("kassambara/easyGgplot2")
 License: GPL-3 (GNU General Public License version 3)
 Encoding: UTF-8
 LazyData: true
