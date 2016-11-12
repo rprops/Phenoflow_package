@@ -14,9 +14,9 @@ Imports:
     boot,
     gridExtra,
     devtools,
-    source("https://bioconductor.org/biocLite.R"),
-    biocLite("flowCore"),
-    biocLite("flowViz"),
+    biocViews : flowcytometry,
+    flowViz,
+    flowCore,
     install_github("kassambara/easyGgplot2")
 License: GPL-3 (GNU General Public License version 3)
 Encoding: UTF-8
