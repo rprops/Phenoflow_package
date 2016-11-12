@@ -8,6 +8,11 @@ Description: Set of functions to calculate diversity estimates of microbial
 Depends:
     R (>= 3.3.0)
 Imports:
+    Imports: ...,
+        easyGgplot2,
+        ...
+    Remotes: kassambara/easyGgplot2
+    setRepositories(ind=1:2)
     vegan,
     MESS,
     ggplot2,
@@ -17,6 +22,8 @@ Imports:
     biocViews : flowcytometry,
     flowViz,
     flowCore,
+    devtools::use_package("easyGgplot2")
+    devtools::document()
     install_github("kassambara/easyGgplot2")
 License: GPL-3 (GNU General Public License version 3)
 Encoding: UTF-8
