@@ -6,6 +6,11 @@ r:
   - oldrel
   - release
   - devel
+  
+bioc_required: true
+bioc_packages:
+  - flowCore
+  - flowViz
 
 before_deploy:
   - R -e "install.packages('roxygen2', repos = 'http://cran.rstudio.com')"
