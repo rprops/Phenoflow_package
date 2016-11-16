@@ -17,7 +17,7 @@ FCS_resample(x, sample = 0, replace = FALSE)
 This function resamples each sample to an equal number of cells.
 }
 \examples{
-FCS_resample()
+FCS_resample(x)
 }
 \keyword{fcm}
 \keyword{resampling,}

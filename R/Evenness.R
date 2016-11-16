@@ -8,7 +8,7 @@
 #' @keywords evenness, fcm, alpha
 #' @export
 #' @examples
-#' Evenness()
+#' Evenness(x)
 
 Evenness <- function(x,d=3,n=1,plot=FALSE){
   x<- x@basis/apply(x@basis, 1, max)

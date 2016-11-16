@@ -8,7 +8,7 @@
 #' @keywords CV, fcm, coefficient of variance
 #' @export
 #' @examples
-#' So()
+#' CV(x)
 #' 
 
 CV <- function(x,d=3,n=1,plot=FALSE){

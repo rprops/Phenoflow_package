@@ -19,7 +19,7 @@ Evenness(x, d = 3, n = 1, plot = FALSE)
 This function calculates Pareto evenness from FCM data
 }
 \examples{
-Evenness()
+Evenness(x)
 }
 \keyword{alpha}
 \keyword{evenness,}

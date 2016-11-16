@@ -19,7 +19,7 @@ So(x, d = 3, n = 1, plot = FALSE)
 This function calculates Structural organisation from FCM data according to Koch et al. 2014.
 }
 \examples{
-So()
+So(x)
 }
 \keyword{So,}
 \keyword{fcm,}

@@ -5,7 +5,7 @@
 #' @keywords resampling, fcm
 #' @export
 #' @examples
-#' trip()
+#' trip(x)
 
 trip <- function(x,n=3){
   y = c(); s = c()

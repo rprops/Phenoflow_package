@@ -8,7 +8,7 @@
 #' @keywords So, fcm, structural organization
 #' @export
 #' @examples
-#' So()
+#' So(x)
 
 So <- function(x,d=3,n=1,plot=FALSE){
   x<- x@basis/apply(x@basis, 1, max)

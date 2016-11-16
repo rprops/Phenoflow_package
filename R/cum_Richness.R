@@ -6,7 +6,7 @@
 #' @keywords cumulative richness, fcm, alpha
 #' @export
 #' @examples
-#' cum_Richness()
+#' cum_Richness(x)
 
 cum_Richness <- function(x, d=3){
   x = round(x,d)

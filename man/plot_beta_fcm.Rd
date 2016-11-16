@@ -20,7 +20,7 @@ plot_beta_fcm(x, color = NA, shape = NA, labels = c("Factor 1",
 This function visualizes the beta diversity analysis by beta_div_fcm()
 }
 \examples{
-plot_beta_fcm()
+plot_beta_fcm(x)
 }
 \keyword{alpha}
 \keyword{diversity,}

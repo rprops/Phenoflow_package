@@ -10,7 +10,7 @@
 #' @keywords online, fcm, time series analysis FCM
 #' @export
 #' @examples
-#' time_discretization()
+#' time_discretization(x)
 
 time_discretization <- function(x,analysis.length,create=FALSE,start=0,time.interval){
   for(j in 1:length(x)){

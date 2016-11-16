@@ -7,7 +7,7 @@
 #' @keywords resampling, fcm
 #' @export
 #' @examples
-#' FCS_resample()
+#' FCS_resample(x)
 
 FCS_resample <- function(x, sample=0, replace=FALSE){
   sample_distr <- data.frame(counts=fsApply(x,FUN=function(x) nrow(x),use.exprs=TRUE))

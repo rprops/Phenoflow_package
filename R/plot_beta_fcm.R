@@ -8,7 +8,7 @@
 #' @keywords diversity, fcm, alpha
 #' @export
 #' @examples
-#' plot_beta_fcm()
+#' plot_beta_fcm(x)
 
 plot_beta_fcm <- function(x, color=NA,shape=NA,labels=c("Factor 1","Factor 2"),legend.pres=NULL){
   legend.ops <- NULL

@@ -15,7 +15,7 @@ trip(x, n = 3)
 Small (inefficient) function for taking mean/sd
 }
 \examples{
-trip()
+trip(x)
 }
 \keyword{fcm}
 \keyword{resampling,}

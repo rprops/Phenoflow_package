@@ -28,7 +28,7 @@ This function performs beta diversity analysis on FCM data.
 The output can be fed into the plot.beta.fcm() function for visualization.
 }
 \examples{
-beta_div_fcm()
+beta_div_fcm(x)
 }
 \keyword{betadiversity,}
 \keyword{fcm}
