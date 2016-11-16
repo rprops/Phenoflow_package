@@ -10,9 +10,9 @@
 #' @keywords online, fcm, time series analysis FCM
 #' @export
 #' @examples
-#' time.discretization()
+#' time_discretization()
 
-time.discretization <- function(x,analysis.length,create=FALSE,start=0,time.interval){
+time_discretization <- function(x,analysis.length,create=FALSE,start=0,time.interval){
   for(j in 1:length(x)){
     number <- max(round((round(analysis.length/time.interval,0)+1)/10,0))
     old.wd <- getwd()

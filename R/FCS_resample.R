@@ -7,9 +7,9 @@
 #' @keywords resampling, fcm
 #' @export
 #' @examples
-#' FCS.resample()
+#' FCS_resample()
 
-FCS.resample <- function(x, sample=0, replace=FALSE){
+FCS_resample <- function(x, sample=0, replace=FALSE){
   sample_distr <- data.frame(counts=fsApply(x,FUN=function(x) nrow(x),use.exprs=TRUE))
   p1 <- easyGgplot2::ggplot2.histogram(data=sample_distr , xName='counts',
                           fill="white", color="black",
