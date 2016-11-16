@@ -8,32 +8,37 @@
 #' @keywords CV, fcm, coefficient of variance
 #' @export
 #' @examples
-#' So()
+#' CV()
 #' 
 
-CV <- function(x,d=3,n=1,plot=FALSE){
+CV <- function(x, d=3, n=1, plot=FALSE)
+{
   x <- x@basis/apply(x@basis, 1, max)
-  CV= as.numeric(matrix(nrow=length(x[,1]), ncol=1))
-  for(i in 1:length(x[,1])){
-    CV[i] = 100*stats::sd(round(x[i,],d)[round(x[i,],d)!=0])/stats::mean(round(x[i,],d)[round(x[i,],d)!=0])
+  CV = as.numeric(matrix(nrow=length(x[, 1]), ncol=1))
+  for (i in 1:length(x[, 1]))
+  {
+    CV[i] = 100 * stats::sd(round(x[i, ], d)[round(x[i, ], d) != 0])/
+      stats::mean(round(x[i, ], d)[round(x[i, ], d) != 0])
   }
-  if(n>1){
-    results = matrix(nrow=length(x[,1])/3, ncol=2)
-    results[,1]=trip(CV,n)[,1]
-    results[,2]=trip(CV,n)[,2]
-    results=data.frame(results)
-    colnames(results)=c("CV","sdev")
-    rownames(results) = trip_col(attr(x,"dimnames")[[1]],n)
-  }
-  else{
+  if (n > 1)
+  {
+    results = matrix(nrow=length(x[, 1])/3, ncol=2)
+    results[, 1] = trip(CV, n)[, 1]
+    results[, 2] = trip(CV, n)[, 2]
+    results = data.frame(results)
+    colnames(results) = c("CV", "sdev")
+    rownames(results) = trip_col(attr(x, "dimnames")[[1]], n)
+  } else
+  {
     results <- CV
     results = data.frame(results)
-    colnames(results)=c("CV")
-    rownames(results)=attr(x,"dimnames")[[1]]
+    colnames(results) = c("CV")
+    rownames(results) = attr(x, "dimnames")[[1]]
   }
-  if (plot==TRUE) {
-    plot(Coef.var.fbasis$CV,pch=21,bg=adjustcolor("blue",0.7),
-         col=adjustcolor("blue",0.7),cex=1.5,las=1,ylab="CV",xlab="Samples")
+  if (plot == TRUE)
+  {
+    plot(Coef.var.fbasis$CV, pch=21, bg=adjustcolor("blue", 0.7),
+         col=adjustcolor("blue",0.7), cex=1.5, las=1, ylab="CV", xlab="Samples")
   }
   return(results)
 }
