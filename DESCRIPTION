@@ -8,8 +8,9 @@ Description: Set of functions to calculate diversity estimates of microbial
 Remotes:
     kassambara/easyGgplot2
     lievenclement/flowFDA
+    Bioconductor-mirror/flowFP
 Depends:
-    R (>= 3.3.0)
+    R (>= 3.3.0),
 Imports:
     vegan,
     MESS,
@@ -22,9 +23,8 @@ Imports:
     multcomp,
     mclust,
     devtools,
-    flowFP,
     MASS
-biocViews: CellBasedAssays, FlowCytometry, Infrastructure, Software
+biocViews: CellBasedAssays, FlowCytometry, Infrastructure, Software, Clustering
 License: GPL-3 (GNU General Public License version 3)
 Encoding: UTF-8
 LazyData: true
