@@ -8,7 +8,6 @@ Description: Set of functions to calculate diversity estimates of microbial
 Remotes:
     kassambara/easyGgplot2
     lievenclement/flowFDA
-    Bioconductor-mirror/flowFP
 Depends:
     R (>= 3.3.0),
 Imports:
