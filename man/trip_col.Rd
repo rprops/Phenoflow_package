@@ -14,9 +14,7 @@ trip_col(x, n = 3)
 \description{
 Small (inefficient) function for extracting sample names associated with replicates
 }
-\examples{
-trip()
-}
 \keyword{fcm}
 \keyword{resampling,}
+\keyword{trip()}
 

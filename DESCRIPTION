@@ -20,7 +20,9 @@ Imports:
     devtools,
     MASS,
     flowViz,
-    flowCore
+    flowCore,
+    breakaway,
+    phyloseq
 biocViews: CellBasedAssays, FlowCytometry, Infrastructure, Software, Clustering
 License: GPL-3 (GNU General Public License version 3)
 Encoding: UTF-8

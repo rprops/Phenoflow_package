@@ -15,15 +15,12 @@ time_discretization(x, analysis.length, create = FALSE, start = 0,
 \item{create}{Do you want to make a new folder for the new flowframes? Defaults to FALSE.}
 
 \item{start}{Vector of length n(x) that indicates for each sample at what time point it should start discretisizing.
-(e.g., first 10 minutes are irrelevant, start = 10*60s)}
+(e.g., first 10 minutes are irrelevant, start = 10*60)}
 
 \item{time.interval}{Bin size of each new FCS file. For example, time.interval = 10 will make new FCS files of 10 second intervals.}
 }
 \description{
 This function subsets the input frames based on analysis time. Developped for analysis of on-line time series data.
-}
-\examples{
-time_discretization(x)
 }
 \keyword{FCM}
 \keyword{analysis}
@@ -31,4 +28,5 @@ time_discretization(x)
 \keyword{online,}
 \keyword{series}
 \keyword{time}
+\keyword{time_discretization(x)}
 

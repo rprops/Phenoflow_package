@@ -15,18 +15,18 @@ Diversity_16S <- function(x, R=999){
       \tare taxa in your phyloseq object, please verify.\n")
   if (!requireNamespace("breakaway", quietly = TRUE)) {
     cat("Installing breakaway package for richness estimation")
-    install.packages("breakaway")
+    utils::install.packages("breakaway")
     require("breakaway")
   }
   if (!requireNamespace("phyloseq", quietly = TRUE)) {
     cat("Installing phyloseq package")
     source("https://bioconductor.org/biocLite.R")
-    biocLite("phyloseq")
+    BiocInstaller::biocLite("phyloseq")
     require("phyloseq")
   }
   # Matrix for storing data
-  DIV <- matrix(nrow = nsamples(x), ncol = 10)
-  row.names(DIV) <- sample_names(x)
+  DIV <- matrix(nrow = phyloseq::nsamples(x), ncol = 10)
+  row.names(DIV) <- phyloseq::sample_names(x)
   
   # Diversity functions
   D0.boot <- function(x) sum(x!=0)
@@ -34,10 +34,10 @@ Diversity_16S <- function(x, R=999){
   D1.boot <- function(x) exp(-sum(x*log(x)))
   
   # Start resampling
-  for(i in 1:nsamples(x)){
+  for(i in 1:phyloseq::nsamples(x)){
     temp.D0 <- c(); temp.D1 <-c(); temp.D2 <- c()
-    temp.phy <- prune_samples(x=x, samples=sample_names(x)[i])
-    cat(paste0(date(),"\tStarting sample ",sample_names(x)[i],"\n"))
+    temp.phy <- prune_samples(x=x, samples=phyloseq::sample_names(x)[i])
+    cat(paste0(date(),"\tStarting sample ",phyloseq::sample_names(x)[i],"\n"))
     for(j in 1:R){
       temp <- phyloseq::rarefy_even_depth(temp.phy, verbose=FALSE, replace=TRUE)
       # Calculate frequencies
@@ -55,7 +55,7 @@ Diversity_16S <- function(x, R=999){
         DIV[i,9] <- mean(temp.D2)
         DIV[i,10] <- sd(temp.D2)
         remove(temp.D0, temp.D1, temp.D2)
-        cat(paste0(date(),"\tDone with sample ",sample_names(x)[i],"\n"))
+        cat(paste0(date(),"\tDone with sample ", phyloseq::sample_names(x)[i],"\n"))
       }
     }
     # Perform breakaway for richness estimation
@@ -69,6 +69,6 @@ Diversity_16S <- function(x, R=999){
     DIV[i,6] <- rich.chao$seest
   }
   colnames(DIV) = c("D0","se.D0","D0.bre","se.D0.bre","D0.chao","se.D0.chao","D1","sd.D1","D2","sd.D2")
-  cat(date(),"\t Done with all", nsamples(x),"samples\n")
+  cat(date(),"\t Done with all", phyloseq::nsamples(x),"samples\n")
   return(DIV)
 }
