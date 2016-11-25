@@ -39,11 +39,11 @@ Diversity_16S <- function(x, R=999){
       # Store diversities at the end of resampling run  
       if(j==R){
         DIV[i,1] <- mean(temp.D0)
-        DIV[i,2] <- sd(temp.D0)
+        DIV[i,2] <- stats::sd(temp.D0)
         DIV[i,7] <- mean(temp.D1)
-        DIV[i,8] <- sd(temp.D1)
+        DIV[i,8] <- stats::sd(temp.D1)
         DIV[i,9] <- mean(temp.D2)
-        DIV[i,10] <- sd(temp.D2)
+        DIV[i,10] <- stats::sd(temp.D2)
         remove(temp.D0, temp.D1, temp.D2)
         cat(paste0(date(),"\tDone with sample ", phyloseq::sample_names(x)[i],"\n"))
       }

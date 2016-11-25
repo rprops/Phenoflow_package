@@ -40,7 +40,7 @@ Diversity <- function(x, d=4, plot=FALSE, R=999){
     p <- ggplot2::ggplot(results, ggplot2::aes(x=seq(1:nrow(results)),y=D2)) + ggplot2::geom_point(shape=16,size=4,alpha=0.7,colour="blue")+
       ggplot2::geom_point(colour = "grey90", size = 1.5) + ggplot2::labs(x="Samples",y="Phenotypic diversity - D2")+
       ggplot2::geom_line(colour="blue",alpha=0.4,linetype=2)+
-      ggplot2::geom_errorbar(aes(ymin=D2-sd.D2,ymax=D2+sd.D2), width=0.25)+
+      ggplot2::geom_errorbar(ggplot2::aes(ymin=D2-sd.D2,ymax=D2+sd.D2), width=0.25)+
       ggplot2::theme_bw()
     print(p)
   }
