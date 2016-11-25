@@ -20,7 +20,6 @@ This function calculates the coefficient of variance from the fingerprint genera
 }
 \examples{
 CV(x)
-
 }
 \keyword{CV,}
 \keyword{coefficient}
