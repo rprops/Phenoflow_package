@@ -21,7 +21,7 @@ plot_beta_fcm <- function(x, color=NA,shape=NA,labels=c("Factor 1","Factor 2"),l
   PcoA <- as.data.frame(x$points)
   names(PcoA)[1:2] <- c('Axis1', 'Axis2')
   PcoA <- cbind(PcoA, color, shape)
-  ggplot2::ggplot(PcoA, aes(x = Axis1, y = Axis2, color = color, shape = shape))+ 
+  ggplot2::ggplot(PcoA, ggplot2::aes(x = Axis1, y = Axis2, color = color, shape = shape))+ 
     ggplot2::geom_point(alpha = 0.7, size = 4) + 
     ggplot2::geom_point(colour = "grey90", size = 1.5)+
     ggplot2::scale_color_manual(values = c("#a65628", "red", "#ffae19",
