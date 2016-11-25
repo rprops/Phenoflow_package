@@ -14,7 +14,7 @@ FCS_resample(x, sample = 0, replace = FALSE)
 \item{replace}{Do you want to resample with or without replacement? Defaults to FALSE, which is without replacement.}
 }
 \description{
-This function resamples each sample to an equal number of cells.
+This function resamples each sample to an equal number of cells
 }
 \keyword{fcm}
 \keyword{resampling,}

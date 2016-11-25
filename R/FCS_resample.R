@@ -1,6 +1,6 @@
 #' Resampling function for flowSet objects
 #'
-#' This function resamples each sample to an equal number of cells.
+#' This function resamples each sample to an equal number of cells
 #' @param x flowSet object.
 #' @param sample Desired sample size. Defaults to minimum sample size.
 #' @param replace Do you want to resample with or without replacement? Defaults to FALSE, which is without replacement.

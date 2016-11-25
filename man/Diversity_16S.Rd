@@ -15,7 +15,7 @@ Diversity_16S(x, R = 999)
 This function calculates Hill diversity metrics from 16S amplicon data (in phyloseq format).
 D0 (richness) is calculated with three methods: 1) Observed richness, 2) Chao1 estimator
 3) breakaway method (Willis and Bunge 2016). D1 (exponential of Shannon entropy)
-and D2 (inverse Simpson index) are respectively Hill order 1 and 2.
+and D2 (inverse Simpson index) are respectively Hill order 1 and 2
 Errors for D1 and D2 are calculated by bootstrapping.
 }
 \keyword{alpha}
