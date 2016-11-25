@@ -24,12 +24,12 @@ Diversity <- function(x, d=4, plot=FALSE, R=999){
   ### D1
   D1 = apply(x,1,FUN=function(x) {
     x = round(x,d);x<-x[x!=0];
-    boot::boot(data=x, statistic=D1.boot, R=R, weights=x)
+    boot::boot(data=x, statistic=D1.boot, R=R)
   })
   ### D2
   D2 = apply(x,1,FUN=function(x) {
     x = round(x,d);x<-x[x!=0];
-    boot::boot(data=x, statistic=D2.boot, R=R, weights=x)
+    boot::boot(data=x, statistic=D2.boot, R=R)
   })
   results <- data.frame(Sample_name=attr(x,"dimnames")[[1]],
                         D0, 
