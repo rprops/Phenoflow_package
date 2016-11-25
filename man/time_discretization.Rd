@@ -28,5 +28,4 @@ This function subsets the input frames based on analysis time. Developped for an
 \keyword{online,}
 \keyword{series}
 \keyword{time}
-\keyword{time_discretization(x)}
 
