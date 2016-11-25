@@ -2,7 +2,7 @@
 % Please edit documentation in R/CV.R
 \name{CV}
 \alias{CV}
-\title{Calculating coefficient of variance (CV) of fingerprints from FCM data.}
+\title{Calculating coefficient of variance (CV) of fingerprints from FCM data}
 \usage{
 CV(x, d = 3, n = 1, plot = FALSE)
 }

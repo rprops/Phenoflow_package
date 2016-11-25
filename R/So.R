@@ -28,8 +28,8 @@ So <- function(x,d=3,n=1,plot=FALSE){
     rownames(results)=attr(x,"dimnames")[[1]]
   }
   if (plot==TRUE) {
-    graphics::plot(Structural.organization.fbasis$Organisation,pch=21,
-         bg=adjustcolor("blue",0.7),col=adjustcolor("blue",0.7),cex=1.5,
+    graphics::plot(results$Organisation,pch=21,
+         bg=grDevices::adjustcolor("blue",0.7),col=grDevices::adjustcolor("blue",0.7),cex=1.5,
          las=1,ylab="SO",xlab="Samples")
   }
   return(results)

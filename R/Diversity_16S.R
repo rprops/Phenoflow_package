@@ -13,17 +13,7 @@
 Diversity_16S <- function(x, R=999){
   cat("\t**WARNING** this functions assumes that rows are samples and columns
       \tare taxa in your phyloseq object, please verify.\n")
-  if (!requireNamespace("breakaway", quietly = TRUE)) {
-    cat("Installing breakaway package for richness estimation")
-    utils::install.packages("breakaway")
-    require("breakaway")
-  }
-  if (!requireNamespace("phyloseq", quietly = TRUE)) {
-    cat("Installing phyloseq package")
-    source("https://bioconductor.org/biocLite.R")
-    BiocInstaller::biocLite("phyloseq")
-    require("phyloseq")
-  }
+  
   # Matrix for storing data
   DIV <- matrix(nrow = phyloseq::nsamples(x), ncol = 10)
   row.names(DIV) <- phyloseq::sample_names(x)
@@ -36,7 +26,7 @@ Diversity_16S <- function(x, R=999){
   # Start resampling
   for(i in 1:phyloseq::nsamples(x)){
     temp.D0 <- c(); temp.D1 <-c(); temp.D2 <- c()
-    temp.phy <- prune_samples(x=x, samples=phyloseq::sample_names(x)[i])
+    temp.phy <- phyloseq::prune_samples(x=x, samples=phyloseq::sample_names(x)[i])
     cat(paste0(date(),"\tStarting sample ",phyloseq::sample_names(x)[i],"\n"))
     for(j in 1:R){
       temp <- phyloseq::rarefy_even_depth(temp.phy, verbose=FALSE, replace=TRUE)

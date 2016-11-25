@@ -31,13 +31,13 @@ Diversity <- function(x, d=4, plot=FALSE, R=999){
   })
   results <- data.frame(Sample_name=attr(x,"dimnames")[[1]],
                         D0, 
-                        t(data.frame(lapply(D1,FUN=function(x) c(mean(x$t),sd(x$t))))),
-                        t(data.frame(lapply(D2,FUN=function(x) c(mean(x$t),sd(x$t))))))
+                        t(data.frame(lapply(D1,FUN=function(x) c(mean(x$t),stats::sd(x$t))))),
+                        t(data.frame(lapply(D2,FUN=function(x) c(mean(x$t),stats::sd(x$t))))))
   colnames(results) = c("Sample_name","D0","D1","sd.D1","D2",
                         "sd.D2")
   rownames(results) = attr(x,"dimnames")[[1]]
   if (plot==TRUE) {
-    p <- ggplot2::ggplot(results, aes(x=seq(1:nrow(results)),y=D2)) + ggplot2::geom_point(shape=16,size=4,alpha=0.7,colour="blue")+
+    p <- ggplot2::ggplot(results, ggplot2::aes(x=seq(1:nrow(results)),y=D2)) + ggplot2::geom_point(shape=16,size=4,alpha=0.7,colour="blue")+
       ggplot2::geom_point(colour = "grey90", size = 1.5) + ggplot2::labs(x="Samples",y="Phenotypic diversity - D2")+
       ggplot2::geom_line(colour="blue",alpha=0.4,linetype=2)+
       ggplot2::geom_errorbar(aes(ymin=D2-sd.D2,ymax=D2+sd.D2), width=0.25)+

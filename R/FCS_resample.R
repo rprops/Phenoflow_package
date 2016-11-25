@@ -8,17 +8,14 @@
 #' @export
 
 FCS_resample <- function(x, sample=0, replace=FALSE){
-  sample_distr <- data.frame(counts=fsApply(x,FUN=function(x) nrow(x),use.exprs=TRUE))
+  sample_distr <- data.frame(counts=flowCore::fsApply(x,FUN=function(x) nrow(x),use.exprs=TRUE))
   ### Make plot if package easyGgplot2 is installed
-  if (requireNamespace("easyGgplot2", quietly = TRUE)) {
-    p1 <- easyGgplot2::ggplot2.histogram(data=sample_distr , xName='counts',
+  p1 <- easyGgplot2::ggplot2.histogram(data=sample_distr , xName='counts',
                                          fill="white", color="black",
                                          linetype="longdash",addMeanLine=TRUE, meanLineColor="red",
                                          meanLineType="dashed", meanLineSize=1)+
-      theme_bw() + labs(y="Frequency", title="Original count distribution")
-    print(p1)
-  }
-  else cat(paste0("Install package easyGgplot2 if you want a histogram plot"))
+      ggplot2::theme_bw() + ggplot2::labs(y="Frequency", title="Original count distribution")
+  print(p1)
   if(sample==0) sample <- min(flowCore::fsApply(x=x,FUN=function(x) nrow(x),use.exprs=TRUE))
   ## Remove all .fcs files with less observations than the specified sample
   x <- x[fsApply(x=x,FUN=function(x) nrow(x),use.exprs=TRUE)>sample]
