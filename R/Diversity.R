@@ -7,7 +7,6 @@
 #' @param R Number of bootstraps to conduct. Defaults to 999
 #' @keywords diversity, fcm, alpha
 #' @export
-#' Diversity(x)
 
 Diversity <- function(x, d=4, plot=FALSE, R=999){
   D2.boot <- function(x,i) 1/sum((x[i]/sum(x[i]))^2)

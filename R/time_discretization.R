@@ -9,7 +9,6 @@
 #' @param time.interval Bin size of each new FCS file. For example, time.interval = 10 will make new FCS files of 10 second intervals.
 #' @keywords online, fcm, time series analysis FCM
 #' @export
-#' time_discretization(x, analysis.length, time.interval)
 
 time_discretization <- function(x,analysis.length,create=FALSE,start=0,time.interval){
   for(j in 1:length(x)){

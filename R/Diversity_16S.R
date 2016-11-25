@@ -9,7 +9,6 @@
 #' @param R Number of bootstraps to conduct. Defaults to 999
 #' @keywords diversity, fcm, alpha
 #' @export
-#' Diversity_16S(x)
 
 Diversity_16S <- function(x, R=999){
   cat("\t**WARNING** this functions assumes that rows are samples and columns

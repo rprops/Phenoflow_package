@@ -9,7 +9,6 @@
 #' @param legend.pres Surpresses legend when there is no definition of labels.
 #' @keywords diversity, fcm, beta
 #' @export
-#' plot_beta_fcm(x)
 
 plot_beta_fcm <- function(x, color=NA,shape=NA,labels=c("Factor 1","Factor 2"),legend.pres=NULL){
   legend.ops <- NULL

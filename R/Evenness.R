@@ -7,7 +7,6 @@
 #' @param n Number of replicates. Defaults to 1.
 #' @keywords evenness, fcm, alpha
 #' @export
-#' Evenness(x)
 
 Evenness <- function(x,d=3,n=1,plot=FALSE){
   x<- x@basis/apply(x@basis, 1, max)
