@@ -11,6 +11,7 @@
 #' @param iter Number of iterations for NMDS analysis. Defaults to 100.
 #' @param ord.type Choose between NMDS or PCoA analysis.
 #' @keywords betadiversity, fcm
+#' @export
 #' beta_div_fcm(x)
 
 beta_div_fcm <- function(x, d=3, n=1, dist="bray",k=2,iter=100,ord.type=c("NMDS","PCoA")){

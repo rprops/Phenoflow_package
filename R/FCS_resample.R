@@ -5,6 +5,7 @@
 #' @param sample Desired sample size. Defaults to minimum sample size.
 #' @param replace Do you want to resample with or without replacement? Defaults to FALSE, which is without replacement.
 #' @keywords resampling, fcm
+#' @export
 #' FCS_resample(x)
 
 FCS_resample <- function(x, sample=0, replace=FALSE){

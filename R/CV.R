@@ -6,6 +6,7 @@
 #' @param plot Make plot of diversity values? Defaults to FALSE.
 #' @param n Number of replicates. Defaults to 1.
 #' @keywords CV, fcm, coefficient of variance
+#' @export
 #' CV(x)
 
 CV <- function(x, d=3, n=1, plot=FALSE){
