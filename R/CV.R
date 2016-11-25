@@ -6,13 +6,11 @@
 #' @param plot Make plot of diversity values? Defaults to FALSE.
 #' @param n Number of replicates. Defaults to 1.
 #' @keywords CV, fcm, coefficient of variance
-#' @export
-#' @examples
 #' CV(x)
 
 CV <- function(x, d=3, n=1, plot=FALSE){
   x <- x@basis/apply(x@basis, 1, max)
-  CV= as.numeric(matrix(nrow=length(x[,1]), ncol=1))
+  CV = as.numeric(matrix(nrow=length(x[,1]), ncol=1))
   for(i in 1:length(x[,1])){
     CV[i] = 100*stats::sd(round(x[i,],d)[round(x[i,],d)!=0])/stats::mean(round(x[i,],d)[round(x[i,],d)!=0])
   }

@@ -18,9 +18,7 @@ Diversity(x, d = 4, plot = FALSE, R = 999)
 \description{
 This function calculates Hill diversity metrics from FCM data
 }
-\examples{
-Diversity(x)
-}
+\keyword{Diversity(x)}
 \keyword{alpha}
 \keyword{diversity,}
 \keyword{fcm,}

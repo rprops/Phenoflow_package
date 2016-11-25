@@ -18,9 +18,7 @@ Evenness(x, d = 3, n = 1, plot = FALSE)
 \description{
 This function calculates Pareto evenness from FCM data
 }
-\examples{
-Evenness(x)
-}
+\keyword{Evenness(x)}
 \keyword{alpha}
 \keyword{evenness,}
 \keyword{fcm,}

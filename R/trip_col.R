@@ -3,8 +3,6 @@
 #' @param x Vector of Sample names of entire flowSet
 #' @param n Number of replicates
 #' @keywords resampling, fcm
-#' @export
-#' @examples
 #' trip()
 
 trip_col <- function(x,n=3){

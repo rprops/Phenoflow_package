@@ -6,8 +6,6 @@
 #' @param plot Make plot of diversity values? Defaults to FALSE.
 #' @param n Number of replicates. Defaults to 1.
 #' @keywords So, fcm, structural organization
-#' @export
-#' @examples
 #' So(x)
 
 So <- function(x,d=3,n=1,plot=FALSE){

@@ -3,8 +3,6 @@
 #' @param x Input matrix
 #' @param n Number of replicates
 #' @keywords resampling, fcm
-#' @export
-#' @examples
 #' trip(x)
 
 trip <- function(x,n=3){

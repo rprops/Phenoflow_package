@@ -5,11 +5,9 @@
 #' @param create Do you want to make a new folder for the new flowframes? Defaults to FALSE.
 #' @param analysis.length Dataframe with $time defining the total analysis time for each sample
 #' @param start Vector of length n(x) that indicates for each sample at what time point it should start discretisizing.
-#' (e.g., first 10 minutes are irrelevant, start = 10*60s)
+#' (e.g., first 10 minutes are irrelevant, start = 10*60)
 #' @param time.interval Bin size of each new FCS file. For example, time.interval = 10 will make new FCS files of 10 second intervals.
 #' @keywords online, fcm, time series analysis FCM
-#' @export
-#' @examples
 #' time_discretization(x)
 
 time_discretization <- function(x,analysis.length,create=FALSE,start=0,time.interval){
@@ -31,12 +29,12 @@ time_discretization <- function(x,analysis.length,create=FALSE,start=0,time.inte
     for(i in 1:teller){
       bottom <- (i-1)*time.interval + res + start[j]
       top <- i*time.interval + start[j]
-      time.gate <- rectangleGate(filterId = "Time discretization", "Time" = c(bottom, top), "FL1-H" = c(0, 1))
+      time.gate <- flowCore::rectangleGate(filterId = "Time discretization", "Time" = c(bottom, top), "FL1-H" = c(0, 1))
       res <- 0.1
-      flowData.temp <- Subset(x[j],time.gate)
+      flowData.temp <- flowCore::Subset(x[j],time.gate)
       flowData.temp[[1]]@description$`$VOL` <- as.numeric(as.numeric(x[[j]]@description$`$VOL`)*(time.interval)/(analysis.length$time[j]))
       print(as.numeric(as.numeric(x[[j]]@description$`$VOL`)*(time.interval)/(analysis.length$time[j])))
-      write.FCS(x=flowData.temp[[1]], filename=paste(i+(10*number),time.interval,paste(rownames(analysis.length)[j]), sep="_"), what="numeric")
+      flowCore::write.FCS(x=flowData.temp[[1]], filename=paste(i+(10*number),time.interval,paste(rownames(analysis.length)[j]), sep="_"), what="numeric")
     }
     setwd(old.wd)
   }

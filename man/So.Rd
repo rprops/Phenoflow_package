@@ -18,9 +18,7 @@ So(x, d = 3, n = 1, plot = FALSE)
 \description{
 This function calculates Structural organisation from FCM data according to Koch et al. 2014.
 }
-\examples{
-So(x)
-}
+\keyword{So(x)}
 \keyword{So,}
 \keyword{fcm,}
 \keyword{organization}

@@ -6,8 +6,6 @@
 #' @param plot Make plot of diversity values? Defaults to FALSE.
 #' @param R Number of bootstraps to conduct. Defaults to 999
 #' @keywords diversity, fcm, alpha
-#' @export
-#' @examples
 #' Diversity(x)
 
 Diversity <- function(x, d=4, plot=FALSE, R=999){

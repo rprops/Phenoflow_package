@@ -14,10 +14,8 @@ cum_Richness(x, d = 3)
 \description{
 This function calculates Hill diversity metrics from FCM data
 }
-\examples{
-cum_Richness(x)
-}
 \keyword{alpha}
+\keyword{cum_Richness(x)}
 \keyword{cumulative}
 \keyword{fcm,}
 \keyword{richness,}
