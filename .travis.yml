@@ -18,5 +18,6 @@ after_success:
   - Rscript -e 'covr::codecov()'
 
 install:
-  - Rscript -e "install_github("lievenclement/flowFDA")"
+  - R -e "install_github("lievenclement/flowFDA")"
+  
   
