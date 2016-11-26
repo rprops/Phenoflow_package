@@ -54,7 +54,7 @@ Diversity_16S <- function(x, R=999){
     rich <- breakaway::breakaway(temp,print=FALSE,plot=FALSE,answers=TRUE)
     DIV[i,3] <- rich$est
     DIV[i,4] <- rich$seest
-    rich.chao <- breakaway::chao1_bc(temp, print=FALSE, answers=TRUE)
+    rich.chao <- breakaway::chao1(temp, print=FALSE, answers=TRUE)
     DIV[i,5] <- rich.chao$est
     DIV[i,6] <- rich.chao$seest
   }
