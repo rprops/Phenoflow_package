@@ -23,7 +23,7 @@ Imports:
     breakaway,
     phyloseq
 biocViews: CellBasedAssays, FlowCytometry, Infrastructure, Software, Clustering
-License: GPL-3 (GNU General Public License version 3)
+License: GPL-2
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 5.0.1
