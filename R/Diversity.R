@@ -37,14 +37,14 @@
 #' flowViz::xyplot(`FL3-H` ~ `FL1-H`, data=flowData_transformed[1], filter=polyGate1,
 #'          scales=list(y=list(limits=c(0,14)),
 #'          x=list(limits=c(6,16))),
-#'          axis = axis.default, nbin=125, 
+#'          axis = lattice::axis.default, nbin=125, 
 #'          par.strip.text=list(col='white', font=2, cex=2), smooth=FALSE)
 #'  
 #'  # Isolate only the cellular information based on the polyGate1
 #'  flowData_transformed <- flowCore::Subset(flowData_transformed, polyGate1)
 #'  
 #'  # Normalize parameter values to [0,1] interval based on max. value across parameters
-#'  summary <- flowCore::sApply(x=flowData_transformed,FUN=function(x) apply(x,2,max),use.exprs=TRUE)
+#'  summary <- flowCore::fsApply(x=flowData_transformed,FUN=function(x) apply(x,2,max),use.exprs=TRUE)
 #'  max = max(summary[,1])
 #'  mytrans <- function(x) x/max
 #'  flowData_transformed <- flowCore::transform(flowData_transformed,`FL1-H`=mytrans(`FL1-H`),
