@@ -17,7 +17,5 @@ before_deploy:
 after_success:
   - Rscript -e 'covr::codecov()'
 
-install:
-  - R -e "install_github("lievenclement/flowFDA")"
-  
-  
+r_github_packages:
+  - lievenclement/flowFDA
