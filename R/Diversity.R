@@ -6,8 +6,7 @@
 #' @param plot Make plot of diversity values? Defaults to FALSE.
 #' @param R Number of bootstraps to conduct. Defaults to 999
 #' @keywords diversity, fcm, alpha
-#' 
-#' #' @examples  
+#' @examples  
 #' ## Short example
 #' 
 #' # Load precomputed fingerprint object

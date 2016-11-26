@@ -18,130 +18,61 @@ Diversity(x, d = 4, plot = FALSE, R = 999)
 \description{
 This function calculates Hill diversity metrics from FCM data
 }
-\keyword{#}
-\keyword{##}
-\keyword{#'}
-\keyword{'FL3-H','SSC-H','FSC-H')}
-\keyword{'Total}
-\keyword{(cells}
-\keyword{(imported}
-\keyword{<-}
-\keyword{=}
-\keyword{@examples}
-\keyword{Asinh}
-\keyword{Calculate}
-\keyword{Cells')}
-\keyword{Create}
-\keyword{Define}
-\keyword{Diversity(CoolingTower,}
-\keyword{Diversity(fbasis,}
-\keyword{Full}
-\keyword{Gating}
-\keyword{Green}
-\keyword{I).}
-\keyword{Isolate}
-\keyword{Load}
-\keyword{Normalize}
-\keyword{PolygonGate}
-\keyword{Short}
-\keyword{Subset(flowData_transformed,}
-\keyword{Sybr}
-\keyword{[0,1]}
-\keyword{`FL1-H`,}
-\keyword{`FL3-H`=asinh(`FL3-H`),}
-\keyword{`FL3-H`=mytrans(`FL3-H`),}
-\keyword{`FSC-H`=asinh(`FSC-H`))}
-\keyword{`FSC-H`=mytrans(`FSC-H`))}
-\keyword{`SSC-H`=asinh(`SSC-H`),}
-\keyword{`SSC-H`=mytrans(`SSC-H`),}
-\keyword{a}
-\keyword{across}
+\examples{
+ 
+## Short example
+
+# Load precomputed fingerprint object
+data(CoolingTower)
+
+# Calculate diversity values
+Diversity(CoolingTower, plot=TRUE)
+
+## Full data processing example
+
+# Load raw data (imported using flowCore)
+data(flowData)
+# Asinh transform and select parameters of interest (cells were stained with Sybr Green I).
+flowData_transformed <- transform(flowData,`FL1-H`=asinh(`FL1-H`),
+       `SSC-H`=asinh(`SSC-H`), 
+       `FL3-H`=asinh(`FL3-H`), 
+       `FSC-H`=asinh(`FSC-H`))
+param=c('FL1-H', 'FL3-H','SSC-H','FSC-H')
+flowData_transformed = flowData_transformed[,param]
+
+# Create a PolygonGate for denoising the dataset
+# Define coordinates for gate in sqrcut1 in format: c(x,x,x,x,y,y,y,y)
+sqrcut1 <- matrix(c(8.75,8.75,14,14,3,7.5,14,3),ncol=2, nrow=4)
+colnames(sqrcut1) <- c('FL1-H','FL3-H')
+polyGate1 <- polygonGate(.gate=sqrcut1, filterId = 'Total Cells')
+
+# Gating quality check
+xyplot(`FL3-H` ~ `FL1-H`, data=flowData_transformed[1], filter=polyGate1,
+         scales=list(y=list(limits=c(0,14)),
+         x=list(limits=c(6,16))),
+         axis = axis.default, nbin=125, 
+         par.strip.text=list(col='white', font=2, cex=2), smooth=FALSE)
+ 
+ # Isolate only the cellular information based on the polyGate1
+ flowData_transformed <- Subset(flowData_transformed, polyGate1)
+ 
+ # Normalize parameter values to [0,1] interval based on max. value across parameters
+ summary <- fsApply(x=flowData_transformed,FUN=function(x) apply(x,2,max),use.exprs=TRUE)
+ max = max(summary[,1])
+ mytrans <- function(x) x/max
+ flowData_transformed <- transform(flowData_transformed,`FL1-H`=mytrans(`FL1-H`),
+         `FL3-H`=mytrans(`FL3-H`), 
+         `SSC-H`=mytrans(`SSC-H`),
+         `FSC-H`=mytrans(`FSC-H`))
+ 
+ # Calculate fingerprint
+ fbasis <- flowBasis(flowData_transformed, param, nbin=128, 
+         bw=0.01,normalize=function(x) x)
+ 
+ # Calculate diversity
+ Diversity(fbasis, plot=TRUE)
+}
 \keyword{alpha}
-\keyword{and}
-\keyword{apply(x,2,max),use.exprs=TRUE)}
-\keyword{axis}
-\keyword{axis.default,}
-\keyword{based}
-\keyword{bw=0.01,normalize=function(x)}
-\keyword{c('FL1-H','FL3-H')}
-\keyword{c(x,x,x,x,y,y,y,y)}
-\keyword{cellular}
-\keyword{cex=2),}
-\keyword{check}
-\keyword{colnames(sqrcut1)}
-\keyword{coordinates}
-\keyword{data}
-\keyword{data(CoolingTower)}
-\keyword{data(flowData)}
-\keyword{data=flowData_transformed[1],}
-\keyword{dataset}
-\keyword{denoising}
-\keyword{diversity}
 \keyword{diversity,}
-\keyword{example}
-\keyword{fbasis}
 \keyword{fcm,}
-\keyword{filter=polyGate1,}
-\keyword{filterId}
-\keyword{fingerprint}
-\keyword{flowBasis(flowData_transformed,}
-\keyword{flowCore)}
-\keyword{flowData_transformed}
-\keyword{flowData_transformed[,param]}
-\keyword{font=2,}
-\keyword{for}
-\keyword{format:}
-\keyword{fsApply(x=flowData_transformed,FUN=function(x)}
-\keyword{function(x)}
-\keyword{gate}
-\keyword{in}
-\keyword{information}
-\keyword{interest}
-\keyword{interval}
-\keyword{matrix(c(8.75,8.75,14,14,3,7.5,14,3),ncol=2,}
-\keyword{max}
-\keyword{max(summary[,1])}
-\keyword{max.}
-\keyword{mytrans}
-\keyword{nbin=125,}
-\keyword{nbin=128,}
-\keyword{nrow=4)}
-\keyword{object}
-\keyword{of}
-\keyword{on}
-\keyword{only}
-\keyword{par.strip.text=list(col='white',}
-\keyword{param,}
-\keyword{param=c('FL1-H',}
-\keyword{parameter}
-\keyword{parameters}
-\keyword{plot=TRUE)}
-\keyword{polyGate1}
-\keyword{polyGate1)}
-\keyword{polygonGate(.gate=sqrcut1,}
-\keyword{precomputed}
-\keyword{processing}
-\keyword{quality}
-\keyword{raw}
-\keyword{scales=list(y=list(limits=c(0,14)),}
-\keyword{select}
-\keyword{smooth=FALSE)}
-\keyword{sqrcut1}
-\keyword{stained}
-\keyword{summary}
-\keyword{the}
-\keyword{to}
-\keyword{transform}
-\keyword{transform(flowData,`FL1-H`=asinh(`FL1-H`),}
-\keyword{transform(flowData_transformed,`FL1-H`=mytrans(`FL1-H`),}
-\keyword{using}
-\keyword{value}
-\keyword{values}
-\keyword{were}
-\keyword{with}
-\keyword{x)}
-\keyword{x/max}
-\keyword{x=list(limits=c(6,16))),}
-\keyword{xyplot(`FL3-H`}
-\keyword{~}
 
