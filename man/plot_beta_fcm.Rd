@@ -15,7 +15,7 @@ plot_beta_fcm(x, color = NA, shape = NA, labels = c("Factor 1",
 \item{shape}{A vector of factors indicating the shape of the groups in the plot}
 
 \item{labels}{A vector of length 2, giving the labels for color and shape to be 
-used in the legend. Has to be in the order c("color","shape").}
+used in the legend. Has to be in the order c('color','shape').}
 
 \item{legend.pres}{Surpresses legend when there is no definition of labels.}
 }
