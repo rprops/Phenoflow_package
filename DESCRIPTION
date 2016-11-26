@@ -1,5 +1,5 @@
 Package: Phenoflow
-Title: Advanced analysis of microbial flow cytometry data.
+Title: Advanced analysis of microbial flow cytometry data
 Version: 1.0
 Authors@R: c(person("Ruben", "Props", email = "Ruben.Props@UGent.be", role = c("aut", "cre")),person("Frederiek-Maarten", "Kerckhof", email = "FrederiekMaarten.Kerckhof@UGent.be", role = "ctb"))
 BugReports: https://github.com/rprops/PhenoFlow/issues
@@ -14,7 +14,6 @@ Imports:
     ggplot2,
     boot,
     gridExtra,
-    devtools,
     multcomp,
     mclust,
     devtools,

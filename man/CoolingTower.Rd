@@ -3,7 +3,7 @@
 \docType{data}
 \name{CoolingTower}
 \alias{CoolingTower}
-\title{Flow cytometric fingerprint of cooling water microbial community.}
+\title{Flow cytometric fingerprint of cooling water microbial community}
 \format{fbasis object
 \describe{
   \item{"@basis"}{Actual fingerprint - concatenated kernel density estimations}
@@ -15,7 +15,7 @@
   ...
 }}
 \source{
-\url{(http://dx.doi.org/10.5061/dryad.m1c04}
+\url{http://dx.doi.org/10.5061/dryad.m1c04}
 }
 \usage{
 CoolingTower

@@ -1,4 +1,4 @@
-#' Flow cytometric fingerprint of cooling water microbial community.
+#' Flow cytometric fingerprint of cooling water microbial community
 #'
 #' Dataset containing the flow cytometric fingerprint of 41 samples 
 #' of a secondary cooling water system, 128x128 binning grid, bw=0.01.
