@@ -16,7 +16,6 @@ Imports:
     gridExtra,
     multcomp,
     mclust,
-    devtools,
     MASS,
     flowViz,
     flowCore,
