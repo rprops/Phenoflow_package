@@ -6,7 +6,7 @@
 #' @param plot Make plot of diversity values? Defaults to FALSE.
 #' @param R Number of bootstraps to conduct. Defaults to 999
 #' @keywords diversity, fcm, alpha
-#' @examples  
+#' @examples
 #' ## Short example
 #' 
 #' # Load precomputed fingerprint object
@@ -20,7 +20,7 @@
 #' # Load raw data (imported using flowCore)
 #' data(flowData)
 #' # Asinh transform and select parameters of interest (cells were stained with Sybr Green I).
-#' flowData_transformed <- transform(flowData,`FL1-H`=asinh(`FL1-H`),
+#' flowData_transformed <- flowCore::transform(flowData,`FL1-H`=asinh(`FL1-H`),
 #'        `SSC-H`=asinh(`SSC-H`), 
 #'        `FL3-H`=asinh(`FL3-H`), 
 #'        `FSC-H`=asinh(`FSC-H`))
@@ -31,30 +31,30 @@
 #' # Define coordinates for gate in sqrcut1 in format: c(x,x,x,x,y,y,y,y)
 #' sqrcut1 <- matrix(c(8.75,8.75,14,14,3,7.5,14,3),ncol=2, nrow=4)
 #' colnames(sqrcut1) <- c('FL1-H','FL3-H')
-#' polyGate1 <- polygonGate(.gate=sqrcut1, filterId = 'Total Cells')
+#' polyGate1 <- flowCore::polygonGate(.gate=sqrcut1, filterId = 'Total Cells')
 #' 
 #' # Gating quality check
-#' xyplot(`FL3-H` ~ `FL1-H`, data=flowData_transformed[1], filter=polyGate1,
+#' flowViz::xyplot(`FL3-H` ~ `FL1-H`, data=flowData_transformed[1], filter=polyGate1,
 #'          scales=list(y=list(limits=c(0,14)),
 #'          x=list(limits=c(6,16))),
 #'          axis = axis.default, nbin=125, 
 #'          par.strip.text=list(col='white', font=2, cex=2), smooth=FALSE)
 #'  
 #'  # Isolate only the cellular information based on the polyGate1
-#'  flowData_transformed <- Subset(flowData_transformed, polyGate1)
+#'  flowData_transformed <- flowCore::Subset(flowData_transformed, polyGate1)
 #'  
 #'  # Normalize parameter values to [0,1] interval based on max. value across parameters
-#'  summary <- fsApply(x=flowData_transformed,FUN=function(x) apply(x,2,max),use.exprs=TRUE)
+#'  summary <- flowCore::sApply(x=flowData_transformed,FUN=function(x) apply(x,2,max),use.exprs=TRUE)
 #'  max = max(summary[,1])
 #'  mytrans <- function(x) x/max
-#'  flowData_transformed <- transform(flowData_transformed,`FL1-H`=mytrans(`FL1-H`),
+#'  flowData_transformed <- flowCore::transform(flowData_transformed,`FL1-H`=mytrans(`FL1-H`),
 #'          `FL3-H`=mytrans(`FL3-H`), 
 #'          `SSC-H`=mytrans(`SSC-H`),
 #'          `FSC-H`=mytrans(`FSC-H`))
 #'  
 #'  # Calculate fingerprint
-#'  fbasis <- flowBasis(flowData_transformed, param, nbin=128, 
-#'          bw=0.01,normalize=function(x) x)
+#'  fbasis <- flowFDA::flowBasis(flowData_transformed, param, nbin=128, 
+#'          bw=0.01, normalize=function(x) x)
 #'  
 #'  # Calculate diversity
 #'  Diversity(fbasis, plot=TRUE)
