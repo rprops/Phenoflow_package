@@ -10,7 +10,7 @@
 #' @keywords diversity, fcm, alpha
 #' @export
 
-Diversity_16S <- function(x, R=999){
+Diversity_16S <- function(x, R = 999) {
   cat("\t**WARNING** this functions assumes that rows are samples and columns
       \tare taxa in your phyloseq object, please verify.\n")
   
@@ -19,46 +19,50 @@ Diversity_16S <- function(x, R=999){
   row.names(DIV) <- phyloseq::sample_names(x)
   
   # Diversity functions
-  D0.boot <- function(x) sum(x!=0)
+  D0.boot <- function(x) sum(x != 0)
   D2.boot <- function(x) 1/sum((x)^2)
-  D1.boot <- function(x) exp(-sum(x*log(x)))
+  D1.boot <- function(x) exp(-sum(x * log(x)))
   
   # Start resampling
-  for(i in 1:phyloseq::nsamples(x)){
-    temp.D0 <- c(); temp.D1 <-c(); temp.D2 <- c()
-    temp.phy <- phyloseq::prune_samples(x=x, samples=phyloseq::sample_names(x)[i])
-    cat(paste0(date(),"\tStarting sample ",phyloseq::sample_names(x)[i],"\n"))
-    for(j in 1:R){
-      temp <- phyloseq::rarefy_even_depth(temp.phy, verbose=FALSE, replace=TRUE)
+  for (i in 1:phyloseq::nsamples(x)) {
+    temp.D0 <- c()
+    temp.D1 <- c()
+    temp.D2 <- c()
+    temp.phy <- phyloseq::prune_samples(x = x, samples = phyloseq::sample_names(x)[i])
+    cat(paste0(date(), "\tStarting sample ", phyloseq::sample_names(x)[i], "\n"))
+    for (j in 1:R) {
+      temp <- phyloseq::rarefy_even_depth(temp.phy, verbose = FALSE, replace = TRUE)
       # Calculate frequencies
-      temp <- data.frame(phyloseq::transform_sample_counts(temp, fun= function(x) x/sum(x))@otu_table)
+      temp <- data.frame(phyloseq::transform_sample_counts(temp, fun = function(x) x/sum(x))@otu_table)
       # Calculate Diversities
       temp.D0 <- c(temp.D0, D0.boot(temp))
-      temp.D1 <- c(temp.D1, D1.boot(temp))  
+      temp.D1 <- c(temp.D1, D1.boot(temp))
       temp.D2 <- c(temp.D2, D2.boot(temp))
-      # Store diversities at the end of resampling run  
-      if(j==R){
-        DIV[i,1] <- mean(temp.D0)
-        DIV[i,2] <- stats::sd(temp.D0)
-        DIV[i,7] <- mean(temp.D1)
-        DIV[i,8] <- stats::sd(temp.D1)
-        DIV[i,9] <- mean(temp.D2)
-        DIV[i,10] <- stats::sd(temp.D2)
+      # Store diversities at the end of resampling run
+      if (j == R) {
+        DIV[i, 1] <- mean(temp.D0)
+        DIV[i, 2] <- stats::sd(temp.D0)
+        DIV[i, 7] <- mean(temp.D1)
+        DIV[i, 8] <- stats::sd(temp.D1)
+        DIV[i, 9] <- mean(temp.D2)
+        DIV[i, 10] <- stats::sd(temp.D2)
         remove(temp.D0, temp.D1, temp.D2)
-        cat(paste0(date(),"\tDone with sample ", phyloseq::sample_names(x)[i],"\n"))
+        cat(paste0(date(), "\tDone with sample ", phyloseq::sample_names(x)[i], "\n"))
       }
     }
     # Perform breakaway for richness estimation
-    temp <- t(matrix(temp.phy@otu_table)); temp <- temp[temp!=0]
+    temp <- t(matrix(temp.phy@otu_table))
+    temp <- temp[temp != 0]
     temp <- data.frame(table(temp))
-    rich <- breakaway::breakaway(temp,print=FALSE,plot=FALSE,answers=TRUE)
-    DIV[i,3] <- rich$est
-    DIV[i,4] <- rich$seest
-    rich.chao <- breakaway::chao1(temp, print=FALSE, answers=TRUE)
-    DIV[i,5] <- rich.chao$est
-    DIV[i,6] <- rich.chao$seest
+    rich <- breakaway::breakaway(temp, print = FALSE, plot = FALSE, answers = TRUE)
+    DIV[i, 3] <- rich$est
+    DIV[i, 4] <- rich$seest
+    rich.chao <- breakaway::chao1(temp, print = FALSE, answers = TRUE)
+    DIV[i, 5] <- rich.chao$est
+    DIV[i, 6] <- rich.chao$seest
   }
-  colnames(DIV) = c("D0","se.D0","D0.bre","se.D0.bre","D0.chao","se.D0.chao","D1","sd.D1","D2","sd.D2")
-  cat(date(),"\t Done with all", phyloseq::nsamples(x),"samples\n")
+  colnames(DIV) = c("D0", "se.D0", "D0.bre", "se.D0.bre", "D0.chao", "se.D0.chao", "D1", "sd.D1", "D2", 
+                    "sd.D2")
+  cat(date(), "\t Done with all", phyloseq::nsamples(x), "samples\n")
   return(DIV)
 }

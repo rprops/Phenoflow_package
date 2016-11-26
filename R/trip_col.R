@@ -5,12 +5,12 @@
 #' @keywords resampling, fcm
 #' trip(x)
 
-trip_col <- function(x,n=3){
+trip_col <- function(x, n = 3) {
   y = c()
-  j=1
-  for(i in seq(1,length(x),by=n)){
-    y[j] = x[(i+n-1)]
-    j=j+1
+  j = 1
+  for (i in seq(1, length(x), by = n)) {
+    y[j] = x[(i + n - 1)]
+    j = j + 1
   }
   return(y)
 }

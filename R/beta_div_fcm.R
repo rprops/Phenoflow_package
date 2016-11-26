@@ -13,25 +13,24 @@
 #' @keywords betadiversity, fcm
 #' @export
 
-beta_div_fcm <- function(x, d=3, n=1, dist="bray",k=2,iter=100,ord.type=c("NMDS","PCoA")){
+beta_div_fcm <- function(x, d = 3, n = 1, dist = "bray", k = 2, iter = 100, ord.type = c("NMDS", "PCoA")) {
   x <- x@basis/apply(x@basis, 1, max)
-  input <- matrix(nrow=nrow(x)/n,ncol=ncol(x))
-  j<-1
-  if(n>1){
-    for(i in seq(1,nrow(x),n)){
-      if(n>1)
-        input[j,] <- round(colMeans(x[(i:(i+(n-1))),]),d)
-      j=j+1
+  input <- matrix(nrow = nrow(x)/n, ncol = ncol(x))
+  j <- 1
+  if (n > 1) {
+    for (i in seq(1, nrow(x), n)) {
+      if (n > 1) 
+        input[j, ] <- round(colMeans(x[(i:(i + (n - 1))), ]), d)
+      j = j + 1
     }
-    rownames(input) <- rownames(x)[seq(1,nrow(x),n)]
-    input.dist <- vegan::vegdist(input,method=dist)
-    if(ord.type=="NMDS") mds.fbasis <- vegan::metaMDS(input.dist,autotransform=FALSE, k,trymax=iter)
-    else mds.fbasis <- stats::cmdscale(input.dist, k = 2, eig = TRUE, add = TRUE)
-  }
-  else{
-    input.dist <- vegan::vegdist(x,method=dist)
-    if(ord.type=="NMDS") mds.fbasis <- vegan::metaMDS(input.dist,autotransform=FALSE, k,trymax=iter)
-    else mds.fbasis <- stats::cmdscale(input.dist, k = 2, eig = TRUE, add = TRUE)
+    rownames(input) <- rownames(x)[seq(1, nrow(x), n)]
+    input.dist <- vegan::vegdist(input, method = dist)
+    if (ord.type == "NMDS") 
+      mds.fbasis <- vegan::metaMDS(input.dist, autotransform = FALSE, k, trymax = iter) else mds.fbasis <- stats::cmdscale(input.dist, k = 2, eig = TRUE, add = TRUE)
+  } else {
+    input.dist <- vegan::vegdist(x, method = dist)
+    if (ord.type == "NMDS") 
+      mds.fbasis <- vegan::metaMDS(input.dist, autotransform = FALSE, k, trymax = iter) else mds.fbasis <- stats::cmdscale(input.dist, k = 2, eig = TRUE, add = TRUE)
   }
   return(mds.fbasis)
 }

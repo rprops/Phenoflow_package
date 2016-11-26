@@ -25,21 +25,21 @@
 #'        `SSC-H`=asinh(`SSC-H`), 
 #'        `FL3-H`=asinh(`FL3-H`), 
 #'        `FSC-H`=asinh(`FSC-H`))
-#' param=c("FL1-H", "FL3-H","SSC-H","FSC-H")
+#' param=c('FL1-H', 'FL3-H','SSC-H','FSC-H')
 #' flowData_transformed = flowData_transformed[,param]
 #' 
 #' # Create a PolygonGate for denoising the dataset
 #' # Define coordinates for gate in sqrcut1 in format: c(x,x,x,x,y,y,y,y)
 #' sqrcut1 <- matrix(c(8.75,8.75,14,14,3,7.5,14,3),ncol=2, nrow=4)
-#' colnames(sqrcut1) <- c("FL1-H","FL3-H")
-#' polyGate1 <- polygonGate(.gate=sqrcut1, filterId = "Total Cells")
+#' colnames(sqrcut1) <- c('FL1-H','FL3-H')
+#' polyGate1 <- polygonGate(.gate=sqrcut1, filterId = 'Total Cells')
 #' 
 #' # Gating quality check
 #' xyplot(`FL3-H` ~ `FL1-H`, data=flowData_transformed[1], filter=polyGate1,
 #'          scales=list(y=list(limits=c(0,14)),
 #'          x=list(limits=c(6,16))),
 #'          axis = axis.default, nbin=125, 
-#'          par.strip.text=list(col="white", font=2, cex=2), smooth=FALSE)
+#'          par.strip.text=list(col='white', font=2, cex=2), smooth=FALSE)
 #'  
 #'  # Isolate only the cellular information based on the polyGate1
 #'  flowData_transformed <- Subset(flowData_transformed, polyGate1)
@@ -61,42 +61,43 @@
 #'  Diversity(fbasis, plot=TRUE)
 #' @export
 
-Diversity <- function(x, d=4, plot=FALSE, R=999){
-  D2.boot <- function(x,i) 1/sum((x[i]/sum(x[i]))^2)
-  D1.boot <- function(x,i) exp(-sum((x[i]/sum(x[i]))*log(x[i]/sum(x[i]))))
+Diversity <- function(x, d = 4, plot = FALSE, R = 999) {
+  D2.boot <- function(x, i) 1/sum((x[i]/sum(x[i]))^2)
+  D1.boot <- function(x, i) exp(-sum((x[i]/sum(x[i])) * log(x[i]/sum(x[i]))))
   x <- x@basis/apply(x@basis, 1, max)
   cat("\t**Notice** As only frequency data is available, all bins will be resampled equally.
       \t This is a conservative estimate of the error.\n")
-  D=matrix(ncol=3,nrow=nrow(x))
+  D = matrix(ncol = 3, nrow = nrow(x))
   ### Observed richness
-  D0 = apply(x,1,FUN=function(x) {
-    x = round(x,d); x<-x[x!=0]; sum(x!=0)
+  D0 = apply(x, 1, FUN = function(x) {
+    x = round(x, d)
+    x <- x[x != 0]
+    sum(x != 0)
   })
   ### D1
-  D1 = apply(x,1,FUN=function(x) {
-    x = round(x,d);x<-x[x!=0];
-    boot::boot(data=x, statistic=D1.boot, R=R)
+  D1 = apply(x, 1, FUN = function(x) {
+    x = round(x, d)
+    x <- x[x != 0]
+    boot::boot(data = x, statistic = D1.boot, R = R)
   })
   ### D2
-  D2 = apply(x,1,FUN=function(x) {
-    x = round(x,d);x<-x[x!=0];
-    boot::boot(data=x, statistic=D2.boot, R=R)
+  D2 = apply(x, 1, FUN = function(x) {
+    x = round(x, d)
+    x <- x[x != 0]
+    boot::boot(data = x, statistic = D2.boot, R = R)
   })
-  results <- data.frame(Sample_name=attr(x,"dimnames")[[1]],
-                        D0, 
-                        t(data.frame(lapply(D1,FUN=function(x) c(mean(x$t),stats::sd(x$t))))),
-                        t(data.frame(lapply(D2,FUN=function(x) c(mean(x$t),stats::sd(x$t))))))
-  colnames(results) = c("Sample_name","D0","D1","sd.D1","D2",
-                        "sd.D2")
-  rownames(results) = attr(x,"dimnames")[[1]]
-  if (plot==TRUE) {
-    p <- ggplot2::ggplot(results, ggplot2::aes(x=seq(1:nrow(results)),y=D2)) + ggplot2::geom_point(shape=16,size=4,alpha=0.7,colour="blue")+
-      ggplot2::geom_point(colour = "grey90", size = 1.5) + ggplot2::labs(x="Samples",y="Phenotypic diversity - D2")+
-      ggplot2::geom_line(colour="blue",alpha=0.4,linetype=2)+
-      ggplot2::geom_errorbar(ggplot2::aes(ymin=D2-sd.D2,ymax=D2+sd.D2), width=0.25)+
-      ggplot2::theme_bw()
+  results <- data.frame(Sample_name = attr(x, "dimnames")[[1]], D0, t(data.frame(lapply(D1, FUN = function(x) c(mean(x$t), 
+                                                                                                                stats::sd(x$t))))), t(data.frame(lapply(D2, FUN = function(x) c(mean(x$t), stats::sd(x$t))))))
+  colnames(results) = c("Sample_name", "D0", "D1", "sd.D1", "D2", "sd.D2")
+  rownames(results) = attr(x, "dimnames")[[1]]
+  if (plot == TRUE) {
+    p <- ggplot2::ggplot(results, ggplot2::aes(x = seq(1:nrow(results)), y = D2)) + ggplot2::geom_point(shape = 16, 
+                                                                                                        size = 4, alpha = 0.7, colour = "blue") + ggplot2::geom_point(colour = "grey90", size = 1.5) + 
+      ggplot2::labs(x = "Samples", y = "Phenotypic diversity - D2") + ggplot2::geom_line(colour = "blue", 
+                                                                                         alpha = 0.4, linetype = 2) + ggplot2::geom_errorbar(ggplot2::aes(ymin = D2 - sd.D2, ymax = D2 + 
+                                                                                                                                                            sd.D2), width = 0.25) + ggplot2::theme_bw()
     print(p)
   }
-  cat(date(),paste0("---- Alpha diversity metrics (D0,D1,D2) have been computed after ",R," bootstraps"))
+  cat(date(), paste0("---- Alpha diversity metrics (D0,D1,D2) have been computed after ", R, " bootstraps"))
   return(results)
 }

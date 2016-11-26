@@ -6,14 +6,14 @@
 #' @keywords cumulative richness, fcm, alpha
 #' cum_Richness(x)
 
-cum_Richness <- function(x, d=3){
-  x = round(x,d)
-  x = x[x!=0]
+cum_Richness <- function(x, d = 3) {
+  x = round(x, d)
+  x = x[x != 0]
   x = x[rev(order(x))]/sum(x)
-  for(i in 1: (length(x)-1)){
-    x[i+1] = x[i+1] + x[i] 
+  for (i in 1:(length(x) - 1)) {
+    x[i + 1] = x[i + 1] + x[i]
   }
-  y=seq(0,1,by=(1/(length(x)-1)))
-  result=cbind(y,x)
+  y = seq(0, 1, by = (1/(length(x) - 1)))
+  result = cbind(y, x)
   return(result)
 }

@@ -8,31 +8,30 @@
 #' @keywords evenness, fcm, alpha
 #' @export
 
-Evenness <- function(x,d=3,n=1,plot=FALSE){
-  x<- x@basis/apply(x@basis, 1, max)
-  AUC = as.numeric(matrix(nrow= length(x[,1]), ncol=1))
-  for(i in 1:nrow(x)){
-    AUC[i] = MESS::auc(cum_Richness(x[i,],d=d)[,1],cum_Richness(x[i,],d=d)[,2])
-    AUC[i] = 1-(AUC[i]-0.5)/(0.5)
+Evenness <- function(x, d = 3, n = 1, plot = FALSE) {
+  x <- x@basis/apply(x@basis, 1, max)
+  AUC = as.numeric(matrix(nrow = length(x[, 1]), ncol = 1))
+  for (i in 1:nrow(x)) {
+    AUC[i] = MESS::auc(cum_Richness(x[i, ], d = d)[, 1], cum_Richness(x[i, ], d = d)[, 2])
+    AUC[i] = 1 - (AUC[i] - 0.5)/(0.5)
   }
-  if(n>1){
-    results = matrix(nrow=length(x[,1])/3, ncol=2)
-    results[,1]=trip(AUC,n)[,1]
-    results[,2]=trip(AUC,n)[,2]
-    results=data.frame(results)
-    colnames(results)=c("Evenness","sdev")
-    rownames(results) = trip_col(attr(x,"dimnames")[[1]],n)
-  }
-  else{
-    results = matrix(nrow=length(x[,1]), ncol=1)
-    results[,1] = AUC
+  if (n > 1) {
+    results = matrix(nrow = length(x[, 1])/3, ncol = 2)
+    results[, 1] = trip(AUC, n)[, 1]
+    results[, 2] = trip(AUC, n)[, 2]
+    results = data.frame(results)
+    colnames(results) = c("Evenness", "sdev")
+    rownames(results) = trip_col(attr(x, "dimnames")[[1]], n)
+  } else {
+    results = matrix(nrow = length(x[, 1]), ncol = 1)
+    results[, 1] = AUC
     results = data.frame(results)
     colnames(results) = c("Evenness")
-    rownames(results) = attr(x,"dimnames")[[1]]
+    rownames(results) = attr(x, "dimnames")[[1]]
   }
-  if (plot==TRUE) {
-    graphics::plot(results$Evenness,pch=21,bg=grDevices::adjustcolor("blue",0.7),
-         col=grDevices::adjustcolor("blue",0.7), cex=1.5,las=1, ylab="Evenness", xlab="Samples")
+  if (plot == TRUE) {
+    graphics::plot(results$Evenness, pch = 21, bg = grDevices::adjustcolor("blue", 0.7), col = grDevices::adjustcolor("blue", 
+                                                                                                                      0.7), cex = 1.5, las = 1, ylab = "Evenness", xlab = "Samples")
   }
   return(results)
   cat(paste0("1 = maximum evenness; 0 = minimum evenness"))

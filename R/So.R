@@ -8,29 +8,29 @@
 #' @keywords So, fcm, structural organization
 #' @export
 
-So <- function(x,d=3,n=1,plot=FALSE){
-  x<- x@basis/apply(x@basis, 1, max)
-  So = apply(x,1,FUN=function(x){
-    x = round(x,d);x<-x[x!=0];sum(abs(x-mean(x)))/(length(x))
+So <- function(x, d = 3, n = 1, plot = FALSE) {
+  x <- x@basis/apply(x@basis, 1, max)
+  So = apply(x, 1, FUN = function(x) {
+    x = round(x, d)
+    x <- x[x != 0]
+    sum(abs(x - mean(x)))/(length(x))
   })
-  if(n>1){
-    results = matrix(nrow=length(x[,1])/3, ncol=2)
-    results[,1]=trip(So,n)[,1]
-    results[,2]=trip(So,n)[,2]
-    results=data.frame(results)
-    colnames(results)=c("Organisation","sdev")
-    rownames(results) = trip_col(attr(x,"dimnames")[[1]],n)
-  }
-  else{
+  if (n > 1) {
+    results = matrix(nrow = length(x[, 1])/3, ncol = 2)
+    results[, 1] = trip(So, n)[, 1]
+    results[, 2] = trip(So, n)[, 2]
+    results = data.frame(results)
+    colnames(results) = c("Organisation", "sdev")
+    rownames(results) = trip_col(attr(x, "dimnames")[[1]], n)
+  } else {
     results <- So
     results = data.frame(results)
-    colnames(results)=c("Organisation")
-    rownames(results)=attr(x,"dimnames")[[1]]
+    colnames(results) = c("Organisation")
+    rownames(results) = attr(x, "dimnames")[[1]]
   }
-  if (plot==TRUE) {
-    graphics::plot(results$Organisation,pch=21,
-         bg=grDevices::adjustcolor("blue",0.7),col=grDevices::adjustcolor("blue",0.7),cex=1.5,
-         las=1,ylab="SO",xlab="Samples")
+  if (plot == TRUE) {
+    graphics::plot(results$Organisation, pch = 21, bg = grDevices::adjustcolor("blue", 0.7), col = grDevices::adjustcolor("blue", 
+                                                                                                                          0.7), cex = 1.5, las = 1, ylab = "SO", xlab = "Samples")
   }
   return(results)
 }

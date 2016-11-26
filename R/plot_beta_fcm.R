@@ -5,30 +5,31 @@
 #' @param color A vector of factors indicating the groups to be colored in the plot
 #' @param shape A vector of factors indicating the shape of the groups in the plot
 #' @param labels A vector of length 2, giving the labels for color and shape to be 
-#' used in the legend. Has to be in the order c("color","shape"). 
+#' used in the legend. Has to be in the order c('color','shape'). 
 #' @param legend.pres Surpresses legend when there is no definition of labels.
 #' @keywords diversity, fcm, beta
 #' @export
 
-plot_beta_fcm <- function(x, color=NA,shape=NA,labels=c("Factor 1","Factor 2"),legend.pres=NULL){
+plot_beta_fcm <- function(x, color = NA, shape = NA, labels = c("Factor 1", "Factor 2"), legend.pres = NULL) {
   legend.ops <- NULL
-  if (sum(is.na(color))>0) color=rep("f1",nrow(x$points))
-  if (sum(is.na(shape))>0) {
-    shape = rep("f2",nrow(x$points))
+  if (sum(is.na(color)) > 0) 
+    color = rep("f1", nrow(x$points))
+  if (sum(is.na(shape)) > 0) {
+    shape = rep("f2", nrow(x$points))
     legend.ops <- FALSE
   }
   var.pcoa <- vegan::eigenvals(x)/sum(vegan::eigenvals(x))
   PcoA <- as.data.frame(x$points)
-  names(PcoA)[1:2] <- c('Axis1', 'Axis2')
+  names(PcoA)[1:2] <- c("Axis1", "Axis2")
   PcoA <- cbind(PcoA, color, shape)
-  ggplot2::ggplot(PcoA, ggplot2::aes(x = Axis1, y = Axis2, color = color, shape = shape))+ 
+  ggplot2::ggplot(PcoA, ggplot2::aes(x = Axis1, y = Axis2, color = color, shape = shape)) + 
     ggplot2::geom_point(alpha = 0.7, size = 4) + 
-    ggplot2::geom_point(colour = "grey90", size = 1.5)+
+    ggplot2::geom_point(colour = "grey90", size = 1.5) +
     ggplot2::scale_color_manual(values = c("#a65628", "red", "#ffae19",
-                                  "#4daf4a", "#1919ff", "darkorchid3", "magenta"))+
+                                  "#4daf4a", "#1919ff", "darkorchid3", "magenta")) +
     ggplot2::labs(x = paste0("Axis1 (",round(100*var.pcoa[1],1),"%)"),
-                  y = paste0("Axis2 (",round(100*var.pcoa[2],1),"%)"))+
-    ggplot2::ggtitle("Ordination of phenotypic fingerprints")+
-    ggplot2::labs(color = labels[1],shape = labels[2])+
+                  y = paste0("Axis2 (",round(100*var.pcoa[2],1),"%)")) +
+    ggplot2::ggtitle("Ordination of phenotypic fingerprints") +
+    ggplot2::labs(color = labels[1],shape = labels[2]) +
     ggplot2::guides(color = legend.pres, shape = legend.ops)
 }

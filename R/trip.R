@@ -5,14 +5,15 @@
 #' @keywords resampling, fcm
 #' trip(x)
 
-trip <- function(x,n=3){
-  y = c(); s = c()
-  j=1
-  for(i in seq(1,length(x),by=n)){
-    y[j] = base::mean(x[i:(i+n-1)])
-    s[j] = stats::sd(x[i:(i+n-1)])
-    j=j+1
+trip <- function(x, n = 3) {
+  y = c()
+  s = c()
+  j = 1
+  for (i in seq(1, length(x), by = n)) {
+    y[j] = base::mean(x[i:(i + n - 1)])
+    s[j] = stats::sd(x[i:(i + n - 1)])
+    j = j + 1
   }
-  y=cbind(y,s)
+  y = cbind(y, s)
   return(y)
 }
