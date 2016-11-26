@@ -16,5 +16,7 @@ before_deploy:
 
 after_success:
   - Rscript -e 'covr::codecov()'
+
+install:
+  - Rscript -e "install_github("lievenclement/flowFDA")"
   
-r_github_packages: hadley/devtools#1263
