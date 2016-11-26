@@ -58,7 +58,7 @@ flowViz::xyplot(`FL3-H` ~ `FL1-H`, data=flowData_transformed[1], filter=polyGate
  # Normalize parameter values to [0,1] interval based on max. value across parameters
  summary <- flowCore::fsApply(x=flowData_transformed,FUN=function(x) apply(x,2,max),use.exprs=TRUE)
  max = max(summary[,1])
- mytrans <- function(x) x/max
+ mytrans <- function(x) x/max(x)
  flowData_transformed <- flowCore::transform(flowData_transformed,`FL1-H`=mytrans(`FL1-H`),
          `FL3-H`=mytrans(`FL3-H`), 
          `SSC-H`=mytrans(`SSC-H`),
