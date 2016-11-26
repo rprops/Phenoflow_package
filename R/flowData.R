@@ -6,5 +6,5 @@
 #' Available parameterse: FSC-A SSC-A FL1-A FL2-A FL3-A FL4-A FSC-H SSC-H 
 #' FL1-H FL2-H FL3-H FL4-H Width Time
 #' @format A flowSet with 41 experiments
-#' @source \url{(http://dx.doi.org/10.5061/dryad.m1c04}
+#' @source \url{http://dx.doi.org/10.5061/dryad.m1c04}
 "flowData"

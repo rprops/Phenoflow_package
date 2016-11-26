@@ -15,5 +15,5 @@
 #'   \item{"@bw"}{Bandwidth used in kernel density estimation}
 #'   ...
 #' }
-#' @source \url{(http://dx.doi.org/10.5061/dryad.m1c04}
+#' @source \url{http://dx.doi.org/10.5061/dryad.m1c04}
 "CoolingTower"
