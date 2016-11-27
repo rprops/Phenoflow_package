@@ -15,8 +15,9 @@ Diversity_16S(x, R = 999)
 This function calculates Hill diversity metrics from 16S amplicon data (in phyloseq format).
 D0 (richness) is calculated with three methods: 1) Observed richness, 2) Chao1 estimator
 3) breakaway method (Willis and Bunge 2016). D1 (exponential of Shannon entropy)
-and D2 (inverse Simpson index) are respectively Hill order 1 and 2
-Errors for D1 and D2 are calculated by bootstrapping.
+and D2 (inverse Simpson index) are respectively Hill order 1 and 2.
+Errors for D1 and D2 are calculated by bootstrapping. Currently the breakaway
+method is not yet included because it fails for certain samples.
 }
 \examples{
 # First install phyloseq if you haven't yet
@@ -24,7 +25,7 @@ source("https://bioconductor.org/biocLite.R")
 biocLite("phyloseq")
 # Load data (V3-V4 amplicon data from doi: 10.1111/2041-210X.12607)
 data(physeq_test)
-# Opting for one bootstrap, because this can take some time.
+# Opting for three bootstraps, because this can take some time.
 Diversity_16S(physeq_test, R=3)
 }
 \keyword{alpha}
