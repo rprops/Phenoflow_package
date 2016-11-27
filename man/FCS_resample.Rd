@@ -16,6 +16,11 @@ FCS_resample(x, sample = 0, replace = FALSE)
 \description{
 This function resamples each sample to an equal number of cells
 }
+\examples{
+# Load raw data (imported using flowCore)
+data(flowData)
+flowData <- FCS_resample(flowData, replace=TRUE)
+}
 \keyword{fcm}
 \keyword{resampling,}
 

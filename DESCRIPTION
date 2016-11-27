@@ -22,8 +22,7 @@ Imports:
     breakaway,
     phyloseq,
     lattice,
-    devtools,
-    foreign
+    devtools
 biocViews: CellBasedAssays, FlowCytometry, Infrastructure, Software, Clustering
 License: GPL-2
 Encoding: UTF-8

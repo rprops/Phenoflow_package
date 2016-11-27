@@ -18,6 +18,11 @@ D0 (richness) is calculated with three methods: 1) Observed richness, 2) Chao1 e
 and D2 (inverse Simpson index) are respectively Hill order 1 and 2
 Errors for D1 and D2 are calculated by bootstrapping.
 }
+\examples{
+# Load data (V3-V4 amplicon data from doi: 10.1111/2041-210X.12607)
+data(physeq_test)
+Diversity_16S(physeq_test, R=100)
+}
 \keyword{alpha}
 \keyword{diversity,}
 \keyword{fcm,}

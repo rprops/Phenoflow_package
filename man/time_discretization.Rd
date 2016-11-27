@@ -22,6 +22,9 @@ time_discretization(x, analysis.length, create = FALSE, start = 0,
 \description{
 This function subsets the input frames based on analysis time. Developped for analysis of on-line time series data.
 }
+\examples{
+# To be added in the near future
+}
 \keyword{FCM}
 \keyword{analysis}
 \keyword{fcm,}
