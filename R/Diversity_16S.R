@@ -10,8 +10,8 @@
 #' @keywords diversity, fcm, alpha
 #' @examples 
 #' # Load data (V3-V4 amplicon data from doi: 10.1111/2041-210X.12607)
-#' data(physeq.test)
-#' Diversity_16S(physeq.test, R=100)
+#' data(physeq_test)
+#' Diversity_16S(physeq_test, R=100)
 #' @export
 
 Diversity_16S <- function(x, R = 999) {
