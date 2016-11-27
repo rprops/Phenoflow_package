@@ -25,7 +25,7 @@ biocLite("phyloseq")
 # Load data (V3-V4 amplicon data from doi: 10.1111/2041-210X.12607)
 data(physeq_test)
 # Opting for one bootstrap, because this can take some time.
-Diversity_16S(physeq_test, R=1)
+Diversity_16S(physeq_test, R=3)
 }
 \keyword{alpha}
 \keyword{diversity,}

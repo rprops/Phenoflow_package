@@ -15,7 +15,7 @@
 #' # Load data (V3-V4 amplicon data from doi: 10.1111/2041-210X.12607)
 #' data(physeq_test)
 #' # Opting for one bootstrap, because this can take some time.
-#' Diversity_16S(physeq_test, R=1)
+#' Diversity_16S(physeq_test, R=3)
 #' @export
 
 Diversity_16S <- function(x, R = 999) {
@@ -73,7 +73,7 @@ Diversity_16S <- function(x, R = 999) {
     DIV[i, 5] <- rich.chao$est
     DIV[i, 6] <- rich.chao$seest
   }
-  colnames(DIV) = c("D0", "se.D0", "D0.bre", "se.D0.bre", "D0.chao", "se.D0.chao", "D1", "sd.D1", "D2", 
+  colnames(DIV) = c("D0", "sd.D0", "D0.bre", "sd.D0.bre", "D0.chao", "sd.D0.chao", "D1", "sd.D1", "D2", 
                     "sd.D2")
   cat(date(), "\t Done with all", phyloseq::nsamples(x), "samples\n")
   return(DIV)
