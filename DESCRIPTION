@@ -7,7 +7,7 @@ Description: Set of functions to calculate diversity estimates of microbial
     communities from FCM data (described in: doi: 10.1111/2041-210X.12607).
 Remotes: github::lievenclement/flowFDA
 Depends:
-    R (>= 3.3.0)
+    R (>= 3.3.0), flowFDA
 Imports:
     vegan,
     MESS,
