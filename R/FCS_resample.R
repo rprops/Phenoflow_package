@@ -5,6 +5,10 @@
 #' @param sample Desired sample size. Defaults to minimum sample size.
 #' @param replace Do you want to resample with or without replacement? Defaults to FALSE, which is without replacement.
 #' @keywords resampling, fcm
+#' @examples 
+#' # Load raw data (imported using flowCore)
+#' data(flowData)
+#' flowData <- FCS_resample(flowData, replace=TRUE)
 #' @export
 
 FCS_resample <- function(x, sample = 0, replace = FALSE) {
