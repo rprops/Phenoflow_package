@@ -9,6 +9,9 @@
 #' @param R Number of bootstraps to conduct. Defaults to 999
 #' @keywords diversity, fcm, alpha
 #' @examples 
+#' # First install phyloseq if you haven't yet
+#' source("https://bioconductor.org/biocLite.R")
+#' biocLite("phyloseq")
 #' # Load data (V3-V4 amplicon data from doi: 10.1111/2041-210X.12607)
 #' data(physeq_test)
 #' # Opting for one bootstrap, because this can take some time.
@@ -16,6 +19,10 @@
 #' @export
 
 Diversity_16S <- function(x, R = 999) {
+  if (!requireNamespace("phyloseq", quietly = TRUE)) {
+    stop("Phyloseq package needed for this function to work. Please install it.",
+         call. = FALSE)
+  }
   cat("\t**WARNING** this functions assumes that rows are samples and columns
       \tare taxa in your phyloseq object, please verify.\n")
   
