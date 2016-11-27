@@ -21,7 +21,8 @@ Errors for D1 and D2 are calculated by bootstrapping.
 \examples{
 # Load data (V3-V4 amplicon data from doi: 10.1111/2041-210X.12607)
 data(physeq_test)
-Diversity_16S(physeq_test, R=100)
+# Opting for one bootstrap, because this can take some time.
+Diversity_16S(physeq_test, R=1)
 }
 \keyword{alpha}
 \keyword{diversity,}
