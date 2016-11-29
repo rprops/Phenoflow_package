@@ -72,7 +72,7 @@ Diversity_16S <- function(x, R = 999, brea=TRUE, thresh=200) {
     temp <- temp[temp != 0]
     temp <- data.frame(table(temp))
     temp <- apply(temp, 2, FUN = function(x) as.integer(x))
-    if(brea==TRUE && sample_sums(temp.phy) > thresh){
+    if(brea==TRUE && phyloseq::sample_sums(temp.phy) > thresh){
       rich <- breakaway::breakaway(temp, print = FALSE, plot = FALSE, answers = TRUE, force=TRUE)
       if(!is.null(rich)){
         DIV[i, 3] <- rich$est
@@ -82,7 +82,7 @@ Diversity_16S <- function(x, R = 999, brea=TRUE, thresh=200) {
         DIV[i, 4] <- NA
       }
     }
-    if(sample_sums(temp.phy) >= thresh){
+    if(phyloseq::sample_sums(temp.phy) >= thresh){
       rich.chao <- breakaway::chao1(temp, print = FALSE, answers = TRUE)
       DIV[i, 5] <- rich.chao$est
       DIV[i, 6] <- rich.chao$seest
