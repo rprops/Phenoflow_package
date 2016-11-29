@@ -11,6 +11,7 @@
 #' @param brea TRUE/FALSE if breakaway method for D0 estimation should be used.
 #' Defaults to TRUE. This method fails easily if you don't have atleast 6 contiguous
 #' frequencies.
+#' @param thresh Minimum sample size required to perform Chao1 estimation.
 #' @keywords diversity, fcm, alpha
 #' @examples 
 #' # First install phyloseq if you haven't yet
@@ -22,7 +23,7 @@
 #' Diversity_16S(physeq_test, R=3)
 #' @export
 
-Diversity_16S <- function(x, R = 999, brea=TRUE) {
+Diversity_16S <- function(x, R = 999, brea=TRUE, thresh=200) {
   if (!requireNamespace("phyloseq", quietly = TRUE)) {
     stop("Phyloseq package needed for this function to work. Please install it.",
          call. = FALSE)
@@ -71,20 +72,24 @@ Diversity_16S <- function(x, R = 999, brea=TRUE) {
     temp <- temp[temp != 0]
     temp <- data.frame(table(temp))
     temp <- apply(temp, 2, FUN = function(x) as.integer(x))
-    if(brea==TRUE){
+    if(brea==TRUE && sample_sums(temp.phy) > thresh){
       rich <- breakaway::breakaway(temp, print = FALSE, plot = FALSE, answers = TRUE, force=TRUE)
       if(!is.null(rich)){
         DIV[i, 3] <- rich$est
         DIV[i, 4] <- rich$seest
-      }
-      else {
+      } else {
         DIV[i, 3] <- NA
         DIV[i, 4] <- NA
       }
     }
-    rich.chao <- breakaway::chao1(temp, print = FALSE, answers = TRUE)
-    DIV[i, 5] <- rich.chao$est
-    DIV[i, 6] <- rich.chao$seest
+    if(sample_sums(temp.phy) >= thresh){
+      rich.chao <- breakaway::chao1(temp, print = FALSE, answers = TRUE)
+      DIV[i, 5] <- rich.chao$est
+      DIV[i, 6] <- rich.chao$seest
+    } else {
+      DIV[i, 5] <- NA
+      DIV[i, 6] <- NA
+    }
   }
   colnames(DIV) = c("D0", "sd.D0", "D0.bre" , "sd.D0.bre", "D0.chao", "sd.D0.chao", "D1", "sd.D1", "D2", 
                     "sd.D2")
