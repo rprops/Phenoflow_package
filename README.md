@@ -18,9 +18,9 @@ Diversity_16S | Calculation of Hill diversities from 16S amplicon data for compa
 Evenness | Calculation of pareto evenness (Wittebolle L. et al. (2009)) from fingerprint object (1 = maximum evenness, 0 = minimum evenness)
 So | Calculation of Structural Organization parameter (Koch et al. (2014), Frontiers in Microbiology)
 CV | Calculation of Coefficient of Variation (CV) of the fingerprint object
-beta.diversity.fcm | Non-metric Multidimensional Scaling (NMDS) or PCoA of the phenotypic fingerprints
-time.discretization | Function for subsetting .fcs files in time intervals and exporting them as new .fcs files. Designed for the analysis of on-line experiments.
-FCS.resample | Resamples sample files from flowSet object to an equal number of cells. Standard is to the minimum sample size.
+beta_diversity_fcm | Non-metric Multidimensional Scaling (NMDS) or PCoA of the phenotypic fingerprints
+time_discretization | Function for subsetting .fcs files in time intervals and exporting them as new .fcs files. Designed for the analysis of on-line experiments.
+FCS_resample | Resamples sample files from flowSet object to an equal number of cells. Standard is to the minimum sample size.
 
 
 ## Functionalities to be added in the future:
