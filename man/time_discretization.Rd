@@ -5,7 +5,7 @@
 \title{Time discretization function for FCM data}
 \usage{
 time_discretization(x, analysis.length, create = FALSE, start = 0,
-  time.interval, height = c(0, 200), trigger = "FL1-H")
+  time.interval, height = c(0, 200), trigger = "FL1-H", time.step = 0.1)
 }
 \arguments{
 \item{x}{flowSet of FCM data}
@@ -22,6 +22,9 @@ time_discretization(x, analysis.length, create = FALSE, start = 0,
 \item{height}{Bottom and top of the time window utilized (use minimum and maximum parameter intensity). Default on c(0,200)}
 
 \item{trigger}{Primary parameter of signal detection (e.g. FL1-H for SYBR Green). This is used to construct the binning window with the height parameter.}
+
+\item{time.step}{discrete unit of time used in the FCS files (FCS files don't register in seconds). This value is used to transform
+the discrete time units into seconds.}
 }
 \description{
 This function subsets the input frames based on analysis time. Developped for analysis of on-line time series data.
