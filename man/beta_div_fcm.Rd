@@ -4,7 +4,7 @@
 \alias{beta_div_fcm}
 \title{Beta diversity function for FCM data}
 \usage{
-beta_div_fcm(x, d = 3, n = 1, dist = "bray", k = 2, iter = 100,
+beta_div_fcm(x, d = 4, n = 1, dist = "bray", k = 2, iter = 100,
   ord.type = c("NMDS", "PCoA"))
 }
 \arguments{

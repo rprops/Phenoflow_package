@@ -67,7 +67,7 @@
 #'  plot_beta_fcm(beta)
 #' @export
 
-beta_div_fcm <- function(x, d = 3, n = 1, dist = "bray", k = 2, iter = 100, ord.type = c("NMDS", "PCoA")) {
+beta_div_fcm <- function(x, d = 4, n = 1, dist = "bray", k = 2, iter = 100, ord.type = c("NMDS", "PCoA")) {
   x <- x@basis/apply(x@basis, 1, max)
   input <- matrix(nrow = nrow(x)/n, ncol = ncol(x))
   j <- 1
