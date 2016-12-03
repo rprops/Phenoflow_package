@@ -82,7 +82,7 @@ CV <- function(x, d = 3, n = 1, plot = FALSE) {
   }
   if (plot == TRUE) {
     plot(results$CV, pch = 21, bg = grDevices::adjustcolor("blue", 0.7), col = grDevices::adjustcolor("blue", 
-                                                                                                      0.7), cex = 1.5, las = 1, ylab = "CV", xlab = "Samples")
+
   }
   return(results)
 }
