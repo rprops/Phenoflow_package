@@ -2,10 +2,10 @@ language: R
 cache: packages
 sudo: false
 
+warnings_are_errors: false
+
 r:
-  - oldrel
   - release
-  - devel
   
 bioc_required: true
 bioc_packages:
@@ -18,3 +18,6 @@ before_deploy:
 
 after_success:
   - Rscript -e 'covr::codecov()'
+
+r_github_packages:
+  - lievenclement/flowFDA
