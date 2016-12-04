@@ -81,7 +81,7 @@ CV <- function(x, d = 3, n = 1, plot = FALSE) {
     rownames(results) = attr(x, "dimnames")[[1]]
   }
   if (plot == TRUE) {
-    plot(results$CV, pch = 21, bg = grDevices::adjustcolor("blue", 0.7), col = grDevices::adjustcolor("blue", 
+    plot(results$CV, pch = 21, bg = grDevices::adjustcolor("blue", 0.7), col = grDevices::adjustcolor("blue",0.7)) 
 
   }
   return(results)
