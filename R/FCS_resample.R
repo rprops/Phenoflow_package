@@ -1,6 +1,8 @@
 #' Resampling function for flowSet objects
 #'
-#' This function resamples each sample to an equal number of cells
+#' This function resamples each sample to an equal number of cells. Options are to resample 
+#' with or withour replacement, and to resample on a per sample basis or across the entire dataset
+#' (normalization to equal sample size).
 #' @param x flowSet object.
 #' @param sample Desired sample size. Defaults to minimum sample size.
 #' @param replace Do you want to resample with or without replacement? Defaults to FALSE, which is without replacement.
