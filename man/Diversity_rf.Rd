@@ -71,7 +71,7 @@ flowViz::xyplot(`FL3-H` ~ `FL1-H`, data=flowData_transformed[1], filter=polyGate
          `FSC-H`=mytrans(`FSC-H`))
  
  # Calculate diversity
- Diversity_rf(flowData_transformed, param = param, R = 10, R.b = 10)
+ Diversity_rf(flowData_transformed, param = param, R = 3, R.b = 3)
 }
 \keyword{alpha}
 \keyword{diversity,}
