@@ -70,11 +70,12 @@ Diversity_rf <- function(x, d = 4, R = 100, R.b = 100, bw = 0.01, nbin = 128,
                            normalize = function(x) x)
     tmp.diversity <- Diversity(tmp.basis, plot = FALSE, d = d, R = R.b, 
                                progress = FALSE)
+    rm(tmp, tmp.basis)
     if (i == 1) 
       results <- cbind(tmp.diversity) else {
         results <- rbind(results, tmp.diversity)
       }
-    rm(tmp, tmp.basis, tmp.diversity)
+    rm(tmp.diversity)
   }
   results.sd <- by(results[, c(2, 3, 5)], INDICES = factor(results$Sample_name), 
                    FUN = function(x) apply(x, 2, sd))
