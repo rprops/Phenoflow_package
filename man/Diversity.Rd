@@ -19,8 +19,9 @@ Diversity(x, d = 4, plot = FALSE, R = 999, progress = TRUE)
 }
 \description{
 This function calculates Hill diversity metrics from FCM data but does so without
-resampling the individual samples. Use this function only to compare samples with
-more or less equal number of cells or with more than 10,000 cells. 
+resampling the individual samples. Use this function to compare samples with
+more or less equal number of cells, with more than 10,000 cells or to get a quick approximation.
+This function is much faster than its Diversity_rf() counterpart.
 Go to https://github.com/rprops/Phenoflow_package/wiki/Effect-of-sample-size for more information.
 }
 \examples{
