@@ -4,7 +4,8 @@
 \alias{FCS_resample}
 \title{Resampling function for flowSet objects}
 \usage{
-FCS_resample(x, sample = 0, replace = FALSE, rarefy = FALSE)
+FCS_resample(x, sample = 0, replace = FALSE, rarefy = FALSE,
+  progress = TRUE)
 }
 \arguments{
 \item{x}{flowSet object.}
@@ -14,6 +15,8 @@ FCS_resample(x, sample = 0, replace = FALSE, rarefy = FALSE)
 \item{replace}{Do you want to resample with or without replacement? Defaults to FALSE, which is without replacement.}
 
 \item{rarefy}{Do you want each sample resampled without adjusting sample size? Default to FALSE.}
+
+\item{progress}{Should progress be reported? Defaults to yes.}
 }
 \description{
 This function resamples each sample to an equal number of cells
