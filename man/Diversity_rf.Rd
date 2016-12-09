@@ -28,7 +28,8 @@ c("FL1-H", "FL3-H", "SSC-H", "FSC-H").}
 This function calculates Hill diversity metrics from FCM data. This function differs from
 the Diversity() function in that it resamples (with replacement) all individual samples and 
 averages out the diversity over all subsamples. This function is recommended in case there there are
-differences in sample size (nr. of cells). Analysis time is approximately 1 min/resample run.
+differences in sample size (nr. of cells). Analysis time is approximately 10s/resample run (R) on default
+settings for the flowData example.
 }
 \examples{
 ## Full data processing example
