@@ -54,7 +54,7 @@
 #'          `FSC-H`=mytrans(`FSC-H`))
 #'  
 #'  # Calculate diversity
-#'  Diversity_rf(flowData_transformed, plot=TRUE, param = param, R = 10, R.b = 10)
+#'  Diversity_rf(flowData_transformed, param = param, R = 10, R.b = 10)
 #' @export
 
 Diversity_rf <- function(x, d = 4, R = 100, R.b = 100, bw = 0.01, nbin = 128, param, progress = TRUE) {
