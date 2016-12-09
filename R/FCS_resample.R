@@ -31,8 +31,6 @@ FCS_resample <- function(x, sample = 0, replace = FALSE, rarefy = FALSE, progres
     for (i in 1:length(x)) {
       flowCore::exprs(x[[i]]) <- flowCore::exprs(x[[i]])[base::sample(1:nrow(flowCore::exprs(x[[i]])), 
                                                                       size = nrow(flowCore::exprs(x[[i]])), replace = replace), ]
-      # print(i)
-      # print(length(x))
     }
     if(progress==TRUE) cat(paste0("Your samples were randomly subsampled to their respective sample size\n"))
   }
