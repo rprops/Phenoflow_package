@@ -15,26 +15,34 @@
 #' flowData <- FCS_resample(flowData, replace=TRUE)
 #' @export
 
-FCS_resample <- function(x, sample = 0, replace = FALSE, rarefy = FALSE, progress = TRUE) {
+FCS_resample <- function(x, sample = 0, replace = FALSE, rarefy = FALSE, 
+                         progress = TRUE) {
   
   if (sample == 0) 
-    sample <- min(flowCore::fsApply(x = x, FUN = function(x) nrow(x), use.exprs = TRUE))
+    sample <- min(flowCore::fsApply(x = x, FUN = function(x) nrow(x), 
+                                    use.exprs = TRUE))
   
-  ## Remove all .fcs files with less observations than the specified sample
-  x <- x[flowCore::fsApply(x = x, FUN = function(x) nrow(x), use.exprs = TRUE) >= sample]
+  ## Remove all .fcs files with less observations than the specified
+  ## sample
+  x <- x[flowCore::fsApply(x = x, FUN = function(x) nrow(x), use.exprs = TRUE) >= 
+           sample]
   
-  if(rarefy==FALSE){
+  if (rarefy == FALSE) {
     for (i in 1:length(x)) {
       flowCore::exprs(x[[i]]) <- flowCore::exprs(x[[i]])[base::sample(1:nrow(flowCore::exprs(x[[i]])), 
                                                                       size = sample, replace = replace), ]
     }
-    if(progress==TRUE) cat(paste0("Your samples were randomly subsampled to ", sample, " cells\n"))
+    if (progress == TRUE) 
+      cat(paste0("Your samples were randomly subsampled to ", sample, 
+                 " cells\n"))
   } else {
     for (i in 1:length(x)) {
       flowCore::exprs(x[[i]]) <- flowCore::exprs(x[[i]])[base::sample(1:nrow(flowCore::exprs(x[[i]])), 
-                                                                      size = nrow(flowCore::exprs(x[[i]])), replace = replace), ]
+                                                                      size = nrow(flowCore::exprs(x[[i]])), replace = replace), 
+                                                         ]
     }
-    if(progress==TRUE) cat(paste0("Your samples were randomly subsampled to their respective sample size\n"))
+    if (progress == TRUE) 
+      cat(paste0("Your samples were randomly subsampled to their respective sample size\n"))
   }
   return(x)
 }

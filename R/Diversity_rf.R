@@ -57,23 +57,31 @@
 #'  Diversity_rf(flowData_transformed, param = param, R = 10, R.b = 10)
 #' @export
 
-Diversity_rf <- function(x, d = 4, R = 100, R.b = 100, bw = 0.01, nbin = 128, param, progress = TRUE) {
- for(i in 1:R){
-   if(progress==TRUE) cat(date(), paste0("---- Starting resample run ", i,"\n"))
-   tmp <- FCS_resample(x, rarefy = TRUE, replace = TRUE, progress = FALSE)
-   tmp.basis <- flowBasis(tmp, param = param, nbin = nbin, bw = bw, normalize = function(x) x)
-   tmp.diversity <- Diversity(tmp.basis, plot = FALSE, d = d, R = R.b, progress = FALSE)
-   if (i == 1)
-     results <- cbind(tmp.diversity) else {
-       results <- rbind(results, tmp.diversity)
-     }
- }
-  results.sd <- by(results[, c(2,3,5)], INDICES=factor(results$Sample_name), FUN = function(x) apply(x, 2, sd))
-  results.sd <- do.call(rbind, results.sd)
-  colnames(results.sd) <- c("sd.D0","sd.D1","sd.D2")
-  results.m <- by(results[, c(2,3,5)], INDICES=factor(results$Sample_name), FUN = colMeans) 
-  results.m <- do.call(rbind, results.m)
-  results <- data.frame(Sample_names = flowCore::sampleNames(x), results.m, results.sd)
-  cat(date(), paste0("---- Alpha diversity metrics (D0,D1,D2) have been computed after ", R, " bootstraps\n"))
-  return(results)
+Diversity_rf <- function(x, d = 4, R = 100, R.b = 100, bw = 0.01, nbin = 128, 
+                         param, progress = TRUE) {
+  for (i in 1:R) {
+    if (progress == TRUE) 
+      cat(date(), paste0("---- Starting resample run ", i, "\n"))
+    tmp <- FCS_resample(x, rarefy = TRUE, replace = TRUE, progress = FALSE)
+    tmp.basis <- flowBasis(tmp, param = param, nbin = nbin, bw = bw, 
+                           normalize = function(x) x)
+    tmp.diversity <- Diversity(tmp.basis, plot = FALSE, d = d, R = R.b, 
+                               progress = FALSE)
+    if (i == 1) 
+      results <- cbind(tmp.diversity) else {
+        results <- rbind(results, tmp.diversity)
+      }
   }
+  results.sd <- by(results[, c(2, 3, 5)], INDICES = factor(results$Sample_name), 
+                   FUN = function(x) apply(x, 2, sd))
+  results.sd <- do.call(rbind, results.sd)
+  colnames(results.sd) <- c("sd.D0", "sd.D1", "sd.D2")
+  results.m <- by(results[, c(2, 3, 5)], INDICES = factor(results$Sample_name), 
+                  FUN = colMeans)
+  results.m <- do.call(rbind, results.m)
+  results <- data.frame(Sample_names = flowCore::sampleNames(x), results.m, 
+                        results.sd)
+  cat(date(), paste0("---- Alpha diversity metrics (D0,D1,D2) have been computed after ", 
+                     R, " bootstraps\n"))
+  return(results)
+}

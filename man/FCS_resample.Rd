@@ -19,7 +19,9 @@ FCS_resample(x, sample = 0, replace = FALSE, rarefy = FALSE,
 \item{progress}{Should progress be reported? Defaults to yes.}
 }
 \description{
-This function resamples each sample to an equal number of cells
+This function resamples each sample to an equal number of cells. Options are to resample 
+with or withour replacement, and to resample on a per sample basis or across the entire dataset
+(normalization to equal sample size).
 }
 \examples{
 # Load raw data (imported using flowCore)

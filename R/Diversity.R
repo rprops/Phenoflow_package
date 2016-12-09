@@ -68,7 +68,9 @@ Diversity <- function(x, d = 4, plot = FALSE, R = 999, progress = TRUE) {
   D2.boot <- function(x, i) 1/sum((x[i]/sum(x[i]))^2)
   D1.boot <- function(x, i) exp(-sum((x[i]/sum(x[i])) * log(x[i]/sum(x[i]))))
   x <- x@basis/apply(x@basis, 1, max)
-  if(progress==TRUE) cat("\t**Notice** As only frequency data is available, all bins will be resampled equally. \t This is a conservative estimate of the error.\n")
+  if (progress == TRUE) 
+    cat("\t**Notice** As only frequency data is available, all bins will be resampled equally. 
+        \t This is a conservative estimate of the error.\n")
   D = matrix(ncol = 3, nrow = nrow(x))
   ### Observed richness
   D0 = apply(x, 1, FUN = function(x) {
@@ -88,18 +90,23 @@ Diversity <- function(x, d = 4, plot = FALSE, R = 999, progress = TRUE) {
     x <- x[x != 0]
     boot::boot(data = x, statistic = D2.boot, R = R)
   })
-  results <- data.frame(Sample_name = attr(x, "dimnames")[[1]], D0, t(data.frame(lapply(D1, FUN = function(x) c(mean(x$t), 
-                                                                                                                stats::sd(x$t))))), t(data.frame(lapply(D2, FUN = function(x) c(mean(x$t), stats::sd(x$t))))))
+  results <- data.frame(Sample_name = attr(x, "dimnames")[[1]], D0, t(data.frame(lapply(D1, 
+                                                                                        FUN = function(x) c(mean(x$t), stats::sd(x$t))))), t(data.frame(lapply(D2, 
+                                                                                                                                                               FUN = function(x) c(mean(x$t), stats::sd(x$t))))))
   colnames(results) = c("Sample_name", "D0", "D1", "sd.D1", "D2", "sd.D2")
   rownames(results) = attr(x, "dimnames")[[1]]
   if (plot == TRUE) {
-    p <- ggplot2::ggplot(results, ggplot2::aes(x = seq(1:nrow(results)), y = D2)) + ggplot2::geom_point(shape = 16, 
-                                                                                                        size = 4, alpha = 0.7, colour = "blue") + ggplot2::geom_point(colour = "grey90", size = 1.5) + 
-      ggplot2::labs(x = "Samples", y = "Phenotypic diversity - D2") + ggplot2::geom_line(colour = "blue", 
-                                                                                         alpha = 0.4, linetype = 2) + ggplot2::geom_errorbar(ggplot2::aes(ymin = D2 - sd.D2, ymax = D2 + 
-                                                                                                                                                            sd.D2), width = 0.25) + ggplot2::theme_bw()
+    p <- ggplot2::ggplot(results, ggplot2::aes(x = seq(1:nrow(results)), 
+                                               y = D2)) + ggplot2::geom_point(shape = 16, size = 4, alpha = 0.7, 
+                                                                              colour = "blue") + ggplot2::geom_point(colour = "grey90", size = 1.5) + 
+      ggplot2::labs(x = "Samples", y = "Phenotypic diversity - D2") + 
+      ggplot2::geom_line(colour = "blue", alpha = 0.4, linetype = 2) + 
+      ggplot2::geom_errorbar(ggplot2::aes(ymin = D2 - sd.D2, ymax = D2 + 
+                                            sd.D2), width = 0.25) + ggplot2::theme_bw()
     print(p)
   }
-  if(progress==TRUE) cat(date(), paste0("---- Alpha diversity metrics (D0,D1,D2) have been computed after ", R, " bootstraps\n"))
+  if (progress == TRUE) 
+    cat(date(), paste0("---- Alpha diversity metrics (D0,D1,D2) have been computed after ", 
+                       R, " bootstraps\n"))
   return(results)
 }
