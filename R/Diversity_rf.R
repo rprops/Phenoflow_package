@@ -3,7 +3,7 @@
 #' This function calculates Hill diversity metrics from FCM data. This function differs from
 #' the Diversity() function in that it resamples (with replacement) all individual samples and 
 #' averages out the diversity over all subsamples. This function is recommended in case there there are
-#' differences in sample size (nr. of cells).
+#' differences in sample size (nr. of cells). Analysis time is approximately 1 min/resample run.
 #' @param x flowSet containing the samples to analyse.
 #' @param d Rounding factor for density values. Defaults to 4.
 #' @param R Number of resampling runs to conduct on individual samples. Defaults to 100
@@ -13,7 +13,6 @@
 #' @param nbin Resolution of the binning grid. Defaults to 128 bins which corresponds to a 128x128 binning grid.
 #' @param param Parameter vector indicating on which parameters the diversity should be estimated. An example input would be:
 #' c("FL1-H", "FL3-H", "SSC-H", "FSC-H").
-#' @param progress Should progress be reported? Defaults to yes.
 #' @keywords diversity, fcm, alpha
 #' @examples
 #' ## Full data processing example
@@ -62,10 +61,9 @@
 #' @export
 
 Diversity_rf <- function(x, d = 4, R = 100, R.b = 100, bw = 0.01, nbin = 128, 
-                         param, progress = TRUE) {
+                         param) {
   for (i in 1:R) {
-    if (progress == TRUE) 
-      cat(date(), paste0("---- Starting resample run ", i, "\n"))
+    cat(date(), paste0("---- Starting resample run ", i, "\n"))
     tmp <- FCS_resample(x, rarefy = TRUE, replace = TRUE, progress = FALSE)
     tmp.basis <- flowBasis(tmp, param = param, nbin = nbin, bw = bw, 
                            normalize = function(x) x)
@@ -75,6 +73,7 @@ Diversity_rf <- function(x, d = 4, R = 100, R.b = 100, bw = 0.01, nbin = 128,
       results <- cbind(tmp.diversity) else {
         results <- rbind(results, tmp.diversity)
       }
+    rm(tmp, tmp.basis, tmp.diversity)
   }
   results.sd <- by(results[, c(2, 3, 5)], INDICES = factor(results$Sample_name), 
                    FUN = function(x) apply(x, 2, sd))

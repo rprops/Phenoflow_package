@@ -5,7 +5,7 @@
 \title{Diversity_rf function for FCM data}
 \usage{
 Diversity_rf(x, d = 4, R = 100, R.b = 100, bw = 0.01, nbin = 128,
-  param, progress = TRUE)
+  param)
 }
 \arguments{
 \item{x}{flowSet containing the samples to analyse.}
@@ -23,14 +23,12 @@ FCM data (i.e., all parameter values are within [0,1]).}
 
 \item{param}{Parameter vector indicating on which parameters the diversity should be estimated. An example input would be:
 c("FL1-H", "FL3-H", "SSC-H", "FSC-H").}
-
-\item{progress}{Should progress be reported? Defaults to yes.}
 }
 \description{
 This function calculates Hill diversity metrics from FCM data. This function differs from
 the Diversity() function in that it resamples (with replacement) all individual samples and 
 averages out the diversity over all subsamples. This function is recommended in case there there are
-difference in sample size (nr. of cells).
+differences in sample size (nr. of cells). Analysis time is approximately 1 min/resample run.
 }
 \examples{
 ## Full data processing example
