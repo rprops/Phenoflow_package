@@ -20,6 +20,10 @@
 #' 
 #' # Load raw data (imported using flowCore)
 #' data(flowData)
+#' 
+#' # Take subsample
+#' flowData <- flowData[1:5]
+#' 
 #' # Asinh transform and select parameters of interest (cells were stained with Sybr Green I).
 #' flowData_transformed <- flowCore::transform(flowData,`FL1-H`=asinh(`FL1-H`),
 #'        `SSC-H`=asinh(`SSC-H`), 
