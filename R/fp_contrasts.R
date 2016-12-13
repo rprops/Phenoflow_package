@@ -23,8 +23,8 @@
 #' CoolingTower@param
 #' 
 #' ### Lets run with the standard c("FL1-H","FL3-H") and lets evaluate how the 
-#' microbial community compares between the start-up and control phase of the
-#' cooling water system.
+#' ### microbial community compares between the start-up and control phase of the
+#' ### cooling water system.
 #' comp <- fp_contrasts(CoolingTower, comp1 = c(5:9), comp2 = c(1:4), 
 #' param=c("FL1-H","FL3-H"), thresh=0.01)
 #' 
@@ -38,7 +38,7 @@
 #'   ggplot2::geom_contour(color = "white", alpha = 1)
 #'  
 #'  ### Red/positive values indicate higher density for the reactor start-up.
-#'  blue/negative values indicate lower density during start-up.
+#'  ### blue/negative values indicate lower density during start-up.
 #'  print(v)
 #' 
 
