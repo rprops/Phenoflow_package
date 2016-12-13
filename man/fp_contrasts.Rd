@@ -55,7 +55,7 @@ v <- ggplot2::ggplot(comp, ggplot2::aes(`FL1-H`, `FL3-H`, z = Density))+
  ### Red/positive values indicate higher density for the reactor start-up.
  ### blue/negative values indicate lower density during start-up.
  print(v)
-
+ 
 }
 \keyword{contrasts,}
 \keyword{fcm}

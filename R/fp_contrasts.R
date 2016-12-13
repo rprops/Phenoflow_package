@@ -40,7 +40,8 @@
 #'  ### Red/positive values indicate higher density for the reactor start-up.
 #'  ### blue/negative values indicate lower density during start-up.
 #'  print(v)
-#' 
+#'  
+#' @export
 
 fp_contrasts <- function(x, comp1, comp2, param = c("FL1-H","FL3-H"), d = 3, thresh = 0.1){
   nbin <- x@nbin
