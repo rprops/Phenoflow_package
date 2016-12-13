@@ -43,41 +43,45 @@
 #'  
 #' @export
 
-fp_contrasts <- function(x, comp1, comp2, param = c("FL1-H","FL3-H"), d = 3, thresh = 0.1){
+fp_contrasts <- function(x, comp1, comp2, param = c("FL1-H", "FL3-H"), 
+                         d = 3, thresh = 0.1) {
   nbin <- x@nbin
   Y <- c()
-  for(i in 1:nbin) Y <- c(Y, rep(i,128))
+  for (i in 1:nbin) Y <- c(Y, rep(i, 128))
   
   ### Calculate max. density over total data
   max.total <- max(x@basis)
   
   ### Make contrasts
-  if(length(comp1)==1 & length(comp2)==1)
-    tmp <- (x@basis[comp1,] - x@basis[comp2,]) 
-  if (length(comp1)==1 & length(comp2)!=1)
-    tmp <- x@basis[comp1,] - colMeans(x@basis[comp2,])
-  if (length(comp1)!=1 & length(comp2)==1)
-    tmp <- colMeans(x@basis[comp1,]) - x@basis[comp2,]
-  if (length(comp1)!=1 & length(comp2)!=1)
-    tmp <- colMeans(x@basis[comp1,]) - colMeans(x@basis[comp2,])
+  if (length(comp1) == 1 & length(comp2) == 1) 
+    tmp <- (x@basis[comp1, ] - x@basis[comp2, ])
+  if (length(comp1) == 1 & length(comp2) != 1) 
+    tmp <- x@basis[comp1, ] - colMeans(x@basis[comp2, ])
+  if (length(comp1) != 1 & length(comp2) == 1) 
+    tmp <- colMeans(x@basis[comp1, ]) - x@basis[comp2, ]
+  if (length(comp1) != 1 & length(comp2) != 1) 
+    tmp <- colMeans(x@basis[comp1, ]) - colMeans(x@basis[comp2, ])
   
   ### Normalize
   tmp <- tmp/max.total
   
   ### Position of data in @basis
-  npos <- seq(1:nrow(x@param))[x@param[,1]== "FL1-H" & x@param[,2]== "FL3-H"]
-  region <- ((npos-1)*nbin*nbin + 1):(npos*nbin*nbin)
+  npos <- seq(1:nrow(x@param))[x@param[, 1] == param[1] & x@param[, 2] == 
+                                 param[2]]
+  region <- ((npos - 1) * nbin * nbin + 1):(npos * nbin * nbin)
+  cat(paste0("\tRegion used for contrasts ", min(region), " ", max(region), 
+             "\n"))
   
   ### Convert to data.frame
-  
-  df <- data.frame(Density=tmp[region], X=rep(1:nbin, nbin),Y=Y)
-  colnames(df)[2:3] <- param 
+  df <- data.frame(Density = tmp[region], X = rep(1:nbin, nbin), Y = Y)
+  colnames(df)[2:3] <- param
   
   ### Filter out low density values
-  df <- df[abs(round(df$Density, d))>thresh,]
+  df <- df[abs(round(df$Density, d)) > thresh, ]
   
   ### Message
-  cat(paste0("\tReturning contrasts for ", rownames(x@basis)[comp1]," ",rownames(x@basis)[comp2],"\n"))
+  cat(paste0("\tReturning contrasts for ", rownames(x@basis)[comp1], 
+             " ", rownames(x@basis)[comp2], "\n"))
   
   return(df)
 }
