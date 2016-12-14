@@ -46,7 +46,7 @@ Diversity_16S <- function(x, R = 999, brea=TRUE, thresh=200) {
     temp.D1 <- c()
     temp.D2 <- c()
     temp.phy <- phyloseq::prune_samples(x = x, samples = phyloseq::sample_names(x)[i])
-    cat(paste0(date(), "\tStarting sample ", phyloseq::sample_names(x)[i], "\n"))
+    cat(paste0(date(), "\tCalculating diversity for sample ",i,"/",phyloseq::nsamples(x)," --- ",phyloseq::sample_names(x)[i], "\n"))
     for (j in 1:R) {
       temp <- phyloseq::rarefy_even_depth(temp.phy, verbose = FALSE, replace = TRUE)
       # Calculate frequencies
@@ -64,7 +64,7 @@ Diversity_16S <- function(x, R = 999, brea=TRUE, thresh=200) {
         DIV[i, 9] <- mean(temp.D2)
         DIV[i, 10] <- stats::sd(temp.D2)
         remove(temp.D0, temp.D1, temp.D2)
-        cat(paste0(date(), "\tDone with sample ", phyloseq::sample_names(x)[i], "\n"))
+        # cat(paste0(date(), "\tDone with sample ", phyloseq::sample_names(x)[i], "\n"))
       }
     }
     # Perform breakaway for richness estimation
