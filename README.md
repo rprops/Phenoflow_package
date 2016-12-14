@@ -14,6 +14,7 @@ Functions  | Actions
 ------------| -----------
 flowBasis | Function part of the flowFDA package (in development) which performes bivariate kernel density estimations on the phenotypic parameters
 Diversity | Calculation of Hill diversities of order 0, 1 and 2 from fingerprint object
+Diversity_rf | More accurate (i.e., smaller errors) calculation of Hill diversities from flowSet. It is slower than Diversity().
 Diversity_16S | Calculation of Hill diversities from 16S amplicon data for comparison with <code>Diversity()</code>. 
 Evenness | Calculation of pareto evenness (Wittebolle L. et al. (2009)) from fingerprint object (1 = maximum evenness, 0 = minimum evenness)
 So | Calculation of Structural Organization parameter (Koch et al. (2014), Frontiers in Microbiology)
