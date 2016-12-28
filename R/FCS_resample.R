@@ -21,8 +21,6 @@ FCS_resample <- function(x, sample = 0, replace = FALSE, rarefy = FALSE,
                               use.exprs = TRUE))
   max <- max(flowCore::fsApply(x = x, FUN = function(x) nrow(x), 
                                use.exprs = TRUE))
-  cat(paste0("Your samples range between ", min, 
-             " and ", max, " cells\n"))
   if (sample == 0) 
     sample <- min
   
@@ -36,9 +34,12 @@ FCS_resample <- function(x, sample = 0, replace = FALSE, rarefy = FALSE,
       flowCore::exprs(x[[i]]) <- flowCore::exprs(x[[i]])[base::sample(1:nrow(flowCore::exprs(x[[i]])), 
                                                                       size = sample, replace = replace), ]
     }
-    if (progress == TRUE) 
+    if (progress == TRUE) {
+      cat(paste0("Your samples range between ", min, 
+                 " and ", max, " cells\n"))
       cat(paste0("Your samples were randomly subsampled to ", sample, 
                  " cells\n"))
+    }
   } else {
     for (i in 1:length(x)) {
       flowCore::exprs(x[[i]]) <- flowCore::exprs(x[[i]])[base::sample(1:nrow(flowCore::exprs(x[[i]])), 
