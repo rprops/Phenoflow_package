@@ -17,10 +17,14 @@
 
 FCS_resample <- function(x, sample = 0, replace = FALSE, rarefy = FALSE, 
                          progress = TRUE) {
-  
+  min <- min(flowCore::fsApply(x = x, FUN = function(x) nrow(x), 
+                              use.exprs = TRUE))
+  max <- max(flowCore::fsApply(x = x, FUN = function(x) nrow(x), 
+                               use.exprs = TRUE))
+  cat(paste0("Your samples range between ", min, 
+             " and ", max, " cells\n"))
   if (sample == 0) 
-    sample <- min(flowCore::fsApply(x = x, FUN = function(x) nrow(x), 
-                                    use.exprs = TRUE))
+    sample <- min
   
   ## Remove all .fcs files with less observations than the specified
   ## sample
