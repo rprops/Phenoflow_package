@@ -23,7 +23,7 @@ beta_div_fcm(x, d = 4, dist = "bray", k = 2, iter = 100,
 \item{INDICES}{Factor vector indicating the samples to average for the beta-diversity
 analysis}
 
-\item{binary}{Specify whether the distance metric should be binary. Defaults to FALSE.}
+\item{binary}{Specify whether the data should be transformed to presence/absence. Defaults to FALSE.}
 }
 \description{
 This function performs beta diversity analysis on FCM data. 

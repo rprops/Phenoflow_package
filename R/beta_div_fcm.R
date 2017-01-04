@@ -9,7 +9,7 @@
 #' @param dist Distance metric to use in the vegdist() function. Defaults to bray.
 #' @param k Number of dimensions to project your samples into. Defaults to 2.
 #' @param iter Number of iterations for NMDS analysis. Defaults to 100.
-#' @param binary Specify whether the distance metric should be binary. Defaults to FALSE.
+#' @param binary Specify whether the data should be transformed to presence/absence. Defaults to FALSE.
 #' @param ord.type Choose between NMDS or PCoA analysis.
 #' @keywords betadiversity, fcm
 #' @examples
