@@ -7,7 +7,7 @@
 
 Install the package:
 ```R
-library(devtools)
+library("devtools")
 install_github("rprops/Phenoflow_package")
 ```
 ![alt text][logo] 
