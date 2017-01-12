@@ -2,7 +2,7 @@
 % Please edit documentation in R/fp_contrasts.R
 \name{fp_contrasts}
 \alias{fp_contrasts}
-\title{Returns contrasts betweeen fingerprints}
+\title{Returns contrasts between fingerprints}
 \usage{
 fp_contrasts(x, comp1, comp2, param = c("FL1-H", "FL3-H"), d = 3,
   thresh = 0.1)
