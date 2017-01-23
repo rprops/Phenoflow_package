@@ -65,7 +65,8 @@
 
 #' @export
 
-plot_beta_fcm <- function(x, color = NA, shape = NA, labels = c("Factor 1", "Factor 2"), legend.pres = NULL) {
+plot_beta_fcm <- function(x, color = NA, shape = NA, labels = c("Factor 1", "Factor 2"), legend.pres = NULL,
+                          binary = FALSE) {
   legend.ops <- NULL
   if (sum(is.na(color)) > 0) 
     color = rep("f1", nrow(x$points))

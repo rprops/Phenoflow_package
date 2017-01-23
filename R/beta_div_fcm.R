@@ -9,6 +9,7 @@
 #' @param dist Distance metric to use in the vegdist() function. Defaults to bray.
 #' @param k Number of dimensions to project your samples into. Defaults to 2.
 #' @param iter Number of iterations for NMDS analysis. Defaults to 100.
+#' @param binary Specify whether the data should be transformed to presence/absence. Defaults to FALSE.
 #' @param ord.type Choose between NMDS or PCoA analysis.
 #' @keywords betadiversity, fcm
 #' @examples
@@ -67,14 +68,15 @@
 #'  plot_beta_fcm(beta)
 #' @export
 
-beta_div_fcm <- function(x, d = 4, dist = "bray", k = 2, iter = 100, ord.type = c("NMDS", "PCoA"), INDICES=NULL) {
+beta_div_fcm <- function(x, d = 4, dist = "bray", k = 2, iter = 100, ord.type = c("NMDS", "PCoA"), INDICES=NULL,
+                         binary = FALSE) {
   x <- x@basis/apply(x@basis, 1, max)
   x <- round(x, d)
   if(!is.null(INDICES)){
-    x <- by(x, INDICES = INDICES, FUN=colMeans)
+    x <- by(x, INDICES = INDICES, FUN = colMeans)
     x <- do.call(rbind, x)
   }
-    input.dist <- vegan::vegdist(x, method = dist)
+    input.dist <- vegan::vegdist(x, method = dist, binary = binary)
     if (ord.type == "NMDS") 
       mds.fbasis <- vegan::metaMDS(input.dist, autotransform = FALSE, k, trymax = iter) else mds.fbasis <- stats::cmdscale(input.dist, k = 2, eig = TRUE, add = TRUE)
   return(mds.fbasis)
