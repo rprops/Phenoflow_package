@@ -23,6 +23,7 @@ Imports:
     breakaway,
     lattice,
     devtools,
+    scales
 biocViews: CellBasedAssays, FlowCytometry, Infrastructure, Software, Clustering
 License: GPL-2
 Encoding: UTF-8
