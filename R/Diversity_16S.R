@@ -11,6 +11,15 @@
 #' @param brea TRUE/FALSE if breakaway method for D0 estimation should be used.
 #' Defaults to TRUE. This method fails easily if you don't have atleast 6 contiguous
 #' frequencies.
+#' @param diss Provide sequence distance or dissimarity matrix in case 
+#' similarity-based diverstiy metricsshould be calculated as well. 
+#' See Leinster, T. and Cobbold, C. A. (2012), Measuring diversity: the importance 
+#' of species similarity. Ecology, 93: 477–489. doi:10.1890/10-2402.1 
+#' @param sim Does the provided distance matrix contain dissimilarities? 
+#' Defaults to FALSE. Distances (e.g. Bray-Curtis) will be transformed to
+#' dissimilarities by e^-dist.
+#' @param q Hill order for the similarity-based diversity metric calculation. 
+#' Defaults to 2.
 #' @param thresh Minimum sample size required to perform Chao1 estimation.
 #' @keywords diversity, fcm, alpha
 #' @examples 
@@ -23,7 +32,8 @@
 #' Diversity_16S(physeq_test, R=3)
 #' @export
 
-Diversity_16S <- function(x, R = 999, brea=TRUE, thresh=200) {
+Diversity_16S <- function(x, R = 999, brea=TRUE, thresh=200, diss = NULL, 
+                          sim = FALSE, q = 2) {
   if (!requireNamespace("phyloseq", quietly = TRUE)) {
     stop("Phyloseq package needed for this function to work. Please install it.",
          call. = FALSE)
@@ -40,6 +50,7 @@ Diversity_16S <- function(x, R = 999, brea=TRUE, thresh=200) {
   D2.boot <- function(x) 1/sum((x)^2)
   D1.boot <- function(x) exp(-sum(x * log(x)))
   
+  D.sim <- function(x) (sum(x*(Zp)^(q-1)))^(1/(q-1))
   # Start resampling
   for (i in 1:phyloseq::nsamples(x)) {
     temp.D0 <- c()

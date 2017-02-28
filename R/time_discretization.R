@@ -20,7 +20,7 @@ time_discretization <- function(x, analysis.length, create=FALSE, start=0, time.
                                 time.step=0.1){
   x <- transform(x,`Time`=(`Time`- min(`Time`))*time.step)
   for(j in 1:length(x)){
-    number <- max(round((round(analysis.length/time.interval,0)+1)/10,0))
+    # number <- max(round((round(analysis.length/time.interval,0)+1)/10,0))
     old.wd <- getwd()
     if(create) {
       dir.create(paste(strsplit(rownames(analysis.length)[j],".fcs")[[1]], paste(time.interval), sep="_"))
@@ -42,7 +42,7 @@ time_discretization <- function(x, analysis.length, create=FALSE, start=0, time.
       flowData.temp <- flowCore::Subset(x[j],time.gate)
       flowData.temp[[1]]@description$`$VOL` <- as.numeric(as.numeric(x[[j]]@description$`$VOL`)*(time.interval)/(analysis.length$time[j]))
       print(as.numeric(as.numeric(x[[j]]@description$`$VOL`)*(time.interval)/(analysis.length$time[j])))
-      flowCore::write.FCS(x=flowData.temp[[1]], filename=paste(i+(10*number),time.interval,paste(rownames(analysis.length)[j]), sep="_"), what="numeric")
+      flowCore::write.FCS(x=flowData.temp[[1]], filename=paste(i, time.interval,paste(rownames(analysis.length)[j]), sep="_"), what="numeric")
     }
     setwd(old.wd)
   }
