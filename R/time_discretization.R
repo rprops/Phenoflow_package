@@ -18,7 +18,7 @@
 
 time_discretization <- function(x, analysis.length, create=FALSE, start=0, time.interval, height = c(0,200), trigger = "FL1-H",
                                 time.step=0.1){
-  x <- transform(x,`Time`=(`Time`- min(`Time`))*time.step)
+  x <- flowCore::transform(x,`Time`=(`Time`- min(`Time`))*time.step)
   for(j in 1:length(x)){
     # number <- max(round((round(analysis.length/time.interval,0)+1)/10,0))
     old.wd <- getwd()
