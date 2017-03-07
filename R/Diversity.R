@@ -91,7 +91,7 @@ Diversity <- function(x, d = 4, plot = FALSE, R = 999, progress = TRUE) {
     x <- x[x != 0]
     boot::boot(data = x, statistic = D2.boot, R = R)
   })
-  results <- data.frame(Sample_name = attr(x, "dimnames")[[1]], D0, t(data.frame(lapply(D1, 
+  results <- data.frame(Sample_name = rownames(x), D0, t(data.frame(lapply(D1, 
                                                                                         FUN = function(x) c(mean(x$t), stats::sd(x$t))))), t(data.frame(lapply(D2, 
                                                                                                                                                                FUN = function(x) c(mean(x$t), stats::sd(x$t))))))
   colnames(results) = c("Sample_name", "D0", "D1", "sd.D1", "D2", "sd.D2")
