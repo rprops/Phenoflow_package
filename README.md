@@ -15,7 +15,8 @@ library("devtools")
 install_github("rprops/Phenoflow_package")
 ```
 
-![alt text][logo]  
+![alt text][logo]
+
 [logo]: https://github.com/rprops/PhenoFlow/blob/master/Animation_low_res.gif "Figure 1"
 
 ## Available functions
