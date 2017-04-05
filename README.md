@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/rprops/Phenoflow_package.svg?branch=master)](https://travis-ci.org/rprops/Phenoflow_package)
 # Phenoflow
-===============
+*******************
 - **Authors**: Ruben Props [Ruben.Props@UGent.be], Frederiek-Maarten Kerchkof [FrederiekMaarten.Kerckhof@UGent.be]
 
 The goal of this package is to provide functions for advanced analysis of microbial flow cytometry data. One of the applications is the derivation of phenotypic diversity estimates, such as depicted below (data available at <a href="http://datadryad.org/resource/doi:10.5061/dryad.m1c04"> doi:10.5061/dryad.m1c04</a>), which can be compared with 16S rRNA gene amplicon data sets. Tutorial can be found [here](https://github.com/rprops/Phenoflow_package/wiki/Phenotypic-diversity-analysis) .
@@ -39,4 +39,3 @@ FCS_resample | Resamples sample files from flowSet object to an equal number of 
 Functions  | Actions
 ------------| -----------
 flowRate | Calculation of growth rates of microbial populations from flow cytometry data.
-flowInsilico | 
