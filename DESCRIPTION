@@ -6,9 +6,10 @@ BugReports: https://github.com/rprops/PhenoFlow/issues
 Description: Set of functions to calculate diversity estimates of microbial
     communities from FCM data (described in: doi: 10.1111/2041-210X.12607).
 Remotes: github::lievenclement/flowFDA
-Suggests: phyloseq
+Suggests: phyloseq,
+    testthat
 Depends:
-    R (>= 3.3.0)
+    R (>= 3.3.0), flowCore
 Imports:
     vegan,
     MESS,
@@ -23,7 +24,9 @@ Imports:
     breakaway,
     lattice,
     devtools,
-    scales
+    scales,
+    stats,
+    flowFDA
 biocViews: CellBasedAssays, FlowCytometry, Infrastructure, Software, Clustering
 License: GPL-2
 Encoding: UTF-8

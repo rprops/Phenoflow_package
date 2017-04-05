@@ -29,7 +29,7 @@
 #' # Load data (V3-V4 amplicon data from doi: 10.1111/2041-210X.12607)
 #' data(physeq_test)
 #' # Opting for three bootstraps, because this can take some time.
-#' Diversity_16S(physeq_test[1:5], R=3)
+#' Diversity_16S(phyloseq::prune_samples(phyloseq::sample_names(physeq_test) == "1", physeq_test), R=3)
 #' @export
 
 Diversity_16S <- function(x, R = 999, brea=TRUE, thresh=200, diss = NULL, 
