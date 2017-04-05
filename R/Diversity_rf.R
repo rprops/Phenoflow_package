@@ -57,8 +57,8 @@
 #'          `SSC-H`=mytrans(`SSC-H`),
 #'          `FSC-H`=mytrans(`FSC-H`))
 #'  
-#'  # Calculate diversity
-#'  Diversity_rf(flowData_transformed, param = param, R = 3, R.b = 3)
+#'  # Calculate diversity for first 5 samples
+#'  Diversity_rf(flowData_transformed[1:5], param = param, R = 3, R.b = 3)
 #' @export
 
 Diversity_rf <- function(x, d = 4, R = 100, R.b = 100, bw = 0.01, nbin = 128, 
@@ -66,7 +66,7 @@ Diversity_rf <- function(x, d = 4, R = 100, R.b = 100, bw = 0.01, nbin = 128,
   for (i in 1:R) {
     cat(date(), paste0("---- Starting resample run ", i, "\n"))
     tmp <- FCS_resample(x, rarefy = TRUE, replace = TRUE, progress = FALSE)
-    tmp.basis <- flowBasis(tmp, param = param, nbin = nbin, bw = bw, 
+    tmp.basis <- flowFDA::flowBasis(tmp, param = param, nbin = nbin, bw = bw, 
                            normalize = function(x) x)
     tmp.diversity <- Diversity(tmp.basis, plot = FALSE, d = d, R = R.b, 
                                progress = FALSE)

@@ -29,7 +29,7 @@
 #' # Load data (V3-V4 amplicon data from doi: 10.1111/2041-210X.12607)
 #' data(physeq_test)
 #' # Opting for three bootstraps, because this can take some time.
-#' Diversity_16S(physeq_test, R=3)
+#' Diversity_16S(physeq_test[1:5], R=3)
 #' @export
 
 Diversity_16S <- function(x, R = 999, brea=TRUE, thresh=200, diss = NULL, 
@@ -50,7 +50,6 @@ Diversity_16S <- function(x, R = 999, brea=TRUE, thresh=200, diss = NULL,
   D2.boot <- function(x) 1/sum((x)^2)
   D1.boot <- function(x) exp(-sum(x * log(x)))
   
-  D.sim <- function(x) (sum(x*(Zp)^(q-1)))^(1/(q-1))
   # Start resampling
   for (i in 1:phyloseq::nsamples(x)) {
     temp.D0 <- c()

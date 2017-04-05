@@ -8,7 +8,7 @@ Description: Set of functions to calculate diversity estimates of microbial
 Remotes: github::lievenclement/flowFDA
 Suggests: phyloseq
 Depends:
-    R (>= 3.3.0), flowFDA, flowCore, flowViz
+    R (>= 3.3.0)
 Imports:
     vegan,
     MESS,
