@@ -21,7 +21,7 @@ do not need meet the criteria will be removed. Only works for samples with more 
 \examples{
 ## Full data processing example
 data(flowData)
-clean_FCS(flowData, cleanparam = c(9,11))
+FCS_clean(flowData, cleanparam = c(9,11))
 }
 \keyword{alpha}
 \keyword{denoise,}

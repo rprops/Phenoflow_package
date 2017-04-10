@@ -11,7 +11,7 @@
 #' @examples
 #' ## Full data processing example
 #' data(flowData)
-#' clean_FCS(flowData, cleanparam = c(9,11))
+#' FCS_clean(flowData, cleanparam = c(9,11))
 #' @export
 
 FCS_clean <- function(x, cleanparam = c(9,11)){
