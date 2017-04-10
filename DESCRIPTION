@@ -9,7 +9,7 @@ Remotes: github::lievenclement/flowFDA
 Suggests: phyloseq,
     testthat
 Depends:
-    R (>= 3.3.0), flowCore
+    R (>= 3.3.0), flowCore, flowClean
 Imports:
     vegan,
     MESS,
@@ -26,7 +26,8 @@ Imports:
     devtools,
     scales,
     stats,
-    flowFDA
+    flowFDA,
+    flowClean
 biocViews: CellBasedAssays, FlowCytometry, Infrastructure, Software, Clustering
 License: GPL-2
 Encoding: UTF-8
