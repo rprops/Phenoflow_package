@@ -1,4 +1,4 @@
-#' clean_FCS function for FCM data
+#' FCS_clean function for FCM data
 #'
 #' This function denoises a flowSet object using the flowClean package. Observations that
 #' do not need meet the criteria will be removed. Only works for samples with more than
@@ -14,7 +14,7 @@
 #' clean_FCS(flowData, cleanparam = c(9,11))
 #' @export
 
-clean_FCS <- function(x, cleanparam = c(9,11)){
+FCS_clean <- function(x, cleanparam = c(9,11)){
   if(nrow(exprs(x)) > 30000){
     GoodCells <- flowClean::clean(x, vectMarkers = cleanparam, nCellCutoff = 500,
                                   binSize = 0.01, returnVector = TRUE,
