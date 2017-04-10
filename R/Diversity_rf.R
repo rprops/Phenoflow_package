@@ -90,7 +90,7 @@ Diversity_rf <- function(x, d = 4, R = 100, R.b = 100, bw = 0.01, nbin = 128,
   if(cleanFCS == TRUE){
     cat(date(), paste0("--- Using the following parameters for removing errant collection events\n in samples with > 30,000 cells: ", colnames(x)[cleanparam[1]], " ", 
                        colnames(x)[cleanparam[2]], "\n"))
-    flowCore::fsApply(x = x, FUN = function(x) FCS_clean(x, cleanparam))
+    x <- flowCore::fsApply(x = x, FUN = function(x) FCS_clean(x, cleanparam))
     x <- x[,param]
     cat(date(), paste0("--- Done with cleaning data\n"))
   }
