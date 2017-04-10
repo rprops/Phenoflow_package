@@ -122,15 +122,3 @@ Diversity_rf <- function(x, d = 4, R = 100, R.b = 100, bw = 0.01, nbin = 128,
                      R, " bootstraps\n"))
   return(results)
 }
-
-clean_FCS <- function(x, cleanparam){
-  if(nrow(exprs(x)) > 30000){
-    GoodCells <- flowClean::clean(x, vectMarkers = cleanparam, nCellCutoff = 500,
-                                  binSize = 0.01, returnVector = TRUE,
-                                  filePrefixWithDir = paste(x@description$FILENAME, "_cleaned.fcs", 
-                                                            sep = ""), ext = "")
-    flowCore::exprs(x) <- flowCore::exprs(x)[GoodCells < 10000, ]
-    
-  }
-  return(x)
-}
