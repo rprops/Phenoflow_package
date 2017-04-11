@@ -21,7 +21,8 @@ do not need meet the criteria will be removed. Only works for samples with more 
 \examples{
 ## Full data processing example
 data(flowData)
-FCS_clean(flowData, cleanparam = c(9,11))
+cleanparam <- c(9,11)
+flowData_cleaned <- flowCore::fsApply(x = flowData, FUN = function(x) FCS_clean(x, cleanparam))
 }
 \keyword{alpha}
 \keyword{denoise,}
