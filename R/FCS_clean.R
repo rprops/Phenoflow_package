@@ -12,7 +12,7 @@
 #' ## Full data processing example
 #' data(flowData)
 #' cleanparam <- c(9,11)
-#' flowData_cleaned <- flowCore::fsApply(x = flowData, FUN = function(x) FCS_clean(x, cleanparam))
+#' flowData_cleaned <- flowCore::fsApply(x = flowData[1:5], FUN = function(x) FCS_clean(x, cleanparam))
 #' @export
 
 FCS_clean <- function(x, cleanparam = c(9,11)){
