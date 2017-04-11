@@ -33,7 +33,7 @@ CV | Calculation of Coefficient of Variation (CV) of the fingerprint object
 beta_diversity_fcm | Non-metric Multidimensional Scaling (NMDS) or PCoA of the phenotypic fingerprints
 time_discretization | Function for subsetting .fcs files in time intervals and exporting them as new .fcs files. Designed for the analysis of on-line experiments.
 FCS_resample | Resamples sample files from flowSet object to an equal number of cells. Standard is to the minimum sample size.
-
+FCS_clean | Denoises all samples by means of [automated identification and removal of fluorescence anomalies in flow cytometry data](http://onlinelibrary.wiley.com/doi/10.1002/cyto.a.22837/full)
 
 ## Functionalities to be added in the future:
 Functions  | Actions
