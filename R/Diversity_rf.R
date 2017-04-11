@@ -91,6 +91,8 @@ Diversity_rf <- function(x, d = 4, R = 100, R.b = 100, bw = 0.01, nbin = 128,
     cat(date(), paste0("--- Using the following parameters for removing errant collection events\n in samples with > 30,000 cells: ", colnames(x)[cleanparam[1]], " ", 
                        colnames(x)[cleanparam[2]], "\n"))
     x <- flowCore::fsApply(x = x, FUN = function(x) FCS_clean(x, cleanparam))
+    # Save parameters used to filter
+    paramfilter <- colnames(x)[cleanparam]
     x <- x[,param]
     cat(date(), paste0("--- Done with cleaning data\n"))
   }
@@ -109,6 +111,7 @@ Diversity_rf <- function(x, d = 4, R = 100, R.b = 100, bw = 0.01, nbin = 128,
       }
     rm(tmp.diversity)
   }
+  
   results.sd <- by(results[, c(2, 3, 5)], INDICES = factor(results$Sample_name), 
                    FUN = function(x) apply(x, 2, sd))
   results.sd <- do.call(rbind, results.sd)
@@ -118,6 +121,15 @@ Diversity_rf <- function(x, d = 4, R = 100, R.b = 100, bw = 0.01, nbin = 128,
   results.m <- do.call(rbind, results.m)
   results <- data.frame(Sample_names = flowCore::sampleNames(x), results.m, 
                         results.sd)
+  # Add parameters as attributes to dataframe
+  attr(results, "R") <- R
+  attr(results, "R.b") <- R.b
+  attr(results, "bw") <- bw
+  attr(results, "nbin") <- nbin
+  attr(results, "d") <- d
+  attr(results, "cleanFCS") <- cleanFCS
+  if(cleanFCS == TRUE) attr(results, "cleanparam") <- paramfilter
+  
   cat(date(), paste0("--- Alpha diversity metrics (D0,D1,D2) have been computed after ", 
                      R, " bootstraps\n"))
   return(results)
