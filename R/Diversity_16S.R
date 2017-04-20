@@ -97,8 +97,8 @@ Diversity_16S <- function(x, R = 999, brea = TRUE, thresh = 200, parallel = FALS
       }
     }
   } else {
-    cl <- makeCluster(ncores) #not to overload your computer
-    registerDoParallel(cl)
+    cl <- parallel::makeCluster(ncores) #not to overload your computer
+    doParallel::registerDoParallel(cl)
     cat(date(), "\tUsing", ncores, "cores for calculations\n")
     # Start resampling
     for (i in 1:phyloseq::nsamples(x)) {
@@ -109,7 +109,7 @@ Diversity_16S <- function(x, R = 999, brea = TRUE, thresh = 200, parallel = FALS
       cat(paste0(date(), "\tCalculating diversity for sample ",i,"/",phyloseq::nsamples(x)," --- ",phyloseq::sample_names(x)[i], "\n"))
       
       # Paralleize diversity calculations 
-      tmp <- foreach(j=1:10, .combine=rbind) %dopar% {
+      tmp <- foreach::foreach(j=1:10, .combine=rbind) %dopar% {
         temp <- phyloseq::rarefy_even_depth(temp.phy, verbose = FALSE, replace = TRUE)
         # Calculate frequencies
         temp <- data.frame(phyloseq::transform_sample_counts(temp, fun = function(x) x/sum(x))@otu_table)
