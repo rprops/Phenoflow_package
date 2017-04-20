@@ -149,7 +149,7 @@ Diversity_16S <- function(x, R = 999, brea = TRUE, thresh = 200, parallel = FALS
     
     if(parallel == TRUE){
       cat(date(), "\tClosing connection to cores\n")
-      stopCluster(cl)
+      parallel::stopCluster(cl)
     }
   }
  
