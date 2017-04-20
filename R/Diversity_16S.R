@@ -11,16 +11,10 @@
 #' @param brea TRUE/FALSE if breakaway method for D0 estimation should be used.
 #' Defaults to TRUE. This method fails easily if you don't have atleast 6 contiguous
 #' frequencies.
-#' @param diss Provide sequence distance or dissimarity matrix in case 
-#' similarity-based diverstiy metricsshould be calculated as well. 
-#' See Leinster, T. and Cobbold, C. A. (2012), Measuring diversity: the importance 
-#' of species similarity. Ecology, 93: 477–489. doi:10.1890/10-2402.1 
-#' @param sim Does the provided distance matrix contain dissimilarities? 
-#' Defaults to FALSE. Distances (e.g. Bray-Curtis) will be transformed to
-#' dissimilarities by e^-dist.
-#' @param q Hill order for the similarity-based diversity metric calculation. 
-#' Defaults to 2.
 #' @param thresh Minimum sample size required to perform Chao1 estimation.
+#' @param parallel Should the calculation be parallelized? Defaults to FALSE
+#' @param ncores How many cores should be used in case of parallel computation?
+#' Defaults to 2.
 #' @keywords diversity, fcm, alpha
 #' @examples 
 #' # First install phyloseq if you haven't yet
@@ -32,8 +26,8 @@
 #' Diversity_16S(phyloseq::prune_samples(phyloseq::sample_names(physeq_test) == "1", physeq_test), R=3)
 #' @export
 
-Diversity_16S <- function(x, R = 999, brea=TRUE, thresh=200, diss = NULL, 
-                          sim = FALSE, q = 2) {
+Diversity_16S <- function(x, R = 999, brea = TRUE, thresh = 200, parallel = FALSE, 
+                          ncores = 2) {
   if (!requireNamespace("phyloseq", quietly = TRUE)) {
     stop("Phyloseq package needed for this function to work. Please install it.",
          call. = FALSE)
@@ -50,59 +44,117 @@ Diversity_16S <- function(x, R = 999, brea=TRUE, thresh=200, diss = NULL,
   D2.boot <- function(x) 1/sum((x)^2)
   D1.boot <- function(x) exp(-sum(x * log(x)))
   
-  # Start resampling
-  for (i in 1:phyloseq::nsamples(x)) {
-    temp.D0 <- c()
-    temp.D1 <- c()
-    temp.D2 <- c()
-    temp.phy <- phyloseq::prune_samples(x = x, samples = phyloseq::sample_names(x)[i])
-    cat(paste0(date(), "\tCalculating diversity for sample ",i,"/",phyloseq::nsamples(x)," --- ",phyloseq::sample_names(x)[i], "\n"))
-    for (j in 1:R) {
-      temp <- phyloseq::rarefy_even_depth(temp.phy, verbose = FALSE, replace = TRUE)
-      # Calculate frequencies
-      temp <- data.frame(phyloseq::transform_sample_counts(temp, fun = function(x) x/sum(x))@otu_table)
-      # Calculate Diversities
-      temp.D0 <- c(temp.D0, D0.boot(temp))
-      temp.D1 <- c(temp.D1, D1.boot(temp))
-      temp.D2 <- c(temp.D2, D2.boot(temp))
-      # Store diversities at the end of resampling run
-      if (j == R) {
-        DIV[i, 1] <- mean(temp.D0)
-        DIV[i, 2] <- stats::sd(temp.D0)
-        DIV[i, 7] <- mean(temp.D1)
-        DIV[i, 8] <- stats::sd(temp.D1)
-        DIV[i, 9] <- mean(temp.D2)
-        DIV[i, 10] <- stats::sd(temp.D2)
-        remove(temp.D0, temp.D1, temp.D2)
-        # cat(paste0(date(), "\tDone with sample ", phyloseq::sample_names(x)[i], "\n"))
+  if(parallel == FALSE){
+    # Start resampling
+    for (i in 1:phyloseq::nsamples(x)) {
+      temp.D0 <- c()
+      temp.D1 <- c()
+      temp.D2 <- c()
+      temp.phy <- phyloseq::prune_samples(x = x, samples = phyloseq::sample_names(x)[i])
+      cat(paste0(date(), "\tCalculating diversity for sample ",i,"/",phyloseq::nsamples(x)," --- ",phyloseq::sample_names(x)[i], "\n"))
+      for (j in 1:R) {
+        temp <- phyloseq::rarefy_even_depth(temp.phy, verbose = FALSE, replace = TRUE)
+        # Calculate frequencies
+        temp <- data.frame(phyloseq::transform_sample_counts(temp, fun = function(x) x/sum(x))@otu_table)
+        # Calculate Diversities
+        temp.D0 <- c(temp.D0, D0.boot(temp))
+        temp.D1 <- c(temp.D1, D1.boot(temp))
+        temp.D2 <- c(temp.D2, D2.boot(temp))
+        # Store diversities at the end of resampling run
+        if (j == R) {
+          DIV[i, 1] <- mean(temp.D0)
+          DIV[i, 2] <- stats::sd(temp.D0)
+          DIV[i, 7] <- mean(temp.D1)
+          DIV[i, 8] <- stats::sd(temp.D1)
+          DIV[i, 9] <- mean(temp.D2)
+          DIV[i, 10] <- stats::sd(temp.D2)
+          remove(temp.D0, temp.D1, temp.D2)
+          # cat(paste0(date(), "\tDone with sample ", phyloseq::sample_names(x)[i], "\n"))
+        }
       }
-    }
-    # Perform breakaway for richness estimation
-    temp <- t(matrix(temp.phy@otu_table))
-    temp <- temp[temp != 0]
-    temp <- data.frame(table(temp))
-    temp <- apply(temp, 2, FUN = function(x) as.integer(x))
-    if(brea==TRUE && phyloseq::sample_sums(temp.phy) > thresh){
-      rich <- breakaway::breakaway(temp, print = FALSE, plot = FALSE, answers = TRUE, force=TRUE)
-      if(!is.null(rich)){
-        DIV[i, 3] <- rich$est
-        DIV[i, 4] <- rich$seest
+      # Perform breakaway for richness estimation
+      temp <- t(matrix(temp.phy@otu_table))
+      temp <- temp[temp != 0]
+      temp <- data.frame(table(temp))
+      temp <- apply(temp, 2, FUN = function(x) as.integer(x))
+      if(brea==TRUE && phyloseq::sample_sums(temp.phy) > thresh){
+        rich <- breakaway::breakaway(temp, print = FALSE, plot = FALSE, answers = TRUE, force=TRUE)
+        if(!is.null(rich)){
+          DIV[i, 3] <- rich$est
+          DIV[i, 4] <- rich$seest
+        } else {
+          DIV[i, 3] <- NA
+          DIV[i, 4] <- NA
+        }
+      }
+      if(phyloseq::sample_sums(temp.phy) >= thresh){
+        rich.chao <- breakaway::chao1(temp, print = FALSE, answers = TRUE)
+        DIV[i, 5] <- rich.chao$est
+        DIV[i, 6] <- rich.chao$seest
       } else {
-        DIV[i, 3] <- NA
-        DIV[i, 4] <- NA
+        DIV[i, 5] <- NA
+        DIV[i, 6] <- NA
       }
     }
-    if(phyloseq::sample_sums(temp.phy) >= thresh){
-      rich.chao <- breakaway::chao1(temp, print = FALSE, answers = TRUE)
-      DIV[i, 5] <- rich.chao$est
-      DIV[i, 6] <- rich.chao$seest
-    } else {
-      DIV[i, 5] <- NA
-      DIV[i, 6] <- NA
+  } else {
+    cl <- makeCluster(ncores) #not to overload your computer
+    registerDoParallel(cl)
+    cat(date(), "\tUsing", ncores, "cores for calculations\n")
+    # Start resampling
+    for (i in 1:phyloseq::nsamples(x)) {
+      temp.D0 <- c()
+      temp.D1 <- c()
+      temp.D2 <- c()
+      temp.phy <- phyloseq::prune_samples(x = x, samples = phyloseq::sample_names(x)[i])
+      cat(paste0(date(), "\tCalculating diversity for sample ",i,"/",phyloseq::nsamples(x)," --- ",phyloseq::sample_names(x)[i], "\n"))
+      
+      # Paralleize diversity calculations 
+      tmp <- foreach(j=1:10, .combine=rbind) %dopar% {
+        temp <- phyloseq::rarefy_even_depth(temp.phy, verbose = FALSE, replace = TRUE)
+        # Calculate frequencies
+        temp <- data.frame(phyloseq::transform_sample_counts(temp, fun = function(x) x/sum(x))@otu_table)
+        # Calculate Diversities
+        cbind(D0.boot(temp),D1.boot(temp), D2.boot(temp))
+      }
+      
+      DIV[i, c(1,7,9)] <- colMeans(tmp)
+      DIV[i, c(2,8,10)] <- apply(tmp, 2, sd)
+      # if (i > 1) DIV <- rbind(DIV, matrix(c(colMeans(tmp), apply(tmp, 2, FUN = sd)), nrow = 1))
+      
+      # Perform breakaway for richness estimation
+      temp <- t(matrix(temp.phy@otu_table))
+      temp <- temp[temp != 0]
+      temp <- data.frame(table(temp))
+      temp <- apply(temp, 2, FUN = function(x) as.integer(x))
+      if(brea==TRUE && phyloseq::sample_sums(temp.phy) > thresh){
+        rich <- breakaway::breakaway(temp, print = FALSE, plot = FALSE, answers = TRUE, force=TRUE)
+        if(!is.null(rich)){
+          DIV[i, 3] <- rich$est
+          DIV[i, 4] <- rich$seest
+        } else {
+          DIV[i, 3] <- NA
+          DIV[i, 4] <- NA
+        }
+      }
+      if(phyloseq::sample_sums(temp.phy) >= thresh){
+        rich.chao <- breakaway::chao1(temp, print = FALSE, answers = TRUE)
+        DIV[i, 5] <- rich.chao$est
+        DIV[i, 6] <- rich.chao$seest
+      } else {
+        DIV[i, 5] <- NA
+        DIV[i, 6] <- NA
+      }
+      cat(paste0(date(), "\tDone with sample ", phyloseq::sample_names(x)[i], "\n"))
+    }
+    
+    if(parallel == TRUE){
+      cat(date(), "\tClosing connection to cores\n")
+      stopCluster(cl)
     }
   }
+ 
   colnames(DIV) = c("D0", "sd.D0", "D0.bre" , "sd.D0.bre", "D0.chao", "sd.D0.chao", "D1", "sd.D1", "D2", 
                     "sd.D2")
-  cat(date(), "\t Done with all", phyloseq::nsamples(x), "samples\n")
+  cat(date(), "\tDone with all", phyloseq::nsamples(x), "samples\n")
   return(DIV)
 }
