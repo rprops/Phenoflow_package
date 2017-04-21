@@ -87,7 +87,7 @@
 
 #' @export
 
-Diversity_rf_test <- function(x, d = 4, R = 100, R.b = 100, bw = 0.01, nbin = 128, 
+Diversity_rf <- function(x, d = 4, R = 100, R.b = 100, bw = 0.01, nbin = 128, 
                               param, cleanFCS = FALSE, cleanparam = c(9,11), ncores,
                               parallel = FALSE) {
   
