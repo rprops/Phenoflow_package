@@ -97,7 +97,8 @@ Diversity_16S <- function(x, R = 999, brea = TRUE, thresh = 200, parallel = FALS
       }
     }
   } else {
-    cl <- parallel::makeCluster(ncores) #not to overload your computer
+    # Initiate/register multiple cores
+    cl <- parallel::makeCluster(ncores)
     doParallel::registerDoParallel(cl)
     cat(date(), "\tUsing", ncores, "cores for calculations\n")
     # Start resampling
@@ -108,7 +109,7 @@ Diversity_16S <- function(x, R = 999, brea = TRUE, thresh = 200, parallel = FALS
       temp.phy <- phyloseq::prune_samples(x = x, samples = phyloseq::sample_names(x)[i])
       cat(paste0(date(), "\tCalculating diversity for sample ", i, "/", phyloseq::nsamples(x)," --- ", phyloseq::sample_names(x)[i], "\n"))
       
-      # Paralleize diversity calculations 
+      # Parallelize diversity calculations 
       tmp <- foreach::foreach(j = 1:R, .combine = rbind) %dopar% {
         temp <- phyloseq::rarefy_even_depth(temp.phy, verbose = FALSE, replace = TRUE)
         # Calculate frequencies
@@ -148,7 +149,7 @@ Diversity_16S <- function(x, R = 999, brea = TRUE, thresh = 200, parallel = FALS
     }
     
     if(parallel == TRUE){
-      cat(date(), "\tClosing connection to cores\n")
+      cat(date(), "\tClosing workers\n")
       parallel::stopCluster(cl)
     }
   }

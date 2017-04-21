@@ -14,6 +14,9 @@
 #' @param nbin Resolution of the binning grid. Defaults to 128 bins which corresponds to a 128x128 binning grid.
 #' @param param Parameter vector indicating on which parameters the diversity should be estimated. An example input would be:
 #' c("FL1-H", "FL3-H", "SSC-H", "FSC-H").
+#' @param parallel Should the calculation be parallelized? Defaults to FALSE
+#' @param ncores How many cores should be used in case of parallel computation?
+#' Defaults to 2.
 #' @param cleanFCS Indicate whether outlier removal should be conducted prior to diversity assessment (flowClean package). 
 #' Defaults to FALSE. Requires not subsetted flowSet object (i.e. no parameters should be removed or otherwise flowClean functions fail).
 #' Only samples with > 30,000 cells will be cleaned.
@@ -84,9 +87,10 @@
 
 #' @export
 
-Diversity_rf <- function(x, d = 4, R = 100, R.b = 100, bw = 0.01, nbin = 128, 
-                         param, cleanFCS = FALSE, cleanparam = c(9,11)) {
-
+Diversity_rf_test <- function(x, d = 4, R = 100, R.b = 100, bw = 0.01, nbin = 128, 
+                              param, cleanFCS = FALSE, cleanparam = c(9,11), ncores,
+                              parallel = FALSE) {
+  
   if(cleanFCS == TRUE){
     cat(date(), paste0("--- Using the following parameters for removing errant collection events\n in samples with > 30,000 cells: ", colnames(x)[cleanparam[1]], " ", 
                        colnames(x)[cleanparam[2]], "\n"))
@@ -96,22 +100,41 @@ Diversity_rf <- function(x, d = 4, R = 100, R.b = 100, bw = 0.01, nbin = 128,
     x <- x[,param]
     cat(date(), paste0("--- Done with cleaning data\n"))
   }
-  
-  for (i in 1:R) {
-    cat(date(), paste0("--- Starting resample run ", i, "\n"))
-    tmp <- FCS_resample(x, rarefy = TRUE, replace = TRUE, progress = FALSE)
-    tmp.basis <- flowFDA::flowBasis(tmp, param = param, nbin = nbin, bw = bw, 
-                           normalize = function(x) x)
-    tmp.diversity <- Diversity(tmp.basis, plot = FALSE, d = d, R = R.b, 
-                               progress = FALSE)
-    rm(tmp, tmp.basis)
-    if (i == 1) 
-      results <- cbind(tmp.diversity) else {
-        results <- rbind(results, tmp.diversity)
-      }
-    rm(tmp.diversity)
+  if(parallel == FALSE){
+    for (i in 1:R) {
+      cat(date(), paste0("--- Starting resample run ", i, "\n"))
+      tmp <- FCS_resample(x, rarefy = TRUE, replace = TRUE, progress = FALSE)
+      tmp.basis <- flowFDA::flowBasis(tmp, param = param, nbin = nbin, bw = bw, 
+                                      normalize = function(x) x)
+      tmp.diversity <- Diversity(tmp.basis, plot = FALSE, d = d, R = R.b, 
+                                 progress = FALSE)
+      rm(tmp, tmp.basis)
+      if (i == 1) 
+        results <- cbind(tmp.diversity) else {
+          results <- rbind(results, tmp.diversity)
+        }
+      rm(tmp.diversity)
+    }
+    
+  } else {
+    cl <- parallel::makeCluster(ncores)
+    doParallel::registerDoParallel(cl)
+    cat(date(), "--- Using", ncores, "cores for calculations\n")
+    # log.socket <- make.socket(port = 4000)
+    
+    results <- foreach::foreach(i = 1:R, .combine = rbind, .packages = c("flowCore", "Phenoflow")) %dopar% {
+      # cat(date(), paste0("--- Starting resample run ", i, "\n"))
+      tmp <- FCS_resample(x, rarefy = TRUE, replace = TRUE, progress = FALSE)
+      tmp.basis <- flowFDA::flowBasis(tmp, param = param, nbin = nbin, bw = bw, 
+                                      normalize = function(x) x)
+      tmp.diversity <- Phenoflow::Diversity(tmp.basis, plot = FALSE, d = d, R = R.b, 
+                                            progress = FALSE)
+    }
   }
-  
+  if(parallel == TRUE){
+    cat(date(), "--- Closing workers\n")
+    parallel::stopCluster(cl)
+  }
   results.sd <- by(results[, c(2, 3, 5)], INDICES = factor(results$Sample_name), 
                    FUN = function(x) apply(x, 2, sd))
   results.sd <- do.call(rbind, results.sd)

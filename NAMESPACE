@@ -3,7 +3,7 @@
 export(CV)
 export(Diversity)
 export(Diversity_16S)
-export(Diversity_rf)
+export(Diversity_rf_test)
 export(Evenness)
 export(FCS_clean)
 export(FCS_resample)
