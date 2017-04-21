@@ -9,7 +9,7 @@ Remotes: github::lievenclement/flowFDA
 Suggests: phyloseq,
     testthat
 Depends:
-    R (>= 3.3.0), flowCore, flowClean, flowFDA
+    R (>= 3.3.0), flowCore, flowClean, flowFDA, foreach
 Imports:
     vegan,
     MESS,
