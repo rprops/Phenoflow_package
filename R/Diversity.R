@@ -9,6 +9,8 @@
 #' @param d Rounding factor for density values. Defaults to 4.
 #' @param plot Make plot of diversity values? Defaults to FALSE.
 #' @param R Number of bootstraps to conduct. Defaults to 999
+#' @param simsens TRUE/FALSE: should a similarity matrix be calculated 
+#' and applied as a "weight" to the naive diversity? 
 #' @param progress Should progress be reported? Defaults to yes.
 #' @keywords diversity, fcm, alpha
 #' @examples
