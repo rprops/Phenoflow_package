@@ -12,13 +12,14 @@ The goal of this package is to provide functions for advanced analysis of microb
 If you use this package, please consider citing the original publication:  
 
 Props R, Monsieurs P, Mysara M, Clement L, Boon N (2016). **Measuring the biodiversity of microbial communities by flow cytometry**. Methods in Ecology and Evolution 7: 1376-1385.
-*******************
 
 Install the package:
 ```R
 library("devtools")
 install_github("rprops/Phenoflow_package")
 ```
+*******************
+
 ![alt text][logo]
 
 [logo]: https://github.com/rprops/PhenoFlow/blob/master/Animation_low_res.gif "Figure 1"
