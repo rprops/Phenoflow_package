@@ -4,6 +4,7 @@ note <- sprintf("R package version %s", meta$Version)
 bibentry(bibtype = "Manual",
          title = "Phenoflow",
          author = c(person("Ruben", "Props"),
+                    person("Frederiek-Maarten", "Kerckhof"),
                     person("Pieter", "Monsieurs"),
                     person("Mohamed", "Mysara"),
                     person("Lieven", "Clement"),
