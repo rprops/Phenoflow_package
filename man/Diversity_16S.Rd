@@ -42,4 +42,3 @@ Diversity_16S(phyloseq::prune_samples(phyloseq::sample_names(physeq_test) == "1"
 \keyword{alpha}
 \keyword{diversity,}
 \keyword{fcm,}
-

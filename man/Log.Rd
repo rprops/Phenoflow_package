@@ -15,4 +15,3 @@ Small function for printing progress of parallel processes
 \keyword{Log(x)}
 \keyword{fcm}
 \keyword{resampling,}
-

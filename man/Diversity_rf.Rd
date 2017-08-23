@@ -109,4 +109,3 @@ cleanFCS = TRUE, cleanparam = c(9,11))
 \keyword{alpha}
 \keyword{diversity,}
 \keyword{fcm,}
-

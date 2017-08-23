@@ -19,4 +19,3 @@ This function calculates Hill diversity metrics from FCM data
 \keyword{cumulative}
 \keyword{fcm,}
 \keyword{richness,}
-

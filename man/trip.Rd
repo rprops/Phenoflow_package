@@ -17,4 +17,3 @@ Small (inefficient) function for taking mean/sd
 \keyword{fcm}
 \keyword{resampling,}
 \keyword{trip(x)}
-

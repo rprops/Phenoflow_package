@@ -17,4 +17,3 @@ Small (inefficient) function for extracting sample names associated with replica
 \keyword{fcm}
 \keyword{resampling,}
 \keyword{trip(x)}
-
