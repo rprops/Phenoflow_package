@@ -132,10 +132,10 @@ Diversity_rf <- function(x, d = 4, R = 100, R.b = 100, bw = 0.01, nbin = 128,
   if(parallel == FALSE){
     for (i in 1:R) {
       cat(date(), paste0("--- Starting resample run ", i, "\n"))
-      tmp <- Phenoflow::FCS_resample(x, rarefy = TRUE, replace = TRUE, progress = FALSE)
+      tmp <- .FCS_resample(x, rarefy = TRUE, replace = TRUE, progress = FALSE)
       tmp.basis <- flowFDA::flowBasis(tmp, param = param, nbin = nbin, bw = bw, 
                                       normalize = function(x) x)
-      tmp.diversity <- Phenoflow::Diversity(tmp.basis, plot = FALSE, d = d, R = R.b, 
+      tmp.diversity <- .Diversity(tmp.basis, plot = FALSE, d = d, R = R.b, 
                                  progress = FALSE)
       rm(tmp, tmp.basis)
       if (i == 1) 
@@ -156,7 +156,7 @@ Diversity_rf <- function(x, d = 4, R = 100, R.b = 100, bw = 0.01, nbin = 128,
       tmp <- FCS_resample(x, rarefy = TRUE, replace = TRUE, progress = FALSE)
       tmp.basis <- flowFDA::flowBasis(tmp, param = param, nbin = nbin, bw = bw, 
                                       normalize = function(x) x)
-      tmp.diversity <- Phenoflow::Diversity(tmp.basis, plot = FALSE, d = d, R = R.b, 
+      tmp.diversity <- .Diversity(tmp.basis, plot = FALSE, d = d, R = R.b, 
                                             progress = FALSE)
     }
   }
