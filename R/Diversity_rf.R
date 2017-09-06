@@ -90,13 +90,14 @@ Diversity_rf <- function(x, d = 4, R = 100, R.b = 100, bw = 0.01, nbin = 128,
     sam_names <- flowCore::sampleNames(x) 
     
     # Extract parameters not to base denoising on
-    param_f <- unique(gsub(param, pattern = "-H|-A", replacement = ""))
-    filter_param <- colnames(x)
-    filter_param <- unique(gsub(filter_param, pattern = "-H|-A", replacement = ""))
+    param_f <- BiocGenerics::unique(gsub(param, pattern = "-H|-A", replacement = ""))
+    filter_param <- BiocGenerics::colnames(x)
+    filter_param <- BiocGenerics::unique(gsub(filter_param, pattern = "-H|-A", replacement = ""))
     filter_param <- filter_param[!filter_param %in% param_f & filter_param!= TimeChannel]
     filter_param <- c(filter_param, "FSC", "SSC")# Exclude all scatter information from denoising
     
     # Denoise with flowAI
+    print(filter_param)
     x <- flowAI::flow_auto_qc(x, alphaFR = 0.01,
                               folder_results = "QC_flowA",
                               fcs_highQ = "HighQ",
