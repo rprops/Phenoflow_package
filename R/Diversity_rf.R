@@ -108,7 +108,7 @@ Diversity_rf <- function(x, d = 4, R = 100, R.b = 100, bw = 0.01, nbin = 128,
     
     # Add sample names again since the QC function removes these
     x@phenoData@data$name  <- sam_names
-    sampleNames(x) <- sam_names
+    flowCore::sampleNames(x) <- sam_names
     
     # Change characters in parameter description from character back to numeric
     # Otherwise nothing that follows will work
