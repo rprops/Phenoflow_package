@@ -12,7 +12,7 @@ Suggests:
     knitr,
     rmarkdown
 Depends:
-    R (>= 3.3.0), flowCore, flowClean, flowFDA, foreach
+    R (>= 3.3.0), flowCore, flowClean, flowFDA, flowAI, foreach
 Imports:
     vegan,
     MESS,
@@ -30,7 +30,7 @@ Imports:
     scales,
     stats,
     flowFDA,
-    flowClean,
+    flowAI,
     foreach,
     doParallel,
     sandwich,
