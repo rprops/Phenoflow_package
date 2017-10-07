@@ -27,4 +27,3 @@ flowData_cleaned <- flowCore::fsApply(x = flowData[1:5], FUN = function(x) FCS_c
 \keyword{alpha}
 \keyword{denoise,}
 \keyword{fcm,}
-

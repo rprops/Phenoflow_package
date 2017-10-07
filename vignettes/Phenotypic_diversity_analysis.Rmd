@@ -1,0 +1,100 @@
+---
+title: "Phenotypic diversity analysis"
+author: "Ruben Props & FM Kerckhof"
+date: "`r Sys.Date()`"
+output: 
+  rmarkdown::html_vignette:
+    fig_caption: yes
+    number_sections: yes
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+# Install the package
+
+Make sure to have the `devtools` package loaded.
+
+```{r install, eval=FALSE}
+library(devtools)
+install_github("rprops/Phenoflow_package")
+```
+
+# Load the packages and source code
+
+```{r load packages, message=FALSE,warning=FALSE}
+library("Phenoflow") # for fingerprinting
+library("flowViz") # for plotting
+library("ggplot2") # for plotting
+library("flowAI") # for denoising
+```
+
+Set a fixed seed to ensure reproducible analysis
+
+```{r setseed}
+set.seed(777)
+```
+
+## Load data
+Load the test data or insert the path to your own data folder, for example test_data for the tutorial data.
+
+```{r read test data}
+data(flowData)
+#path = "test_data"
+#flowData <- read.flowSet(path = path, transformation = FALSE, pattern=".fcs")
+```
+Lets first take a quick look at the dimensions of our flowData using the <code>attributes</code> function. Here we can see that we have 12 parameters (+ Width/Time) which we can use in our analyses.
+
+```{r look at flowdata,output='asis'}
+attributes(flowData)
+```
+
+## Denoise data
+
+Next, we select the phenotypic features of interest and transform their intensity values according to the hyperbolic arcsin. In this case we chose two fluorescent parameters and two scatter parameters in their height format (-H). Depending on the FCM, the resolution may increase by using the area values (-A) since many detectors have a higher signal resolution for area values. For transparency we store the transformed data in a new object, called `flowData_transformed`. We also define the parameters of interest (e.g. `c("FL1-H", "FL3-H","SSC-H","FSC-H")`)
+
+```{r select and transform}
+# Select phenotypic features of interest and transform parameters
+flowData_transformed <- transform(flowData,`FL1-H`=asinh(`FL1-H`), 
+                                   `SSC-H`=asinh(`SSC-H`), 
+                                   `FL3-H`=asinh(`FL3-H`), 
+                                   `FSC-H`=asinh(`FSC-H`))
+param=c("FL1-H", "FL3-H","SSC-H","FSC-H")
+remove(flowData)
+```
+
+Now that the data has been formatted, we need to discard all the signals detected by the FCM which correspond to instrument noise and (in)organic background. This is done by selecting the cells in a scatterplot on the primary fluorescence or scatter signals. For SYBR Green I, this is done based on the `FL1-H` and `FL3-H` parameters. For this example, an initial polygon gate (`polyGate1`) is created and adjusted based on the sample type in question. For each specific experiment, it is advised to use identical gating for each sample. The gating strategy is evaluated on the `flowViz::xyplot` and adjusted if necessary. A more detailed guideline for gating or denoising aquatic microbial samples can be found [here](http://jornades.uab.cat/workshopmrama/sites/jornades.uab.cat.workshopmrama/files/Assessing_water_quality_with_the_BD_Accuri_C6_flow_cytometer.pdf) (p.6).
+
+```{r setting and checking the gate, fig.show='hide'}
+### Create a PolygonGate for denoising the dataset
+### Define coordinates for gate in sqrcut1 in format: c(x,x,x,x,y,y,y,y)
+sqrcut1 <- matrix(c(8.75,8.75,14,14,3,7.5,14,3),ncol=2, nrow=4)
+colnames(sqrcut1) <- c("FL1-H","FL3-H")
+polyGate1 <- polygonGate(.gate=sqrcut1, filterId = "Total Cells")
+
+###  Gating quality check
+xyplot(`FL3-H` ~ `FL1-H`, data=flowData_transformed[1], filter=polyGate1,
+       scales=list(y=list(limits=c(0,14)),
+                   x=list(limits=c(6,16))),
+       axis = axis.default, nbin=125, 
+       par.strip.text=list(col="white", font=2, cex=2), smooth=FALSE)
+```
+
+Here is an example of a good and bad filtering approach:
+```{r gatingraphs, echo=FALSE, out.width="700px",out.height="350px"}
+knitr::include_graphics("FigGating.png")
+```
+
+When the optimal gate has been chosen, the data can be denoised using the 
+`Subset` function. Next we will gather some metadata from the sample names, 
+which requires you have some pre-defined structured naming for your samples. 
+
+```{r extractnames}
+### Isolate only the cellular information based on the polyGate1
+flowData_transformed <- Subset(flowData_transformed, polyGate1)
+
+### Extract metadata from sample names
+metadata <- data.frame(do.call(rbind, lapply(strsplit(flowCore::sampleNames(flowData),"_"), rbind)))
+colnames(metadata) <- c("Cycle_nr", "Location", "day", "timepoint", "Staining", "Reactor_phase", "replicate")
+```

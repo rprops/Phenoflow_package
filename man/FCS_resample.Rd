@@ -30,4 +30,3 @@ flowData <- FCS_resample(flowData, replace=TRUE)
 }
 \keyword{fcm}
 \keyword{resampling,}
-
