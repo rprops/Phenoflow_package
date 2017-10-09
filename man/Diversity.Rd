@@ -80,4 +80,3 @@ flowViz::xyplot(`FL3-H` ~ `FL1-H`, data=flowData_transformed[1], filter=polyGate
 \keyword{alpha}
 \keyword{diversity,}
 \keyword{fcm,}
-
