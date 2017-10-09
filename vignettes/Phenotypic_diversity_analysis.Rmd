@@ -127,7 +127,8 @@ calculation. Each parameter is normalized based on the maximum FL1-H intensity
 value over the data set.
 
 ```{r rescaling}
-summary <- fsApply(x = flowData_transformed, FUN = function(x) apply(x, 2, max), use.exprs = TRUE)
+summary <- fsApply(x = flowData_transformed, FUN = function(x) apply(x, 2, max),
+                   use.exprs = TRUE)
 maxval <- max(summary[,9])
 mytrans <- function(x) x/maxval
 flowData_transformed <- transform(flowData_transformed,`FL1-H`=mytrans(`FL1-H`),
@@ -228,18 +229,125 @@ fingerprint object.
 
 ```{r diversityrf}
 # Diversity assessment with cleaning
-Diversity.clean <- Diversity_rf(flowData_transformed, param = param, R = 3, R.b = 3,
-cleanFCS = TRUE)
+Diversity.clean <- Diversity_rf(flowData_transformed, param = param, R = 3, 
+                                R.b = 3,cleanFCS = TRUE)
 ```
-Similarly as before, we can plot these diversity calculations as well. Note that we only took 3 bootstraps here. It is recommended to increase `R` and `R.b` to 100.
+
+Similarly as before, we can plot these diversity calculations as well. Note that
+we only took 3 bootstraps here. It is recommended to increase `R` and `R.b` to
+100.
+
 ```{r plotbootstrapped, echo=TRUE, fig.show='hide'}
-p2 <- ggplot(data = Diversity.clean, aes(x = as.numeric(as.character(metadata$day)), y = D2, color = metadata$Reactor_phase))+
+p2 <- ggplot(data = Diversity.clean, 
+             aes(x = as.numeric(as.character(metadata$day)),
+                 y = D2, color = metadata$Reactor_phase))+
   geom_point(size = 8, alpha = 0.7)+
   geom_line()+
   scale_color_manual(values = c("#a65628", "red", 
-                                "#ffae19", "#4daf4a", "#1919ff", "darkorchid3", "magenta"))+
+                                "#ffae19", "#4daf4a", "#1919ff", 
+                                "darkorchid3", "magenta"))+
   theme_bw()+
   labs(color = "Reactor phase", y = "Phenotypic diversity (D2)", x = "Days")+
   geom_errorbar(aes(ymin=D2-sd.D2, ymax=D2+sd.D2), width=0.05, color="black")
 print(p2)
+```
+
+```{r divrffig, echo=FALSE, out.width="700px",out.height="500px"}
+knitr::include_graphics("Diversity_rf.png")
+```
+
+Alpha diversity analysis has completed: time to export all the data to your 
+working directory. If you are not sure where this is, type `getwd()`.
+
+```{r export diversity}  
+### Export ecological data to .csv file in the chosen directory
+names(Diversity.clean) <- paste0(names(Diversity.clean),".clean")
+write.csv2(file="results.metrics.csv",
+           cbind(Diversity.fbasis,Diversity.clean))
+```
+
+## Beta diversity analysis
+Optionally, you can also perform a beta diversity analysis using Non-metric
+Multidimensional Scaling (NMDS) or PCoA from the `vegan` package. The
+`beta_div_fcm` function does the calculation (accepts all dissimilarity metrics 
+of the `vegdist` function under the `dist` argument) and the `plot_beta_fcm` 
+plots the ordination. Additional factorial arguments to be given to the plot 
+function are: `color` and `shape` which can be used for visualization (`color` 
+and `shape` have to be factor vectors with length equal to number of samples). 
+The title of the legends for these factors can be specified in the `labels` 
+argument. In case no legend has to be displayed, `legend.pres` can be put to
+`FALSE`.
+**Attention: this dimension reduction utilizes the density values as opposed to the count values which are used for beta-diversity analysis in community 16S rRNA gene amplicon sequencing data sets**
+
+```{r betadiv, fig.width=7,fig.height=5}  
+# Beta-diversity assessment of fingerprint
+set.seed(777)
+beta.div <- beta_div_fcm(fbasis, ord.type="PCoA")
+
+# Plot ordination
+plot_beta_fcm(beta.div, color = metadata$Reactor_phase, labels="Reactor phase") + 
+  theme_bw() +
+  geom_point(size = 8, alpha = 0.5)
+```
+
+## Extract cell counts
+It is often also useful to know the exact cell densities of your sample. This is
+performed by the following code. Additionally it quantifies the amount of High 
+Nucleic Acid (HNA) and Low Nucleic Acid (LNA) bacteria as defined by [Prest et al. (2013)](http://www.sciencedirect.com/science/article/pii/S0043135413008361). Be
+aware that the `flowCore::filter` function has conflicts with the filter 
+function from the `dplyr::filter` package (which is why we call them 
+explicitely)
+
+**Warning: the HNA/LNA partition is only valid for data gathered on a BD Accuri 
+C6 flow cytometer.For other flow cytometers the HNA/LNA cutoff (FL1-H = 20 000) 
+should be adjusted according to the appropriate reference samples.**
+
+```{r cellcountsHNALNA, fig.width=7,fig.height=5,results='hide'}
+### Creating a rectangle gate for counting HNA and LNA cells
+rGate_HNA <- rectangleGate("FL1-H"=c(asinh(20000), 20)/maxval,
+                           "FL3-H"=c(0,20)/maxval, 
+                           filterId = "HNA bacteria")
+### Normalize total cell gate
+sqrcut1 <- matrix(c(8.75,8.75,14,14,3,7.5,14,3)/maxval,ncol=2, nrow=4)
+colnames(sqrcut1) <- c("FL1-H","FL3-H")
+polyGate1 <- polygonGate(.gate=sqrcut1, filterId = "Total Cells")
+
+### Check if rectangle gate is correct, if not, adjust rGate_HNA
+xyplot(`FL3-H` ~ `FL1-H`, data=flowData_transformed[1], filter=rGate_HNA,
+       scales=list(y=list(limits=c(0,1)),
+                   x=list(limits=c(0.4,1))),
+       axis = axis.default, nbin=125, par.strip.text=list(col="white", font=2, 
+                                                          cex=2), smooth=FALSE)
+### Extract the cell counts
+a <- flowCore::filter(flowData_transformed, rGate_HNA) 
+HNACount <- summary(a);HNACount <- toTable(HNACount)
+s <- flowCore::filter(flowData_transformed, polyGate1)
+TotalCount <- summary(s);TotalCount <- toTable(TotalCount)
+
+### Extract the volume
+vol <- c()
+for(i in 1:length(flowData_transformed)){
+  vol[i] <- as.numeric(flowData_transformed[[i]]@description$`$VOL`)/1000
+}
+
+### Store the data
+results_counts <- data.frame(Samples=flowCore::sampleNames(flowData_transformed), 
+                             Total.cells = TotalCount$true/vol, 
+                             HNA.cells = HNACount$true/vol)
+
+```
+Finally, you can export the count data if you so desire.
+```{r export count data}
+### Exporting cell counts to .csv file to working directory
+write.csv2(file="results.counts.csv", results_counts)
+```
+
+```{r plot cell density, fig.width=7,fig.height=5}
+### Plot cell density
+ggplot(data = results_counts, aes(x = as.numeric(as.character(metadata$day)), y = Total.cells, color = metadata$Reactor_phase))+
+  geom_point(size = 8, alpha = 0.9)+
+  scale_color_manual(values = c("#a65628", "red", 
+                                "#ffae19", "#4daf4a", "#1919ff", "darkorchid3", "magenta"))+
+  theme_bw()+
+  labs(color = "Reactor phase", y = "Total cell density (cells/µL)", x = "Days")  
 ```
