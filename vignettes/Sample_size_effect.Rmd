@@ -14,6 +14,7 @@ editor_options:
   chunk_output_type: console
 ---
 
+# Sample size vs. Diversity
 
 For an indication on how many cells you would need to get an accurate phenotypic
 diversity measurement, see below. This analysis was done on sample 10 of the 
