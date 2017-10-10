@@ -22,7 +22,7 @@ after_success:
 r_github_packages:
   - lievenclement/flowFDA
   
-# r_check_args: "--no-vignettes"
+r_check_args: "--no-vignettes"
   
 script: 
   - |
