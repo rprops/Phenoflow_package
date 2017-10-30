@@ -51,4 +51,3 @@ settings for the flowData example.
 \keyword{alpha}
 \keyword{diversity,}
 \keyword{fcm,}
-

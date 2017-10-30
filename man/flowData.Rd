@@ -19,4 +19,3 @@ Available parameters: FSC-A SSC-A FL1-A FL2-A FL3-A FL4-A FSC-H SSC-H
 FL1-H FL2-H FL3-H FL4-H Width Time
 }
 \keyword{datasets}
-
