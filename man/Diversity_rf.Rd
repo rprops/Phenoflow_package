@@ -23,7 +23,9 @@ FCM data (i.e., all parameter values are within [0,1]).}
 \item{nbin}{Resolution of the binning grid. Defaults to 128 bins which corresponds to a 128x128 binning grid.}
 
 \item{param}{Parameter vector indicating on which parameters the diversity should be estimated. An example input would be:
-c("FL1-H", "FL3-H", "SSC-H", "FSC-H").}
+c("FL1-H", "FL3-H", "SSC-H", "FSC-H"). In addition the first parameter in this vector will be used
+to normalize the data. Please make sure this is the primary fluorescence channel if available. For 
+example FL1-H for SYBR Green stained bacterial cells measured on an Accuri C6.}
 
 \item{cleanFCS}{Indicate whether outlier removal should be conducted prior to diversity assessment (flowAI package). 
 Defaults to FALSE. I would recommend to make sure samples have > 500 cells. Will denoise based on the parameters specified in `param`.}
