@@ -88,8 +88,8 @@ Diversity_rf <- function(x, d = 4, R = 100, R.b = 100, bw = 0.01, nbin = 128,
                                          round(base::max(summary_x[, param[i]]),2),"\n"))
     cat(paste0("-------------------------------------------------------------------------------------------------", "\n \n"))
     ##############################################################################
-  } else cat(paste0("--- ", param[i]," is already normalized at: ", 
-                    base::max(summary_x[, param[i]]),"\n"))
+  } else cat(paste0("--- parameters are already normalized at: ", 
+                    base::max(summary_x[, param[1]]),"\n"))
   
   if(cleanFCS == TRUE){
     cat(paste0("-------------------------------------------------------------------------------------------------", "\n"))
