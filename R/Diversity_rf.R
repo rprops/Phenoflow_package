@@ -25,7 +25,7 @@
 #' @param TimeChannel Name of time channel in the FCS files. This can differ between flow cytometers. Defaults to "Time". You can check this by: colnames(flowSet).
 #' @keywords diversity, fcm, alpha
 #' @examples
-#' Full data processing example
+#' # Full data processing example
 #' 
 #' # Load raw data (imported using flowCore)
 #' data(flowData)
@@ -59,7 +59,6 @@
 #' # Calculate diversity for first 5 samples without cleaning data
 #' Diversity_rf(flowData_transformed[1:5], param = param, R = 3, R.b = 3,
 #'              cleanFCS = FALSE)
-
 #' @export
 
 Diversity_rf <- function(x, d = 4, R = 100, R.b = 100, bw = 0.01, nbin = 128, 

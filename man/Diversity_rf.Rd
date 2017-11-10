@@ -47,7 +47,7 @@ differences in sample size (nr. of cells). Analysis time is approximately 10s/re
 settings for the flowData example.
 }
 \examples{
-Full data processing example
+# Full data processing example
 
 # Load raw data (imported using flowCore)
 data(flowData)
