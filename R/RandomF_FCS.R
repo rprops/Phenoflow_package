@@ -25,7 +25,7 @@
 #' # Run Random Forest classifier to predict the Reactor phase based on the
 #' # single-cell FCM data
 #' RandomF_FCS(flowData, sample_info = metadata, target_label = "Reactor_phase",
-#' downsample = 500)
+#' downsample = 10)
 #' @export
 
 RandomF_FCS <- function(x, sample_info, target_label, downsample = 0, 

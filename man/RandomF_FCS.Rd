@@ -44,7 +44,7 @@ colnames(metadata) <- c("name", "Cycle_nr", "Location", "day",
 # Run Random Forest classifier to predict the Reactor phase based on the
 # single-cell FCM data
 RandomF_FCS(flowData, sample_info = metadata, target_label = "Reactor_phase",
-downsample = 500)
+downsample = 10)
 }
 \keyword{fcm}
 \keyword{resampling,}
