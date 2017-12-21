@@ -36,11 +36,11 @@ RandomF_FCS <- function(x, sample_info, target_label, downsample = 0,
   set.seed(seed)
   
   # Step 0: Format metadata
-  pData(x) <- cbind(pData(x), 
-                    sample_info[order(match(as.character(sample_info[, "name"]),
+  pData(x) <- base::cbind(pData(x), 
+                    sample_info[base::order(base::match(as.character(sample_info[, "name"]),
                                             as.character(pData(x)[, "name"]))), 
                                 target_label])
-  colnames(pData(x))[2] <- target_label
+  base::colnames(pData(x))[2] <- target_label
   
   # Step 1: Subset FCS files on parameters of interest
   x <- x[, param]
@@ -56,10 +56,10 @@ RandomF_FCS <- function(x, sample_info, target_label, downsample = 0,
                                     flowCore::exprs(x[[i]]))
       if(i == 1){
         full_data <- tmp
-      } else full_data <- rbind(full_data, tmp)
+      } else full_data <- base::rbind(full_data, tmp)
     }
   }
-  full_data <- droplevels(full_data)
+  full_data <- base::droplevels(full_data)
   
   # if(classification_type == "single-cell"){
   #   # Step 2: add sample labels to each cell
@@ -83,8 +83,8 @@ RandomF_FCS <- function(x, sample_info, target_label, downsample = 0,
   
   # Step 5: Train Random Forest classifier on training set
   metric <- "Accuracy"
-  mtry <- sqrt(ncol(train_data))
-  tunegrid <- expand.grid(.mtry = mtry)
+  mtry <- base::sqrt(ncol(train_data))
+  tunegrid <- base::expand.grid(.mtry = mtry)
   RF_train <- caret::train(label~., data = train_data, method = "rf", 
                       metric = metric, tuneLength=15, 
                       trControl = fitControl)
@@ -95,7 +95,7 @@ RandomF_FCS <- function(x, sample_info, target_label, downsample = 0,
   cat(date(), paste0("--- Accuracy on ",
                      100*(1-p_train),
                      "% test set: ",  
-                     100*round(sum(predict(RF_train, newdata = test_data) == test_data$label)/
+                     100*round(base::sum(stats::predict(RF_train, newdata = test_data) == test_data$label)/
                        nrow(test_data),2), "%\n"))
 
   

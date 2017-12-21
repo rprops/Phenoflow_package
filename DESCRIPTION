@@ -20,6 +20,7 @@ Imports:
     MESS,
     ggplot2,
     boot,
+    data.table,
     gridExtra,
     multcomp,
     mclust,
