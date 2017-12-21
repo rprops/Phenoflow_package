@@ -79,12 +79,22 @@ RandomF_FCS <- function(x, sample_info, target_label, downsample = 0,
   train_data <- full_data[caret::createDataPartition(full_data$label,
                                                      p = p_train)[[1]], ]
   test_data <- full_data[caret::createDataPartition(full_data$label, 
-                                                    p = (1-p_train))[[1]], ]
+                                                    p = (1 - p_train))[[1]], ]
   
   # Step 5: Train Random Forest classifier on training set
   metric <- "Accuracy"
   mtry <- base::sqrt(ncol(train_data))
-  tunegrid <- base::expand.grid(.mtry = mtry)
+  tunegrid <- base::expand.grid(.mtry = mtry, ntrees = 500)
+  cat(date(), paste0("--- Training Random forest classifier on ",
+                     100 * p_train,
+                     "% training set with the following options: \n",
+                     "\tPerformance metric: ", metric, "\n",
+                     "\tNumber of trees: ", 500, "\n",
+                     "\tmtry: ", round(mtry,2), "\n",
+                     "\tmethod: ", fitControl$method, "\n",
+                     "\trepeats: ", fitControl$repeats, "\n",
+                     "\n"))
+  
   RF_train <- caret::train(label~., data = train_data, method = "rf", 
                       metric = metric, tuneLength=15, 
                       trControl = fitControl)
@@ -93,9 +103,9 @@ RandomF_FCS <- function(x, sample_info, target_label, downsample = 0,
   
   # Step 6: Accuracy on test set
   cat(date(), paste0("--- Accuracy on ",
-                     100*(1-p_train),
+                     100 * (1 - p_train),
                      "% test set: ",  
-                     100*round(base::sum(stats::predict(RF_train, newdata = test_data) == test_data$label)/
+                     100 * round(base::sum(stats::predict(RF_train, newdata = test_data) == test_data$label)/
                        nrow(test_data),2), "%\n"))
 
   

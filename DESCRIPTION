@@ -26,6 +26,8 @@ Imports:
     mclust,
     MASS,
     flowViz,
+    caret,
+    randomForest,
     flowCore,
     breakaway,
     lattice,
