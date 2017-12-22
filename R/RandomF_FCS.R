@@ -171,7 +171,46 @@ RandomF_FCS <- function(x, sample_info, target_label, downsample = 0,
   print(performance_metrics)
   cat(paste0("-----------------------------------------------------------------------------------------------------\n"))
   
-  # Final step: Return model for further applications
-  return(RF_train)
+  # For confusion matrix:
+  RF_pred <- stats::predict(RF_train, newdata = test_data)
+  
+  # Create dataframe containing descision boundary of final model
+    ## Extract minimum and maximum values of FCS files
+  summary <- flowCore::fsApply(x = x, FUN = function(x) base::apply(x, 2, base::max), use.exprs = TRUE)
+  maxval <- base::apply(summary, 2, max)
+  minval <- base::apply(summary, 2, min)
+  desc_coord <- list()
+  for(i_param in 1:length(param)){
+    desc_coord[[i_param]] <- seq(from = minval[i_param],
+                                 by = ((maxval[i_param] - minval[i_param])/32), 
+                           to = maxval[i_param])
+  }
+    ## Create vectors containing the parameter value bins for prediction
+  desc_pred <- base::expand.grid(desc_coord)
+  base::colnames(desc_pred) <- param
+  
+    ## Predict this dummy data
+  RF_pred_desc <- stats::predict(RF_train, newdata = desc_pred)
+  
+  # Make list containing model, confusion matrix, summary statistics and descision boundary
+  results_list <- list()
+  results_list[[1]] <- RF_train
+  results_list[[2]] <- caret::confusionMatrix(data = RF_pred, test_data$label)
+  results_list[[3]] <- cbind(desc_pred, RF_pred_desc)
+
+  # Return diagnostic plots (confusion matrix + descision boundary)
+  if(plot == TRUE){
+    # Confusion matrix plot
+    
+    # Descision boundary plot
+    
+    # Use grid.arrange to put them in one figure
+    
+  }
+  
+  # Final step: Return list with final model, confusion matrix, summary statistics
+  # and descision boundary for further applications
+  
+  return(results_list)
 }
 
