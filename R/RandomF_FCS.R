@@ -36,23 +36,25 @@ RandomF_FCS <- function(x, sample_info, target_label, downsample = 0,
   set.seed(seed)
   
   # Step 0: Format metadata
-  pData(x) <- base::cbind(pData(x), 
+  Biobase::pData(x) <- base::cbind( Biobase::pData(x), 
                     sample_info[base::order(base::match(as.character(sample_info[, "name"]),
-                                            as.character(pData(x)[, "name"]))), 
+                                            as.character(Biobase::pData(x)[, "name"]))), 
                                 target_label])
-  base::colnames(pData(x))[2] <- target_label
+  base::colnames(Biobase::pData(x))[2] <- target_label
   
   # Step 1: Subset FCS files on parameters of interest
   x <- x[, param]
   
   # Step 1b: downsample
+  cat(paste0("-----------------------------------------------------------------------------------------------------\n"))
   x <- Phenoflow::FCS_resample(x, sample = downsample)
+  cat(paste0("-----------------------------------------------------------------------------------------------------\n"))
   
   # Step 2: add group labels present in pData to each cell and
   # merge all cells in a single data.table (faster than dataframe)
   if(classification_type == "sample"){
     for(i in 1:length(x)){
-      tmp <- data.table::data.table(label = flowCore::pData(x[i])[, target_label], 
+      tmp <- data.table::data.table(label = Biobase::pData(x[i])[, target_label], 
                                     flowCore::exprs(x[[i]]))
       if(i == 1){
         full_data <- tmp
@@ -64,7 +66,7 @@ RandomF_FCS <- function(x, sample_info, target_label, downsample = 0,
   # if(classification_type == "single-cell"){
   #   # Step 2: add sample labels to each cell
   #   flowCore::fsApply(x, use.exprs = TRUE)
-  #   flowCore::pData(x)  
+  #   Biobase::pData(x)  
   # }
   
   # Step 3: Set model parameters
@@ -72,8 +74,7 @@ RandomF_FCS <- function(x, sample_info, target_label, downsample = 0,
     method = "repeatedcv",
     number = 10,
     ## repeated ten times
-    repeats = 3,
-    search = "random")
+    repeats = 3)
   
   # Step 4: Create data partitions
   train_data <- full_data[caret::createDataPartition(full_data$label,
@@ -84,30 +85,29 @@ RandomF_FCS <- function(x, sample_info, target_label, downsample = 0,
   # Step 5: Train Random Forest classifier on training set
   metric <- "Accuracy"
   mtry <- base::sqrt(ncol(train_data))
-  tunegrid <- base::expand.grid(.mtry = mtry, ntrees = 500)
+  tunegrid <- base::expand.grid(.mtry = mtry)
   cat(date(), paste0("--- Training Random forest classifier on ",
                      100 * p_train,
-                     "% training set with the following options: \n",
+                     "% training set with options: \n",
                      "\tPerformance metric: ", metric, "\n",
                      "\tNumber of trees: ", 500, "\n",
                      "\tmtry: ", round(mtry,2), "\n",
-                     "\tmethod: ", fitControl$method, "\n",
-                     "\trepeats: ", fitControl$repeats, "\n",
-                     "\n"))
-  
+                     "\tmethod: ", fitControl$number, "x ", fitControl$method, "\n",
+                     "\trepeats: ", fitControl$repeats, "\n"))
+  cat(paste0("-----------------------------------------------------------------------------------------------------\n"))
   RF_train <- caret::train(label~., data = train_data, method = "rf", 
-                      metric = metric, tuneLength=15, 
-                      trControl = fitControl)
+                      metric = metric, tuneGrid = tunegrid, 
+                      trControl = fitControl, ntree = 500)
   print(RF_train)
-  plot(RF_train)
   
   # Step 6: Accuracy on test set
+  cat(paste0("-----------------------------------------------------------------------------------------------------\n"))
   cat(date(), paste0("--- Accuracy on ",
                      100 * (1 - p_train),
                      "% test set: ",  
                      100 * round(base::sum(stats::predict(RF_train, newdata = test_data) == test_data$label)/
                        nrow(test_data),2), "%\n"))
-
+  cat(paste0("-----------------------------------------------------------------------------------------------------\n"))
   
   # Final step: Return model for further applications
   return(RF_train)
