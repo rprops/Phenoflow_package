@@ -6,20 +6,23 @@
 \usage{
 RandomF_FCS(x, sample_info, target_label, downsample = 0,
   classification_type = "sample", param = c("FL1-H", "FL3-H", "FSC-H",
-  "SSC-H"), p_train = 0.75, seed = 777)
+  "SSC-H"), p_train = 0.75, seed = 777, cleanFCS = FALSE,
+  timesplit = 0.1, TimeChannel = "Time")
 }
 \arguments{
-\item{x}{flowSet object where the necessary metadata for classification is included in the phenoData ac}
+\item{x}{flowSet object where the necessary metadata for classification is 
+included in the phenoData ac}
 
-\item{sample_info}{Sample information necessary for the classification, has to contain a column named "name"
+\item{sample_info}{Sample information necessary for the classification, has to 
+contain a column named "name"
 which matches the samplenames of the FCS files stored in the flowSet.}
 
-\item{target_label}{Label that you should be predicted based on the flow cytometry data.}
+\item{target_label}{column name of the sample_info dataframe that should be 
+predicted based on the flow cytometry data.}
 
 \item{downsample}{Indicate to which sample size should be downsampled. 
-By default samples are downsampled to the sample size of the sample with the lowest number of cells.}
-
-\item{classification_type}{Whether classification is desired on "sample" level or on "single-cell" level. 
+By default samples are downsampled to the sample size of the sample with the 
+lowest number of cells.
 Defaults to sample level.}
 
 \item{param}{Parameters to base classification on.}
@@ -27,6 +30,13 @@ Defaults to sample level.}
 \item{p_train}{Percentage of the data set that should be used for training the model.}
 
 \item{seed}{Set random seed to be used during the analysis. Put at 777 by default.}
+
+\item{cleanFCS}{Indicate whether outlier removal should be conducted prior to diversity assessment (flowAI package). 
+Defaults to FALSE. I would recommend to make sure samples have > 500 cells. Will denoise based on the parameters specified in `param`.}
+
+\item{timesplit}{Fraction of timestep used in flowAI for denoising. Please consult the `flowAI::flow_auto_qc` function for more information.}
+
+\item{TimeChannel}{Name of time channel in the FCS files. This can differ between flow cytometers. Defaults to "Time". You can check this by: colnames(flowSet).}
 }
 \description{
 Random Forest classifier for supervised demarcation of groups using flow cytometry data.
