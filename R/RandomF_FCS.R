@@ -18,6 +18,8 @@
 #' Defaults to FALSE. I would recommend to make sure samples have > 500 cells. Will denoise based on the parameters specified in `param`.
 #' @param timesplit Fraction of timestep used in flowAI for denoising. Please consult the `flowAI::flow_auto_qc` function for more information.
 #' @param TimeChannel Name of time channel in the FCS files. This can differ between flow cytometers. Defaults to "Time". You can check this by: colnames(flowSet).
+#' @param plot_fig Should the confusion matrix and the overall performance statistics on the test data partition be visualized?
+#' Defaults to FALSE.
 #' @keywords resampling, fcm
 #' @examples 
 #' # Load raw data (imported using flowCore)
@@ -41,7 +43,8 @@ RandomF_FCS <- function(x, sample_info, target_label, downsample = 0,
                        p_train = 0.75, seed = 777,
                        cleanFCS = FALSE,
                        timesplit = 0.1,
-                       TimeChannel = "Time") {
+                       TimeChannel = "Time",
+                       plot_fig = FALSE) {
   # Set seed
   set.seed(seed)
   
@@ -165,7 +168,7 @@ RandomF_FCS <- function(x, sample_info, target_label, downsample = 0,
   }
   colnames(performance_metrics)[1] <- metric
   
-  cat(date(), paste0("--- Accuracy on ",
+  cat(date(), paste0("--- Performance on ",
                      100 * (1 - p_train),
                      "% test set: \n"))
   print(performance_metrics)
@@ -176,34 +179,84 @@ RandomF_FCS <- function(x, sample_info, target_label, downsample = 0,
   
   # Create dataframe containing descision boundary of final model
     ## Extract minimum and maximum values of FCS files
-  summary <- flowCore::fsApply(x = x, FUN = function(x) base::apply(x, 2, base::max), use.exprs = TRUE)
-  maxval <- base::apply(summary, 2, max)
-  minval <- base::apply(summary, 2, min)
-  desc_coord <- list()
-  for(i_param in 1:length(param)){
-    desc_coord[[i_param]] <- seq(from = minval[i_param],
-                                 by = ((maxval[i_param] - minval[i_param])/32), 
-                           to = maxval[i_param])
-  }
-    ## Create vectors containing the parameter value bins for prediction
-  desc_pred <- base::expand.grid(desc_coord)
-  base::colnames(desc_pred) <- param
-  
-    ## Predict this dummy data
-  RF_pred_desc <- stats::predict(RF_train, newdata = desc_pred)
+  # summary <- flowCore::fsApply(x = x, FUN = function(x) base::apply(x, 2, base::max), use.exprs = TRUE)
+  # maxval <- base::apply(summary, 2, max)
+  # minval <- base::apply(summary, 2, min)
+  # desc_coord <- list()
+  # for(i_param in 1:length(param[1:2])){
+  #   desc_coord[[i_param]] <- seq(from = minval[i_param],
+  #                                by = ((maxval[i_param] - minval[i_param])/64), 
+  #                          to = maxval[i_param])
+  # }
+  #   ## Create vectors containing the parameter value bins for prediction
+  # desc_pred <- base::expand.grid(desc_coord)
+  # base::colnames(desc_pred) <- param
+  # 
+  #   ## Predict this dummy data
+  # RF_pred_desc <- stats::predict(RF_train, newdata = desc_pred)
+  # RF_pred_desc <- cbind(desc_pred, RF_pred_desc)
+  # colnames(RF_pred_desc) <- c(param, "label")
   
   # Make list containing model, confusion matrix, summary statistics and descision boundary
   results_list <- list()
   results_list[[1]] <- RF_train
   results_list[[2]] <- caret::confusionMatrix(data = RF_pred, test_data$label)
-  results_list[[3]] <- cbind(desc_pred, RF_pred_desc)
+  # results_list[[3]] <- RF_pred_desc
 
   # Return diagnostic plots (confusion matrix + descision boundary)
-  if(plot == TRUE){
+  if(plot_fig == TRUE){
     # Confusion matrix plot
+    mytable <- base::round(data.frame(performance = results_list[[2]]$overall*100),2)
+    
+    p_conf <- ggplot2::ggplot(data.frame(results_list[[2]]$table), 
+                              ggplot2::aes(x = Prediction, y = Reference, fill = 100*Freq/sum(Freq)))+
+      ggplot2::geom_raster()+
+      ggplot2::geom_text(ggplot2::aes(label = round(100*Freq/sum(Freq), 0)), size = 6)+
+      ggplot2::scale_fill_distiller( name = "% of total cells\n classified\n") +
+      ggplot2::theme_bw()+
+      ggplot2::scale_x_discrete(position = "top")+
+      ggplot2::theme(axis.title=ggplot2::element_text(size=16), 
+                     strip.text.x=ggplot2::element_text(size=14),
+            legend.title=ggplot2::element_text(size=14), legend.text=ggplot2::element_text(size=14),
+            axis.text.y =  ggplot2::element_text(size=13),
+            axis.text.x = ggplot2::element_text(size=13, angle = 55, hjust = 0),
+            title= ggplot2::element_text(size=20),
+            plot.margin = ggplot2::unit(c(1.1,1.1,1.1,1.1), "cm"),
+            panel.grid.major = ggplot2::element_blank(), 
+            panel.grid.minor = ggplot2::element_blank(),
+            panel.border = ggplot2::element_blank(),
+            panel.background = ggplot2::element_rect(fill = "transparent",colour = NA),
+            plot.background =ggplot2::element_rect(fill = "transparent",colour = NA)
+      )
+      
+    p_conf_table <- ggplot2::ggplot(data.frame(results_list[[2]]$table), 
+                              ggplot2::aes(x = Prediction, y = Reference, fill = 100*Freq/sum(Freq)))+
+      ggplot2::theme(axis.title=ggplot2::element_text(size=16), 
+                     strip.text.x=ggplot2::element_text(size=14),
+            legend.title=ggplot2::element_text(size=14), legend.text=ggplot2::element_text(size=14),
+            axis.text.y =  ggplot2::element_text(size=13),
+            axis.text.x = ggplot2::element_text(size=13, angle = 55, hjust = 0),
+            title=ggplot2::element_text(size=20),
+            plot.margin = ggplot2::unit(c(1.1,1.1,1.1,1.1), "cm"),
+            panel.grid.major = ggplot2::element_blank(), 
+            panel.grid.minor = ggplot2::element_blank(),
+            panel.border = ggplot2::element_blank(),
+            panel.background = ggplot2::element_rect(fill = "transparent",colour = NA),
+            plot.background = ggplot2::element_rect(fill = "transparent",colour = NA)
+      )+
+      ggplot2::ylab("")+
+      ggplot2::xlab("")+
+      ggplot2::annotation_custom(gridExtra::tableGrob(mytable))
+    
+    print(cowplot::plot_grid(p_conf, p_conf_table, align = "h", ncol = 2, rel_widths = c(1/2, 1/5)))
     
     # Descision boundary plot
-    
+    # df_desc <- unique(results_list[[3]][, c(param[1:2], "label")]) # Retain only unique values on two primary parameters
+    # p_desc <- ggplot2::ggplot(df_desc, ggplot2::aes(x = `FL1-H`, 
+    #                                                  y = `FL3-H`,
+    #                                                  fill = label))+
+    #   geom_tile()+
+    #   scale_fill_manual(values = c("red", "blue"))
     # Use grid.arrange to put them in one figure
     
   }
