@@ -7,7 +7,7 @@
 RandomF_FCS(x, sample_info, target_label, downsample = 0,
   classification_type = "sample", param = c("FL1-H", "FL3-H", "FSC-H",
   "SSC-H"), p_train = 0.75, seed = 777, cleanFCS = FALSE,
-  timesplit = 0.1, TimeChannel = "Time")
+  timesplit = 0.1, TimeChannel = "Time", plot_fig = FALSE)
 }
 \arguments{
 \item{x}{flowSet object where the necessary metadata for classification is 
@@ -37,6 +37,9 @@ Defaults to FALSE. I would recommend to make sure samples have > 500 cells. Will
 \item{timesplit}{Fraction of timestep used in flowAI for denoising. Please consult the `flowAI::flow_auto_qc` function for more information.}
 
 \item{TimeChannel}{Name of time channel in the FCS files. This can differ between flow cytometers. Defaults to "Time". You can check this by: colnames(flowSet).}
+
+\item{plot_fig}{Should the confusion matrix and the overall performance statistics on the test data partition be visualized?
+Defaults to FALSE.}
 }
 \description{
 Random Forest classifier for supervised demarcation of groups using flow cytometry data.

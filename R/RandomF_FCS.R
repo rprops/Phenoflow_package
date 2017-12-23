@@ -206,7 +206,7 @@ RandomF_FCS <- function(x, sample_info, target_label, downsample = 0,
   # Return diagnostic plots (confusion matrix + descision boundary)
   if(plot_fig == TRUE){
     # Confusion matrix plot
-    mytable <- base::round(data.frame(performance = results_list[[2]]$overall*100),2)
+    mytable <- base::round(data.frame(performance = results_list[[2]]$overall*100), 2)
     
     p_conf <- ggplot2::ggplot(data.frame(results_list[[2]]$table), 
                               ggplot2::aes(x = Prediction, y = Reference, fill = 100*Freq/sum(Freq)))+
@@ -217,32 +217,35 @@ RandomF_FCS <- function(x, sample_info, target_label, downsample = 0,
       ggplot2::scale_x_discrete(position = "top")+
       ggplot2::theme(axis.title=ggplot2::element_text(size=16), 
                      strip.text.x=ggplot2::element_text(size=14),
-            legend.title=ggplot2::element_text(size=14), legend.text=ggplot2::element_text(size=14),
-            axis.text.y =  ggplot2::element_text(size=13),
-            axis.text.x = ggplot2::element_text(size=13, angle = 55, hjust = 0),
-            title= ggplot2::element_text(size=20),
-            plot.margin = ggplot2::unit(c(1.1,1.1,1.1,1.1), "cm"),
-            panel.grid.major = ggplot2::element_blank(), 
-            panel.grid.minor = ggplot2::element_blank(),
-            panel.border = ggplot2::element_blank(),
-            panel.background = ggplot2::element_rect(fill = "transparent",colour = NA),
-            plot.background =ggplot2::element_rect(fill = "transparent",colour = NA)
+                     legend.title=ggplot2::element_text(size=14), 
+                     legend.text=ggplot2::element_text(size=14),
+                     axis.text.y =  ggplot2::element_text(size=13),
+                     axis.text.x = ggplot2::element_text(size=13, angle = 55, hjust = 0),
+                     title= ggplot2::element_text(size=20),
+                     plot.margin = ggplot2::unit(c(1.1,1.1,1.1,1.1), "cm"),
+                     panel.grid.major = ggplot2::element_blank(), 
+                     panel.grid.minor = ggplot2::element_blank(),
+                     panel.border = ggplot2::element_blank(),
+                     panel.background = ggplot2::element_rect(fill = "transparent",colour = NA),
+                     plot.background =ggplot2::element_rect(fill = "transparent",colour = NA)
+            
       )
       
     p_conf_table <- ggplot2::ggplot(data.frame(results_list[[2]]$table), 
                               ggplot2::aes(x = Prediction, y = Reference, fill = 100*Freq/sum(Freq)))+
       ggplot2::theme(axis.title=ggplot2::element_text(size=16), 
                      strip.text.x=ggplot2::element_text(size=14),
-            legend.title=ggplot2::element_text(size=14), legend.text=ggplot2::element_text(size=14),
-            axis.text.y =  ggplot2::element_text(size=13),
-            axis.text.x = ggplot2::element_text(size=13, angle = 55, hjust = 0),
-            title=ggplot2::element_text(size=20),
-            plot.margin = ggplot2::unit(c(1.1,1.1,1.1,1.1), "cm"),
-            panel.grid.major = ggplot2::element_blank(), 
-            panel.grid.minor = ggplot2::element_blank(),
-            panel.border = ggplot2::element_blank(),
-            panel.background = ggplot2::element_rect(fill = "transparent",colour = NA),
-            plot.background = ggplot2::element_rect(fill = "transparent",colour = NA)
+                     legend.title=ggplot2::element_text(size=14), 
+                     legend.text=ggplot2::element_text(size=14),
+                     axis.text.y =  ggplot2::element_text(size=13),
+                     axis.text.x = ggplot2::element_text(size=13, angle = 55, hjust = 0),
+                     title=ggplot2::element_text(size=20),
+                     plot.margin = ggplot2::unit(c(1.1,1.1,1.1,1.1), "cm"),
+                     panel.grid.major = ggplot2::element_blank(), 
+                     panel.grid.minor = ggplot2::element_blank(),
+                     panel.border = ggplot2::element_blank(),
+                     panel.background = ggplot2::element_rect(fill = "transparent",colour = NA),
+                     plot.background = ggplot2::element_rect(fill = "transparent",colour = NA)
       )+
       ggplot2::ylab("")+
       ggplot2::xlab("")+
