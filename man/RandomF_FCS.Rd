@@ -11,7 +11,7 @@ RandomF_FCS(x, sample_info, target_label, downsample = 0,
 }
 \arguments{
 \item{x}{flowSet object where the necessary metadata for classification is 
-included in the phenoData ac}
+included in the phenoData.}
 
 \item{sample_info}{Sample information necessary for the classification, has to 
 contain a column named "name"
@@ -31,7 +31,7 @@ Defaults to sample level.}
 
 \item{seed}{Set random seed to be used during the analysis. Put at 777 by default.}
 
-\item{cleanFCS}{Indicate whether outlier removal should be conducted prior to diversity assessment (flowAI package). 
+\item{cleanFCS}{Indicate whether outlier removal should be conducted prior to model estimation. 
 Defaults to FALSE. I would recommend to make sure samples have > 500 cells. Will denoise based on the parameters specified in `param`.}
 
 \item{timesplit}{Fraction of timestep used in flowAI for denoising. Please consult the `flowAI::flow_auto_qc` function for more information.}
@@ -56,8 +56,12 @@ colnames(metadata) <- c("name", "Cycle_nr", "Location", "day",
 
 # Run Random Forest classifier to predict the Reactor phase based on the
 # single-cell FCM data
-RandomF_FCS(flowData, sample_info = metadata, target_label = "Reactor_phase",
+model_rf < RandomF_FCS(flowData, sample_info = metadata, target_label = "Reactor_phase",
 downsample = 10)
+
+# Make a model prediction on new data and report contigency table of predictions
+model_pred <- predict_RandomF(x = model_rf[[1]], new_data =  flowData[1], cleanFCS = FALSE)
 }
 \keyword{fcm}
-\keyword{resampling,}
+\keyword{forest,}
+\keyword{random}

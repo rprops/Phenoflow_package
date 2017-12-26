@@ -1,7 +1,7 @@
 #' Random Forest classifier for supervised demarcation of groups using flow cytometry data.
 #'
 #' @param x flowSet object where the necessary metadata for classification is 
-#' included in the phenoData ac
+#' included in the phenoData.
 #' @param sample_info Sample information necessary for the classification, has to 
 #' contain a column named "name"
 #' which matches the samplenames of the FCS files stored in the flowSet.
@@ -14,13 +14,13 @@
 #' @param param Parameters to base classification on.
 #' @param p_train Percentage of the data set that should be used for training the model.
 #' @param seed Set random seed to be used during the analysis. Put at 777 by default.
-#' @param cleanFCS Indicate whether outlier removal should be conducted prior to diversity assessment (flowAI package). 
+#' @param cleanFCS Indicate whether outlier removal should be conducted prior to model estimation. 
 #' Defaults to FALSE. I would recommend to make sure samples have > 500 cells. Will denoise based on the parameters specified in `param`.
 #' @param timesplit Fraction of timestep used in flowAI for denoising. Please consult the `flowAI::flow_auto_qc` function for more information.
 #' @param TimeChannel Name of time channel in the FCS files. This can differ between flow cytometers. Defaults to "Time". You can check this by: colnames(flowSet).
 #' @param plot_fig Should the confusion matrix and the overall performance statistics on the test data partition be visualized?
 #' Defaults to FALSE.
-#' @keywords resampling, fcm
+#' @keywords random forest, fcm
 #' @examples 
 #' # Load raw data (imported using flowCore)
 #' data(flowData)
@@ -33,8 +33,11 @@
 #' 
 #' # Run Random Forest classifier to predict the Reactor phase based on the
 #' # single-cell FCM data
-#' RandomF_FCS(flowData, sample_info = metadata, target_label = "Reactor_phase",
+#' model_rf < RandomF_FCS(flowData, sample_info = metadata, target_label = "Reactor_phase",
 #' downsample = 10)
+#' 
+#' # Make a model prediction on new data and report contigency table of predictions
+#' model_pred <- predict_RandomF(x = model_rf[[1]], new_data =  flowData[1], cleanFCS = FALSE)
 #' @export
 
 RandomF_FCS <- function(x, sample_info, target_label, downsample = 0, 
@@ -252,6 +255,12 @@ RandomF_FCS <- function(x, sample_info, target_label, downsample = 0,
       ggplot2::annotation_custom(gridExtra::tableGrob(mytable))
     
     print(cowplot::plot_grid(p_conf, p_conf_table, align = "h", ncol = 2, rel_widths = c(1/2, 1/5)))
+    
+    # Show positions of labelled cells for a stratified sample of the test data
+    
+    
+    
+    
     
     # Descision boundary plot
     # df_desc <- unique(results_list[[3]][, c(param[1:2], "label")]) # Retain only unique values on two primary parameters
