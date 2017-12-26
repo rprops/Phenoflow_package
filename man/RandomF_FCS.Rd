@@ -60,7 +60,7 @@ model_rf < RandomF_FCS(flowData, sample_info = metadata, target_label = "Reactor
 downsample = 10)
 
 # Make a model prediction on new data and report contigency table of predictions
-model_pred <- predict_RandomF(x = model_rf[[1]], new_data =  flowData[1], cleanFCS = FALSE)
+model_pred <- RandomF_predict(x = model_rf[[1]], new_data =  flowData[1], cleanFCS = FALSE)
 }
 \keyword{fcm}
 \keyword{forest,}

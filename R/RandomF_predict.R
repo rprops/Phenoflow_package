@@ -22,10 +22,10 @@
 #' downsample = 10)
 #' 
 #' # Make a model prediction on new data and report contigency table of predictions
-#' model_pred <- predict_RandomF(x = model_rf[[1]], new_data =  flowData[1], cleanFCS = FALSE)
+#' model_pred <- RandomF_predict(x = model_rf[[1]], new_data =  flowData[1], cleanFCS = FALSE)
 #' @export
 
-predict_RandomF <- function(x, new_data, cleanFCS = FALSE,
+RandomF_predict <- function(x, new_data, cleanFCS = FALSE,
                             param = c("FL1-H", "FL3-H", "FSC-H", "SSC-H")) {
   if(cleanFCS == TRUE){
     cat(paste0("-------------------------------------------------------------------------------------------------", "\n"))
