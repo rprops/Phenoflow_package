@@ -15,7 +15,7 @@ RandomF_predict(x, new_data, cleanFCS = FALSE, param = c("FL1-H", "FL3-H",
 \item{cleanFCS}{Indicate whether outlier removal should be conducted prior to model prediction.
 Defaults to FALSE. I would recommend to make sure samples have > 500 cells. Will denoise based on the parameters specified in `param`.}
 
-\item{param}{Parameters used to denoise the new_data}
+\item{param}{Parameters required to denoise the new_data}
 }
 \description{
 Predict cell labels based on a model constructed using RandomF_FCS function.

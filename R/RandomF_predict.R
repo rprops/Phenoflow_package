@@ -4,7 +4,7 @@
 #' @param new_data flowSet containing the data to be predicted.
 #' @param cleanFCS Indicate whether outlier removal should be conducted prior to model prediction.
 #' Defaults to FALSE. I would recommend to make sure samples have > 500 cells. Will denoise based on the parameters specified in `param`.
-#' @param param Parameters used to denoise the new_data
+#' @param param Parameters required to denoise the new_data
 #' @keywords prediction, random forest, fcm
 #' @examples 
 #' # Load raw data (imported using flowCore)
@@ -73,12 +73,11 @@ RandomF_predict <- function(x, new_data, cleanFCS = FALSE,
     }
   }
   
-  # parameters used in the model construction
+  # Extract parameters used in the model construction
   param2 <- base::colnames(x$trainingData)[-1]
   new_data <- new_data[, param2]
   
-  # Step 2: add group labels present in pData to each cell and
-  # merge all cells in a single data.table (faster than dataframe)
+  # Step 2: merge all cells in a single data.table (faster than dataframe)
   for(i in 1:length(new_data)){
     tmp <- data.table::data.table(flowCore::exprs(new_data[[i]]))
     tmp_labels <- base::rep(flowCore::sampleNames(new_data)[i], 
