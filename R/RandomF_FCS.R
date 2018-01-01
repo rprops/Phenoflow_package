@@ -22,6 +22,9 @@
 #' Defaults to FALSE.
 #' @keywords random forest, fcm
 #' @examples 
+#' 
+#' # 1. Example with environmental data:
+#' 
 #' # Load raw data (imported using flowCore)
 #' data(flowData)
 #' 
@@ -38,6 +41,24 @@
 #' 
 #' # Make a model prediction on new data and report contigency table of predictions
 #' model_pred <- RandomF_predict(x = model_rf[[1]], new_data =  flowData[1], cleanFCS = FALSE)
+#' print(model_pred)
+#' 
+#' # 2. Example with synthetic community data
+#' # Load flow cytometry data of two strains with each 5,000 cells measured
+#' load(flowData_ax)
+#' 
+#' # Quickly generate the necesary metadata
+#' metadata_syn <- data.frame(name = flowCore::sampleNames(flowData_ax),
+#'                        labels = flowCore::sampleNames(flowData_ax))
+#' 
+#' # Run Random forest model on 100 cells of each strain
+#' model_rf_syn <- RandomF_FCS(flowData_ax, sample_info = metadata_syn, target_label = "labels",
+#'                         downsample = 100, plot_fig = TRUE)
+#'                         
+#' # Make predictions on each of the samples or on new data of the mixed communities
+#' model_pred_syn <- RandomF_predict(x = model_rf_syn[[1]], new_data =  flowData_ax, cleanFCS = FALSE)
+#' print(model_pred_syn)
+
 #' @export
 
 RandomF_FCS <- function(x, sample_info, target_label, downsample = 0, 
@@ -169,7 +190,7 @@ RandomF_FCS <- function(x, sample_info, target_label, downsample = 0,
     tmp_pred <- stats::predict(RF_train, newdata = tmp)
     performance_metrics$metric[n_label] <- round(100*base::sum(tmp_pred == tmp$label)/nrow(test_data),2)
   }
-  colnames(performance_metrics)[1] <- metric
+  colnames(performance_metrics)[1] <- "pct_cells"
   
   cat(date(), paste0("--- Performance on ",
                      100 * (1 - p_train),

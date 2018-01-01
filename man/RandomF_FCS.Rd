@@ -45,6 +45,9 @@ Defaults to FALSE.}
 Random Forest classifier for supervised demarcation of groups using flow cytometry data.
 }
 \examples{
+
+# 1. Example with environmental data:
+
 # Load raw data (imported using flowCore)
 data(flowData)
 
@@ -61,6 +64,23 @@ downsample = 10)
 
 # Make a model prediction on new data and report contigency table of predictions
 model_pred <- RandomF_predict(x = model_rf[[1]], new_data =  flowData[1], cleanFCS = FALSE)
+print(model_pred)
+
+# 2. Example with synthetic community data
+# Load flow cytometry data of two strains with each 5,000 cells measured
+load(flowData_ax)
+
+# Quickly generate the necesary metadata
+metadata_syn <- data.frame(name = flowCore::sampleNames(flowData_ax),
+                       labels = flowCore::sampleNames(flowData_ax))
+
+# Run Random forest model on 100 cells of each strain
+model_rf_syn <- RandomF_FCS(flowData_ax, sample_info = metadata_syn, target_label = "labels",
+                        downsample = 100, plot_fig = TRUE)
+                        
+# Make predictions on each of the samples or on new data of the mixed communities
+model_pred_syn <- RandomF_predict(x = model_rf_syn[[1]], new_data =  flowData_ax, cleanFCS = FALSE)
+print(model_pred_syn)
 }
 \keyword{fcm}
 \keyword{forest,}
