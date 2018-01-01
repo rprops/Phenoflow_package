@@ -32,7 +32,7 @@ colnames(metadata) <- c("name", "Cycle_nr", "Location", "day",
 
 # Run Random Forest classifier to predict the Reactor phase based on the
 # single-cell FCM data
-model_rf < RandomF_FCS(flowData, sample_info = metadata, target_label = "Reactor_phase",
+model_rf <- RandomF_FCS(flowData, sample_info = metadata, target_label = "Reactor_phase",
 downsample = 10)
 
 # Make a model prediction on new data and report contigency table of predictions
