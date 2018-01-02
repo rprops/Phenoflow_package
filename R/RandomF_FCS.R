@@ -45,7 +45,7 @@
 #' 
 #' # 2. Example with synthetic community data
 #' # Load flow cytometry data of two strains with each 5,000 cells measured
-#' load(flowData_ax)
+#' data(flowData_ax)
 #' 
 #' # Quickly generate the necesary metadata
 #' metadata_syn <- data.frame(name = flowCore::sampleNames(flowData_ax),
