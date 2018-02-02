@@ -12,7 +12,7 @@ fp_contrasts(x, comp1, comp2, param = c("FL1-H", "FL3-H"), d = 3,
 
 \item{comp1}{A vector of factors/indices indicating the groups to be compared. 
 This group will be compared to comp2. Negative density values indicate that
-comp1 had a lower density at that specific bin/area.}
+comp1 had a higher density at that specific bin/area.}
 
 \item{comp2}{A vector of factors/indices indicating the groups to be compared.
 This group will be compared to comp1. Negative density values indicate that

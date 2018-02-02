@@ -11,10 +11,17 @@ FCS_pool(x, stub)
 
 \item{stub}{A vector of patterns by which to pool FCS files (e.g. replicates). 
 For example: providing the pattern "CYCLUS1_BEKKEN_0_4h_SYBR_START" will merge all 
-flowframes containing this pattern in their sample name.}
+flowframes containing this pattern in their sample name. 
+**Notice**: You will have to provide a vector containing all the patterns to merge with
+in case you want the full flowSet merged. For example: for stub = c("CYCLUS1_BEKKEN_0_4h_SYBR_START", 
+"CYCLUS1_BEKKEN_0_10h_SYBR_START") `FCS_pool`` will **only** merge the samples containing those patterns, and it will
+merge them per unique pattern.}
 }
 \description{
 This function pools samples based on sample name patterns
+}
+\examples{
+
 }
 \keyword{FCS,}
 \keyword{merge,}
