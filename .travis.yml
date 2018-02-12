@@ -27,4 +27,4 @@ r_check_args: "--no-vignettes"
 script: 
   - |
     travis_wait 45 R CMD build --no-build-vignettes .
-    travis_wait 45 R CMD check Phenoflow*tar.gz
+    travis_wait 45 R CMD check --no-examples Phenoflow*tar.gz
