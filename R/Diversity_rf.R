@@ -100,9 +100,6 @@ Diversity_rf <- function(x, d = 4, R = 100, R.b = 100, bw = 0.01, nbin = 128,
     cat("\n", paste0("Monaco et al., flowAI: automatic and interactive anomaly discerning tools for flow cytometry data,\n Bioinformatics, Volume 32, Issue 16, 15 August 2016, Pages 2473–2480, \n https://doi.org/10.1093/bioinformatics/btw191", "\n"))
     cat(paste0("-------------------------------------------------------------------------------------------------", "\n \n"))
     
-    # Extract sample names
-    sam_names <- flowCore::sampleNames(x) 
-    
     # Extract parameters not to base denoising on
     param_f <- BiocGenerics::unique(gsub(param, pattern = "-H|-A", replacement = ""))
     filter_param <- BiocGenerics::colnames(x)
@@ -121,10 +118,6 @@ Diversity_rf <- function(x, d = 4, R = 100, R.b = 100, bw = 0.01, nbin = 128,
     
     # Subset data to relevant data
     x <- x[, param]
-    
-    # Add sample names again since the QC function removes these
-    x@phenoData@data$name  <- sam_names
-    flowCore::sampleNames(x) <- sam_names
     
     # Change characters in parameter description from character back to numeric
     # Otherwise nothing that follows will work
