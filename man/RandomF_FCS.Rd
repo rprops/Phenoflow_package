@@ -7,7 +7,8 @@
 RandomF_FCS(x, sample_info, target_label, downsample = 0,
   classification_type = "sample", param = c("FL1-H", "FL3-H", "FSC-H",
   "SSC-H"), p_train = 0.75, seed = 777, cleanFCS = FALSE,
-  timesplit = 0.1, TimeChannel = "Time", plot_fig = FALSE)
+  timesplit = 0.1, TimeChannel = "Time", plot_fig = FALSE,
+  method = "rf")
 }
 \arguments{
 \item{x}{flowSet object where the necessary metadata for classification is 
