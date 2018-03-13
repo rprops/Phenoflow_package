@@ -158,7 +158,7 @@ RandomF_FCS <- function(x, sample_info, target_label, downsample = 0,
     repeats = 3)
   
   # Step 4: Create data partitions
-  trainIndex <- createDataPartition(full_data$label, p = p_train)
+  trainIndex <- caret::createDataPartition(full_data$label, p = p_train)
   
   train_data <- full_data[trainIndex$Resample1, ]
   test_data <- full_data[-trainIndex$Resample1, ]
