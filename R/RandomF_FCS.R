@@ -68,7 +68,8 @@ RandomF_FCS <- function(x, sample_info, target_label, downsample = 0,
                        cleanFCS = FALSE,
                        timesplit = 0.1,
                        TimeChannel = "Time",
-                       plot_fig = FALSE) {
+                       plot_fig = FALSE,
+                       method = "rf") {
   # Set seed
   set.seed(seed)
   
@@ -157,10 +158,10 @@ RandomF_FCS <- function(x, sample_info, target_label, downsample = 0,
     repeats = 3)
   
   # Step 4: Create data partitions
-  train_data <- full_data[caret::createDataPartition(full_data$label,
-                                                     p = p_train)[[1]], ]
-  test_data <- full_data[caret::createDataPartition(full_data$label, 
-                                                    p = (1 - p_train))[[1]], ]
+  trainIndex <- caret::createDataPartition(full_data$label, p = p_train)
+  
+  train_data <- full_data[trainIndex$Resample1, ]
+  test_data <- full_data[-trainIndex$Resample1, ]
   
   # Step 5: Train Random Forest classifier on training set
   metric <- "Accuracy"
@@ -175,10 +176,26 @@ RandomF_FCS <- function(x, sample_info, target_label, downsample = 0,
                      "\t-method: ", fitControl$number, "x ", fitControl$method, "\n",
                      "\t-repeats: ", fitControl$repeats, "\n"))
   cat(paste0("-----------------------------------------------------------------------------------------------------\n"))
-  RF_train <- caret::train(label~., data = train_data, method = "rf", 
-                      metric = metric, tuneGrid = tunegrid, 
-                      trControl = fitControl, ntree = 500)
+  RF_train <- caret::train(label~., data = train_data, method = method, 
+                           metric = metric, tuneGrid = tunegrid, 
+                           trControl = fitControl, ntree = 500)
   print(RF_train)
+  # cat(date(), paste0("--- Training Xgboost classifier on ",
+  #                    100 * p_train,
+  #                    "% training set with options: \n",
+  #                    "\t-Performance metric: ", metric, "\n",
+  #                    "\t-Number of trees: ", 500, "\n",
+  #                    "\t-mtry: ", round(mtry, 2), "\n",
+  #                    "\t-method: ", fitControl$number, "x ", fitControl$method, "\n",
+  #                    "\t-repeats: ", fitControl$repeats, "\n"))
+  # cat(paste0("-----------------------------------------------------------------------------------------------------\n"))
+  # bstSparse <- xgboost(data = train_data$data, 
+  #                      label = train_data$label, 
+  #                      max.depth = 2, eta = 1, 
+  #                      nthread = 2, nround = 2, 
+  #                      objective = "binary:logistic")
+  # print(bstSparse)
+
   
   # Step 6: Accuracy on test set
   cat(paste0("-----------------------------------------------------------------------------------------------------\n"))
@@ -188,9 +205,11 @@ RandomF_FCS <- function(x, sample_info, target_label, downsample = 0,
   for(n_label in 1:length(unique(test_data$label))){
     tmp <- test_data[test_data$label == unique(test_data$label)[n_label], ]
     tmp_pred <- stats::predict(RF_train, newdata = tmp)
-    performance_metrics$metric[n_label] <- round(100*base::sum(tmp_pred == tmp$label)/nrow(test_data),2)
+    index <- performance_metrics$label == unique(test_data$label)[n_label]
+    performance_metrics$metric[index] <- 
+      round(100*base::sum(tmp_pred == tmp$label)/performance_metrics$n_cells[index],2)
   }
-  colnames(performance_metrics)[1] <- "pct_cells"
+  colnames(performance_metrics)[1] <- "Accuracy"
   
   cat(date(), paste0("--- Performance on ",
                      100 * (1 - p_train),
@@ -230,7 +249,7 @@ RandomF_FCS <- function(x, sample_info, target_label, downsample = 0,
   # Return diagnostic plots (confusion matrix + descision boundary)
   if(plot_fig == TRUE){
     # Confusion matrix plot
-    mytable <- base::round(data.frame(performance = results_list[[2]]$overall*100), 2)
+    mytable <- base::round(data.frame(performance = results_list[[2]]$overall), 2)
     
     p_conf <- ggplot2::ggplot(data.frame(results_list[[2]]$table), 
                               ggplot2::aes(x = Prediction, y = Reference, fill = 100*Freq/sum(Freq)))+

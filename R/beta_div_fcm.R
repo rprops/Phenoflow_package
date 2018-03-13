@@ -68,7 +68,8 @@
 #'  plot_beta_fcm(beta)
 #' @export
 
-beta_div_fcm <- function(x, d = 4, dist = "bray", k = 2, iter = 100, ord.type = c("NMDS", "PCoA"), INDICES=NULL,
+beta_div_fcm <- function(x, d = 4, dist = "bray", k = 2, iter = 100, 
+                         ord.type = c("NMDS", "PCoA"), INDICES=NULL,
                          binary = FALSE) {
   x <- x@basis/apply(x@basis, 1, max)
   x <- round(x, d)
@@ -77,7 +78,11 @@ beta_div_fcm <- function(x, d = 4, dist = "bray", k = 2, iter = 100, ord.type = 
     x <- do.call(rbind, x)
   }
     input.dist <- vegan::vegdist(x, method = dist, binary = binary)
-    if (ord.type == "NMDS") 
-      mds.fbasis <- vegan::metaMDS(input.dist, autotransform = FALSE, k, trymax = iter) else mds.fbasis <- stats::cmdscale(input.dist, k = 2, eig = TRUE, add = TRUE)
+    if (ord.type == "NMDS"){ 
+      mds.fbasis <- vegan::metaMDS(input.dist, autotransform = FALSE, k,
+                                   trymax = iter) 
+      } else {
+        mds.fbasis <- stats::cmdscale(input.dist, k = 2, eig = TRUE, add = TRUE)
+      }
   return(mds.fbasis)
 }
