@@ -13,7 +13,9 @@
 #' FCM data (i.e., all parameter values are within [0,1]).
 #' @param nbin Resolution of the binning grid. Defaults to 128 bins which corresponds to a 128x128 binning grid.
 #' @param param Parameter vector indicating on which parameters the diversity should be estimated. An example input would be:
-#' c("FL1-H", "FL3-H", "SSC-H", "FSC-H").
+#' c("FL1-H", "FL3-H", "SSC-H", "FSC-H"). In addition the first parameter in this vector will be used
+#' to normalize the data. Please make sure this is the primary fluorescence channel if available. For 
+#' example FL1-H for SYBR Green stained bacterial cells measured on an Accuri C6.
 #' @param parallel Should the calculation be parallelized? Defaults to FALSE
 #' @param ncores How many cores should be used in case of parallel computation?
 #' Defaults to 2.
@@ -23,51 +25,40 @@
 #' @param TimeChannel Name of time channel in the FCS files. This can differ between flow cytometers. Defaults to "Time". You can check this by: colnames(flowSet).
 #' @keywords diversity, fcm, alpha
 #' @examples
-#' ## Full data processing example
+#' # Full data processing example
 #' 
-# # Load raw data (imported using flowCore)
-# data(flowData)
-# 
-# # Take subsample
-# flowData <- flowData[1:5]
-# 
-# # Asinh transform and select parameters of interest (cells were stained with Sybr Green I).
-# flowData_transformed <- flowCore::transform(flowData,`FL1-H`=asinh(`FL1-H`),
-#        `SSC-H`=asinh(`SSC-H`),
-#        `FL3-H`=asinh(`FL3-H`),
-#        `FSC-H`=asinh(`FSC-H`))
-# param=c('FL1-H', 'FL3-H','SSC-H','FSC-H')
-# 
-# # Create a PolygonGate for denoising the dataset
-# # Define coordinates for gate in sqrcut1 in format: c(x,x,x,x,y,y,y,y)
-# sqrcut1 <- matrix(c(8.75,8.75,14,14,3,7.5,14,3),ncol=2, nrow=4)
-# colnames(sqrcut1) <- c('FL1-H','FL3-H')
-# polyGate1 <- flowCore::polygonGate(.gate=sqrcut1, filterId = 'Total Cells')
-# 
-# # Gating quality check
-# flowViz::xyplot(`FL3-H` ~ `FL1-H`, data=flowData_transformed[1], filter=polyGate1,
-#          scales=list(y=list(limits=c(0,14)),
-#          x=list(limits=c(6,16))),
-#          axis = lattice::axis.default, nbin=125,
-#          par.strip.text=list(col='white', font=2, cex=2), smooth=FALSE)
-# 
-# # Isolate only the cellular information based on the polyGate1
-# flowData_transformed <- flowCore::Subset(flowData_transformed, polyGate1)
-# 
-# # Normalize parameter values to [0,1] interval based on max. value across asinh transformed parameters
-# summary <- flowCore::fsApply(x=flowData_transformed, FUN=function(x) apply(x, 2, max), use.exprs=TRUE)
-# max = max(summary[,9])
-# mytrans <- function(x) x/max
-# flowData_transformed <- flowCore::transform(flowData_transformed,`FL1-H`=mytrans(`FL1-H`),
-#          `FL3-H`=mytrans(`FL3-H`),
-#          `SSC-H`=mytrans(`SSC-H`),
-#          `FSC-H`=mytrans(`FSC-H`))
-# 
-# 
-# # Calculate diversity for first 5 samples with cleaning data
-# Diversity_rf(flowData_transformed[1:5], param = param, R = 3, R.b = 3,
-#              cleanFCS = TRUE)
-
+#' # Load raw data (imported using flowCore)
+#' data(flowData)
+#' 
+#' # Take subsample
+#' flowData <- flowData[1:5]
+#' 
+#' # Asinh transform and select parameters of interest (cells were stained with Sybr Green I).
+#' flowData_transformed <- flowCore::transform(flowData,`FL1-H`=asinh(`FL1-H`),
+#'        `SSC-H`=asinh(`SSC-H`),
+#'        `FL3-H`=asinh(`FL3-H`),
+#'        `FSC-H`=asinh(`FSC-H`))
+#' param=c('FL1-H', 'FL3-H','SSC-H','FSC-H')
+#' 
+#' # Create a PolygonGate for denoising the dataset
+#' # Define coordinates for gate in sqrcut1 in format: c(x,x,x,x,y,y,y,y)
+#' sqrcut1 <- matrix(c(8.75,8.75,14,14,3,7.5,14,3),ncol=2, nrow=4)
+#' colnames(sqrcut1) <- c('FL1-H','FL3-H')
+#' polyGate1 <- flowCore::polygonGate(.gate=sqrcut1, filterId = 'Total Cells')
+#' 
+#' # Gating quality check
+#' flowViz::xyplot(`FL3-H` ~ `FL1-H`, data=flowData_transformed[1], filter=polyGate1,
+#'        scales=list(y=list(limits=c(0,14)),
+#'        x=list(limits=c(6,16))),
+#'        axis = lattice::axis.default, nbin=125,
+#'        par.strip.text=list(col='white', font=2, cex=2), smooth=FALSE)
+#' 
+#' # Isolate only the cellular information based on the polyGate1
+#' flowData_transformed <- flowCore::Subset(flowData_transformed, polyGate1)
+#' 
+#' # Calculate diversity for first 5 samples without cleaning data
+#' Diversity_rf(flowData_transformed[1:5], param = param, R = 3, R.b = 3,
+#'              cleanFCS = FALSE)
 #' @export
 
 Diversity_rf <- function(x, d = 4, R = 100, R.b = 100, bw = 0.01, nbin = 128, 
@@ -75,6 +66,29 @@ Diversity_rf <- function(x, d = 4, R = 100, R.b = 100, bw = 0.01, nbin = 128,
                           parallel = FALSE, 
                           timesplit = 0.1,
                           TimeChannel = "Time") {
+  
+  ### Normalizing ##############################################################
+  summary_x <- flowCore::fsApply(x = x, FUN=function(x) apply(x, 2, max), use.exprs=TRUE)
+  max <- base::max(summary_x[, param[1]])
+  if(round(max,0) > 1){
+    cat(paste0("-------------------------------------------------------------------------------------------------", "\n"))
+    cat(date(), paste0("--- Normalizing your FCS data based on maximum ", param[1]," value\n"))
+    for(i in 1:length(param)) cat(paste0("--- Maximum ", param[i]," before normalizing: ", 
+                                         round(base::max(summary_x[, param[i]]),2),"\n"))
+    cat(paste0("-------------------------------------------------------------------------------------------------", "\n"))
+    for(pm in param){
+      if(pm != TimeChannel){
+        myTrans <- flowCore::transformList(pm, function(x) x/max)
+        x <- flowCore::transform(x, myTrans)
+      }
+    }
+    summary_x <- flowCore::fsApply(x = x, FUN=function(x) apply(x, 2, max), use.exprs=TRUE)
+    for(i in 1:length(param)) cat(paste0("--- Maximum ", param[i]," after normalizing: ", 
+                                         round(base::max(summary_x[, param[i]]),2),"\n"))
+    cat(paste0("-------------------------------------------------------------------------------------------------", "\n \n"))
+    ##############################################################################
+  } else cat(paste0("--- parameters are already normalized at: ", 
+                    base::max(summary_x[, param[1]]),"\n"))
   
   if(cleanFCS == TRUE){
     cat(paste0("-------------------------------------------------------------------------------------------------", "\n"))
@@ -85,9 +99,6 @@ Diversity_rf <- function(x, d = 4, R = 100, R.b = 100, bw = 0.01, nbin = 128,
     cat("\n", paste0("Please cite:", "\n"))
     cat("\n", paste0("Monaco et al., flowAI: automatic and interactive anomaly discerning tools for flow cytometry data,\n Bioinformatics, Volume 32, Issue 16, 15 August 2016, Pages 2473–2480, \n https://doi.org/10.1093/bioinformatics/btw191", "\n"))
     cat(paste0("-------------------------------------------------------------------------------------------------", "\n \n"))
-    
-    # Extract sample names
-    sam_names <- flowCore::sampleNames(x) 
     
     # Extract parameters not to base denoising on
     param_f <- BiocGenerics::unique(gsub(param, pattern = "-H|-A", replacement = ""))
@@ -108,10 +119,6 @@ Diversity_rf <- function(x, d = 4, R = 100, R.b = 100, bw = 0.01, nbin = 128,
     # Subset data to relevant data
     x <- x[, param]
     
-    # Add sample names again since the QC function removes these
-    x@phenoData@data$name  <- sam_names
-    flowCore::sampleNames(x) <- sam_names
-    
     # Change characters in parameter description from character back to numeric
     # Otherwise nothing that follows will work
     for(i in 1:length(x)){
@@ -131,10 +138,10 @@ Diversity_rf <- function(x, d = 4, R = 100, R.b = 100, bw = 0.01, nbin = 128,
   if(parallel == FALSE){
     for (i in 1:R) {
       cat(date(), paste0("--- Starting resample run ", i, "\n"))
-      tmp <- Phenoflow:::FCS_resample(x, rarefy = TRUE, replace = TRUE, progress = FALSE)
-      tmp.basis <- flowFDA::flowBasis(tmp, param = param, nbin = nbin, bw = bw, 
+      tmp <- Phenoflow::FCS_resample(x, rarefy = TRUE, replace = TRUE, progress = FALSE)
+      tmp.basis <- flowFDA::flowBasis(tmp, param = param[param != TimeChannel], nbin = nbin, bw = bw, 
                                       normalize = function(x) x)
-      tmp.diversity <- Phenoflow:::Diversity(tmp.basis, plot = FALSE, d = d, R = R.b, 
+      tmp.diversity <- Phenoflow::Diversity(tmp.basis, plot = FALSE, d = d, R = R.b, 
                                  progress = FALSE)
       rm(tmp, tmp.basis)
       if (i == 1) 
@@ -152,10 +159,10 @@ Diversity_rf <- function(x, d = 4, R = 100, R.b = 100, bw = 0.01, nbin = 128,
     
     results <- foreach::foreach(i = 1:R, .combine = rbind, .packages = c("flowCore", "Phenoflow")) %dopar% {
       # cat(date(), paste0("--- Starting resample run ", i, "\n"))
-      tmp <- Phenoflow:::FCS_resample(x, rarefy = TRUE, replace = TRUE, progress = FALSE)
-      tmp.basis <- flowFDA::flowBasis(tmp, param = param, nbin = nbin, bw = bw, 
+      tmp <- Phenoflow::FCS_resample(x, rarefy = TRUE, replace = TRUE, progress = FALSE)
+      tmp.basis <- flowFDA::flowBasis(tmp, param = param[param != TimeChannel], nbin = nbin, bw = bw, 
                                       normalize = function(x) x)
-      tmp.diversity <- Phenoflow:::Diversity(tmp.basis, plot = FALSE, d = d, R = R.b, 
+      tmp.diversity <- Phenoflow::Diversity(tmp.basis, plot = FALSE, d = d, R = R.b, 
                                             progress = FALSE)
     }
   }

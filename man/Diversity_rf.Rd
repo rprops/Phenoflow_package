@@ -23,7 +23,9 @@ FCM data (i.e., all parameter values are within [0,1]).}
 \item{nbin}{Resolution of the binning grid. Defaults to 128 bins which corresponds to a 128x128 binning grid.}
 
 \item{param}{Parameter vector indicating on which parameters the diversity should be estimated. An example input would be:
-c("FL1-H", "FL3-H", "SSC-H", "FSC-H").}
+c("FL1-H", "FL3-H", "SSC-H", "FSC-H"). In addition the first parameter in this vector will be used
+to normalize the data. Please make sure this is the primary fluorescence channel if available. For 
+example FL1-H for SYBR Green stained bacterial cells measured on an Accuri C6.}
 
 \item{cleanFCS}{Indicate whether outlier removal should be conducted prior to diversity assessment (flowAI package). 
 Defaults to FALSE. I would recommend to make sure samples have > 500 cells. Will denoise based on the parameters specified in `param`.}
@@ -45,10 +47,41 @@ differences in sample size (nr. of cells). Analysis time is approximately 10s/re
 settings for the flowData example.
 }
 \examples{
-## Full data processing example
+# Full data processing example
 
+# Load raw data (imported using flowCore)
+data(flowData)
+
+# Take subsample
+flowData <- flowData[1:5]
+
+# Asinh transform and select parameters of interest (cells were stained with Sybr Green I).
+flowData_transformed <- flowCore::transform(flowData,`FL1-H`=asinh(`FL1-H`),
+       `SSC-H`=asinh(`SSC-H`),
+       `FL3-H`=asinh(`FL3-H`),
+       `FSC-H`=asinh(`FSC-H`))
+param=c('FL1-H', 'FL3-H','SSC-H','FSC-H')
+
+# Create a PolygonGate for denoising the dataset
+# Define coordinates for gate in sqrcut1 in format: c(x,x,x,x,y,y,y,y)
+sqrcut1 <- matrix(c(8.75,8.75,14,14,3,7.5,14,3),ncol=2, nrow=4)
+colnames(sqrcut1) <- c('FL1-H','FL3-H')
+polyGate1 <- flowCore::polygonGate(.gate=sqrcut1, filterId = 'Total Cells')
+
+# Gating quality check
+flowViz::xyplot(`FL3-H` ~ `FL1-H`, data=flowData_transformed[1], filter=polyGate1,
+       scales=list(y=list(limits=c(0,14)),
+       x=list(limits=c(6,16))),
+       axis = lattice::axis.default, nbin=125,
+       par.strip.text=list(col='white', font=2, cex=2), smooth=FALSE)
+
+# Isolate only the cellular information based on the polyGate1
+flowData_transformed <- flowCore::Subset(flowData_transformed, polyGate1)
+
+# Calculate diversity for first 5 samples without cleaning data
+Diversity_rf(flowData_transformed[1:5], param = param, R = 3, R.b = 3,
+             cleanFCS = FALSE)
 }
 \keyword{alpha}
 \keyword{diversity,}
 \keyword{fcm,}
-
