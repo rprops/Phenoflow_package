@@ -205,7 +205,9 @@ RandomF_FCS <- function(x, sample_info, target_label, downsample = 0,
   for(n_label in 1:length(unique(test_data$label))){
     tmp <- test_data[test_data$label == unique(test_data$label)[n_label], ]
     tmp_pred <- stats::predict(RF_train, newdata = tmp)
-    performance_metrics$metric[n_label] <- round(100*base::sum(tmp_pred == tmp$label)/performance_metrics$n_cells[n_label],2)
+    index <- performance_metrics$label == unique(test_data$label)[n_label]
+    performance_metrics$metric[index] <- 
+      round(100*base::sum(tmp_pred == tmp$label)/performance_metrics$n_cells[index],2)
   }
   colnames(performance_metrics)[1] <- "Accuracy"
   
