@@ -106,12 +106,14 @@ Diversity_rf <- function(x, d = 4, R = 100, R.b = 100, bw = 0.01, nbin = 128,
     filter_param <- BiocGenerics::unique(gsub(filter_param, pattern = "-H|-A", replacement = ""))
     filter_param <- filter_param[!filter_param %in% param_f & filter_param!= TimeChannel]
     filter_param <- c(filter_param, "FSC", "SSC")# Exclude all scatter information from denoising
+    add_measuredparam <- unique(do.call(rbind, strsplit(param,"-"))[,2])[1]
     
     # Denoise with flowAI
     x <- flowAI::flow_auto_qc(x, alphaFR = 0.01,
                               folder_results = "QC_flowA",
                               fcs_highQ = "HighQ",
                               output = 1,
+                              ChFM = paste0(param_f[!param_f %in% c("FSC","SSC")],"-", add_measuredparam),
                               ChRemoveFS = filter_param,
                               second_fractionFR = timesplit
     )
