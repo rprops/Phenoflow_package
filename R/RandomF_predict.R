@@ -58,6 +58,7 @@ RandomF_predict <- function(x, new_data, cleanFCS = FALSE,
                               ChFM = paste0(param_f[!param_f %in% 
                                                       c("FSC","SSC")],
                                             "-", add_measuredparam),
+                              timeCh=TimeChannel,
                               ChRemoveFS = filter_param,
                               second_fractionFR = timesplit
     )

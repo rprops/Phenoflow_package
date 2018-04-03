@@ -109,6 +109,7 @@ RandomF_FCS <- function(x, sample_info, target_label, downsample = 0,
                               ChFM = paste0(param_f[!param_f %in% 
                                                       c("FSC","SSC")],"-",
                                             add_measuredparam),
+                              timeCh=TimeChannel,
                               ChRemoveFS = filter_param,
                               second_fractionFR = timesplit
     )
