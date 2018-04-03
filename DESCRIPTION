@@ -53,3 +53,4 @@ LazyData: true
 RoxygenNote: 6.0.1
 Date: 2018
 VignetteBuilder: knitr
+
