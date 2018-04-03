@@ -5,6 +5,8 @@
 #' @param cleanFCS Indicate whether outlier removal should be conducted prior to model prediction.
 #' Defaults to FALSE. I would recommend to make sure samples have > 500 cells. Will denoise based on the parameters specified in `param`.
 #' @param param Parameters required to denoise the new_data
+#' @param TimeChannel Name of time channel in the FCS files. This can differ between flow cytometers. Defaults to "Time". You can check this by: colnames(flowSet).
+#' @importFrom flowAI flow_auto_qc
 #' @keywords prediction, random forest, fcm
 #' @examples 
 #' # Load raw data (imported using flowCore)
@@ -26,7 +28,8 @@
 #' @export
 
 RandomF_predict <- function(x, new_data, cleanFCS = FALSE,
-                            param = c("FL1-H", "FL3-H", "FSC-H", "SSC-H")) {
+                            param = c("FL1-H", "FL3-H", "FSC-H", "SSC-H"),
+                            TimeChannel = "Time") {
   if(cleanFCS == TRUE){
     cat(paste0("-------------------------------------------------------------------------------------------------", "\n"))
     cat(date(), paste0("--- Using the following parameters for removing errant collection events\n in samples:\n \n"))
@@ -46,12 +49,15 @@ RandomF_predict <- function(x, new_data, cleanFCS = FALSE,
     filter_param <- BiocGenerics::unique(gsub(filter_param, pattern = "-H|-A", replacement = ""))
     filter_param <- filter_param[!filter_param %in% param_f & filter_param!= TimeChannel]
     filter_param <- c(filter_param, "FSC", "SSC")# Exclude all scatter information from denoising
-    
+    add_measuredparam <- base::unique(gsub(".*-([A-Z])$","\\1",param))[1]
     # Denoise with flowAI
     new_data <- flowAI::flow_auto_qc(new_data, alphaFR = 0.01,
-                              folder_results = "QC_flowA",
+                              folder_results = "QC_flowAI",
                               fcs_highQ = "HighQ",
                               output = 1,
+                              ChFM = paste0(param_f[!param_f %in% 
+                                                      c("FSC","SSC")],
+                                            "-", add_measuredparam),
                               ChRemoveFS = filter_param,
                               second_fractionFR = timesplit
     )
