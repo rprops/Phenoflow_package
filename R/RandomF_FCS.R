@@ -92,7 +92,7 @@ RandomF_FCS <- function(x, sample_info, target_label, downsample = 0,
     filter_param <- BiocGenerics::unique(gsub(filter_param, pattern = "-H|-A", replacement = ""))
     filter_param <- filter_param[!filter_param %in% param_f & filter_param!= TimeChannel]
     filter_param <- c(filter_param, "FSC", "SSC")# Exclude all scatter information from denoising
-    add_measuredparam <- unique(do.call(rbind, strsplit(param,"-"))[,2])[1]
+    add_measuredparam <- base::unique(gsub(".*-([A-Z])$","\\1",param))[1]
     
     # Denoise with flowAI
     x <- flowAI::flow_auto_qc(x, alphaFR = 0.01,
