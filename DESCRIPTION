@@ -45,7 +45,8 @@ Imports:
     TH.data,
     utils,
     methods,
-    flowFP
+    flowFP,
+    BiocGenerics
 biocViews: CellBasedAssays, FlowCytometry, Infrastructure, Software, Clustering
 License: GPL-2
 Encoding: UTF-8

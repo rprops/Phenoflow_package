@@ -20,6 +20,8 @@
 #' @param TimeChannel Name of time channel in the FCS files. This can differ between flow cytometers. Defaults to "Time". You can check this by: colnames(flowSet).
 #' @param plot_fig Should the confusion matrix and the overall performance statistics on the test data partition be visualized?
 #' Defaults to FALSE.
+#' @importFrom BiocGenerics unique colnames
+#' @importFrom flowAI flow_auto_qc 
 #' @keywords random forest, fcm
 #' @examples 
 #' 
@@ -87,11 +89,16 @@ RandomF_FCS <- function(x, sample_info, target_label, downsample = 0,
     sam_names <- flowCore::sampleNames(x) 
     
     # Extract parameters not to base denoising on
-    param_f <- BiocGenerics::unique(gsub(param, pattern = "-H|-A", replacement = ""))
+    param_f <- BiocGenerics::unique(gsub(param, pattern = "-H|-A|-W", 
+                                         replacement = ""))
     filter_param <- BiocGenerics::colnames(x)
-    filter_param <- BiocGenerics::unique(gsub(filter_param, pattern = "-H|-A", replacement = ""))
-    filter_param <- filter_param[!filter_param %in% param_f & filter_param!= TimeChannel]
-    filter_param <- c(filter_param, "FSC", "SSC")# Exclude all scatter information from denoising
+    filter_param <- BiocGenerics::unique(gsub(filter_param, 
+                                              pattern = "-H|-A|-W", 
+                                              replacement = ""))
+    filter_param <- filter_param[!filter_param %in% param_f & 
+                                   filter_param!= TimeChannel]
+    filter_param <- c(filter_param, "FSC", "SSC")
+    # Exclude all scatter information from denoising
     add_measuredparam <- base::unique(gsub(".*-([A-Z])$","\\1",param))[1]
     
     # Denoise with flowAI
@@ -99,7 +106,10 @@ RandomF_FCS <- function(x, sample_info, target_label, downsample = 0,
                               folder_results = "QC_flowAI",
                               fcs_highQ = "HighQ",
                               output = 1,
-                              ChFM = paste0(param_f[!param_f %in% c("FSC","SSC")],"-", add_measuredparam),
+                              ChFM = paste0(param_f[!param_f %in% 
+                                                      c("FSC","SSC")],"-",
+                                            add_measuredparam),
+                              timeCh=TimeChannel,
                               ChRemoveFS = filter_param,
                               second_fractionFR = timesplit
     )

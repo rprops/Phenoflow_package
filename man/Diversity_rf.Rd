@@ -27,8 +27,10 @@ c("FL1-H", "FL3-H", "SSC-H", "FSC-H"). In addition the first parameter in this v
 to normalize the data. Please make sure this is the primary fluorescence channel if available. For 
 example FL1-H for SYBR Green stained bacterial cells measured on an Accuri C6.}
 
-\item{cleanFCS}{Indicate whether outlier removal should be conducted prior to diversity assessment (flowAI package). 
-Defaults to FALSE. I would recommend to make sure samples have > 500 cells. Will denoise based on the parameters specified in `param`.}
+\item{cleanFCS}{Indicate whether outlier removal should be conducted prior 
+to diversity assessment (flowAI package). Defaults to FALSE. I would 
+recommend to make sure samples have > 500 cells. Will denoise based on 
+the parameters specified in `param`.}
 
 \item{ncores}{How many cores should be used in case of parallel computation?
 Defaults to 2.}
