@@ -4,25 +4,31 @@
 \alias{FCS_clean}
 \title{FCS_clean function for FCM data}
 \usage{
-FCS_clean(x, cleanparam = c(9, 11))
+FCS_clean(x, param = c("FL1-H", "FL3-H", "FSC-H", "SSC-H"), timesplit = 0.1,
+  TimeChannel = "Time")
 }
 \arguments{
-\item{x}{flowSet containing the samples to analyse. Cannot have been subsetted to 
-a lower number of parameters.}
+\item{x}{flowSet containing the samples to analyse. 
+Cannot have been subsetted to  a lower number of parameters.}
 
-\item{cleanparam}{Indices of parameters to be used for removing errant observations. 
-Defaults to 9 and 11 for FL1-H and FL3-H on the BD C6 Accuri FCM.}
+\item{param}{Parameters to base removing of errant observartions on.}
+
+\item{timesplit}{Fraction of timestep used in flowAI for denoising. 
+Please consult the `flowAI::flow_auto_qc` function for more information.}
+
+\item{TimeChannel}{Name of time channel in the FCS files. This can differ 
+between flow cytometers. Defaults to "Time". You can check this by: 
+colnames(flowSet).}
 }
 \description{
-This function denoises a flowSet object using the flowClean package. Observations that
-do not need meet the criteria will be removed. Only works for samples with more than
-30,000 observations.
+This function denoises a flowSet object using the flowAI package. 
+Observations that #' do not need meet the criteria will be removed. 
+Only works for samples with more than 1000 observations.
 }
 \examples{
 ## Full data processing example
 data(flowData)
-cleanparam <- c(9,11)
-flowData_cleaned <- flowCore::fsApply(x = flowData[1:5], FUN = function(x) FCS_clean(x, cleanparam))
+flowData_cleaned <- FCS_clean(flowData[1:3])
 }
 \keyword{alpha}
 \keyword{denoise,}

@@ -19,8 +19,10 @@
 #' @param parallel Should the calculation be parallelized? Defaults to FALSE
 #' @param ncores How many cores should be used in case of parallel computation?
 #' Defaults to 2.
-#' @param cleanFCS Indicate whether outlier removal should be conducted prior to diversity assessment (flowAI package). 
-#' Defaults to FALSE. I would recommend to make sure samples have > 500 cells. Will denoise based on the parameters specified in `param`.
+#' @param cleanFCS Indicate whether outlier removal should be conducted prior 
+#'  to diversity assessment (flowAI package). Defaults to FALSE. I would 
+#'  recommend to make sure samples have > 500 cells. Will denoise based on 
+#'  the parameters specified in `param`.
 #' @param timesplit Fraction of timestep used in flowAI for denoising. Please consult the `flowAI::flow_auto_qc` function for more information.
 #' @param TimeChannel Name of time channel in the FCS files. This can differ between flow cytometers. Defaults to "Time". You can check this by: colnames(flowSet).
 #' @keywords diversity, fcm, alpha
@@ -113,7 +115,10 @@ Diversity_rf <- function(x, d = 4, R = 100, R.b = 100, bw = 0.01, nbin = 128,
                               folder_results = "QC_flowA",
                               fcs_highQ = "HighQ",
                               output = 1,
-                              ChFM = paste0(param_f[!param_f %in% c("FSC","SSC")],"-", add_measuredparam),
+                              timeCh = TimeChannel,
+                              ChFM = paste0(param_f[!param_f %in% c("FSC",
+                                                                    "SSC")],
+                                            "-", add_measuredparam),
                               ChRemoveFS = filter_param,
                               second_fractionFR = timesplit
     )
