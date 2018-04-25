@@ -12,6 +12,8 @@
 #' @param binary Specify whether the data should be transformed to presence/absence. Defaults to FALSE.
 #' @param ord.type Choose between NMDS or PCoA analysis.
 #' @keywords betadiversity, fcm
+#' @importFrom vegan vegdist metaMDS
+#' @importFrom stats cmdscale
 #' @examples
 #' ## Short example
 #' 
@@ -72,7 +74,7 @@ beta_div_fcm <- function(x, d = 4, dist = "bray", k = 2, iter = 100,
                          ord.type = c("NMDS", "PCoA"), INDICES=NULL,
                          binary = FALSE) {
   x <- x@basis/apply(x@basis, 1, max)
-  x <- round(x, d)
+  x <- base::round(x, d)
   if(!is.null(INDICES)){
     x <- by(x, INDICES = INDICES, FUN = colMeans)
     x <- do.call(rbind, x)

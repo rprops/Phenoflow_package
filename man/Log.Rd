@@ -8,6 +8,8 @@ Log(text, ...)
 }
 \arguments{
 \item{text}{Input text}
+
+\item{...}{additional parameters passed on to sprintf}
 }
 \description{
 Small function for printing progress of parallel processes

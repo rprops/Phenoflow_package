@@ -26,6 +26,7 @@
 #' @param timesplit Fraction of timestep used in flowAI for denoising. Please consult the `flowAI::flow_auto_qc` function for more information.
 #' @param TimeChannel Name of time channel in the FCS files. This can differ between flow cytometers. Defaults to "Time". You can check this by: colnames(flowSet).
 #' @keywords diversity, fcm, alpha
+#' @importFrom foreach %dopar%
 #' @examples
 #' # Full data processing example
 #' 
@@ -99,7 +100,7 @@ Diversity_rf <- function(x, d = 4, R = 100, R.b = 100, bw = 0.01, nbin = 128,
     cat(date(), paste0("--- Scatter parameters will be automatically excluded", "\n"))
     cat(paste0("-------------------------------------------------------------------------------------------------"))
     cat("\n", paste0("Please cite:", "\n"))
-    cat("\n", paste0("Monaco et al., flowAI: automatic and interactive anomaly discerning tools for flow cytometry data,\n Bioinformatics, Volume 32, Issue 16, 15 August 2016, Pages 2473–2480, \n https://doi.org/10.1093/bioinformatics/btw191", "\n"))
+    cat("\n", paste0("Monaco et al., flowAI: automatic and interactive anomaly discerning tools for flow cytometry data,\n Bioinformatics, Volume 32, Issue 16, 15 August 2016, Pages 2473-2480, \n https://doi.org/10.1093/bioinformatics/btw191", "\n"))
     cat(paste0("-------------------------------------------------------------------------------------------------", "\n \n"))
     
     # Extract parameters not to base denoising on
