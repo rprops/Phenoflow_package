@@ -16,6 +16,8 @@
 #' @param ncores How many cores should be used in case of parallel computation?
 #' Defaults to 2.
 #' @keywords diversity, fcm, alpha
+#' @importFrom foreach %dopar%
+#' @importFrom stats sd
 #' @examples 
 #' # First install phyloseq if you haven't yet
 #' if(requireNamespace("phyloseq",quietly=TRUE)){
@@ -124,7 +126,7 @@ Diversity_16S <- function(x, R = 999, brea = TRUE, thresh = 200, parallel = FALS
       }
       
       DIV[i, c(1,7,9)] <- colMeans(tmp)
-      DIV[i, c(2,8,10)] <- apply(tmp, 2, sd)
+      DIV[i, c(2,8,10)] <- apply(tmp, 2, stats::sd)
       # if (i > 1) DIV <- rbind(DIV, matrix(c(colMeans(tmp), apply(tmp, 2, FUN = sd)), nrow = 1))
       
       # Perform breakaway for richness estimation

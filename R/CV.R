@@ -6,6 +6,7 @@
 #' @param plot Make plot of diversity values? Defaults to FALSE.
 #' @param n Number of replicates. Defaults to 1.
 #' @keywords CV, fcm, coefficient of variance
+#' @importFrom grDevices adjustcolor
 #' @examples
 #' ## Short example
 #' 
@@ -64,8 +65,8 @@ CV <- function(x, d = 3, n = 1, plot = FALSE) {
   x <- x@basis/apply(x@basis, 1, max)
   CV = as.numeric(matrix(nrow = length(x[, 1]), ncol = 1))
   for (i in 1:length(x[, 1])) {
-    CV[i] = 100 * stats::sd(round(x[i, ], d)[round(x[i, ], d) != 0])/mean(round(x[i, ], d)[round(x[i, 
-                                                                                                   ], d) != 0])
+    CV[i] = 100 * stats::sd(round(x[i, ], d)[round(x[i, ], d) != 0])/
+      mean(round(x[i, ], d)[round(x[i, ], d) != 0])
   }
   if (n > 1) {
     results = matrix(nrow = length(x[, 1])/3, ncol = 2)
@@ -81,7 +82,8 @@ CV <- function(x, d = 3, n = 1, plot = FALSE) {
     rownames(results) = attr(x, "dimnames")[[1]]
   }
   if (plot == TRUE) {
-    plot(results$CV, pch = 21, bg = grDevices::adjustcolor("blue", 0.7), col = grDevices::adjustcolor("blue",0.7)) 
+    plot(results$CV, pch = 21, bg = grDevices::adjustcolor("blue", 0.7), 
+         col = grDevices::adjustcolor("blue",0.7)) 
 
   }
   return(results)

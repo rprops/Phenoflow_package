@@ -37,7 +37,7 @@ RandomF_predict <- function(x, new_data, cleanFCS = FALSE,
     cat(date(), paste0("--- Scatter parameters will be automatically excluded", "\n"))
     cat(paste0("-------------------------------------------------------------------------------------------------"))
     cat("\n", paste0("Please cite:", "\n"))
-    cat("\n", paste0("Monaco et al., flowAI: automatic and interactive anomaly discerning tools for flow cytometry data,\n Bioinformatics, Volume 32, Issue 16, 15 August 2016, Pages 2473–2480, \n https://doi.org/10.1093/bioinformatics/btw191", "\n"))
+    cat("\n", paste0("Monaco et al., flowAI: automatic and interactive anomaly discerning tools for flow cytometry data,\n Bioinformatics, Volume 32, Issue 16, 15 August 2016, Pages 2473-2480, \n https://doi.org/10.1093/bioinformatics/btw191", "\n"))
     cat(paste0("-------------------------------------------------------------------------------------------------", "\n \n"))
     
     # Extract sample names
