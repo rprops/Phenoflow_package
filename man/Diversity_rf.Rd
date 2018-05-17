@@ -5,27 +5,33 @@
 \title{Diversity_rf function for FCM data}
 \usage{
 Diversity_rf(x, d = 4, R = 100, R.b = 100, bw = 0.01, nbin = 128,
-  param, cleanFCS = FALSE, ncores, parallel = FALSE, timesplit = 0.1,
-  TimeChannel = "Time")
+  param, cleanFCS = FALSE, ncores = 1, parallel = FALSE,
+  timesplit = 0.1, TimeChannel = "Time")
 }
 \arguments{
 \item{x}{flowSet containing the samples to analyse.}
 
 \item{d}{Rounding factor for density values. Defaults to 4.}
 
-\item{R}{Number of resampling runs to conduct on individual samples. Defaults to 100}
+\item{R}{Number of resampling runs to conduct on individual samples. Defaults 
+to 100}
 
-\item{R.b}{Number of bootstraps to conduct on the fingerprint (requires less). Defaults to 100}
+\item{R.b}{Number of bootstraps to conduct on the fingerprint (requires less). 
+Defaults to 100}
 
-\item{bw}{Bandwidth used in the kernel density estimation. Defaults to 0.01 which is ideal for normalized
-FCM data (i.e., all parameter values are within [0,1]).}
+\item{bw}{Bandwidth used in the kernel density estimation. Defaults to 0.01 
+which is ideal for normalized FCM data (i.e., all parameter values are 
+within [0,1]).}
 
-\item{nbin}{Resolution of the binning grid. Defaults to 128 bins which corresponds to a 128x128 binning grid.}
+\item{nbin}{Resolution of the binning grid. Defaults to 128 bins which 
+corresponds to a 128x128 binning grid.}
 
-\item{param}{Parameter vector indicating on which parameters the diversity should be estimated. An example input would be:
-c("FL1-H", "FL3-H", "SSC-H", "FSC-H"). In addition the first parameter in this vector will be used
-to normalize the data. Please make sure this is the primary fluorescence channel if available. For 
-example FL1-H for SYBR Green stained bacterial cells measured on an Accuri C6.}
+\item{param}{Parameter vector indicating on which parameters the diversity 
+should be estimated. An example input would be: c("FL1-H", "FL3-H", "SSC-H", 
+"FSC-H"). In addition the first parameter in this vector will be used to 
+normalize the data. Please make sure this is the primary fluorescence 
+channel if available. For example FL1-H for SYBR Green stained bacterial 
+cells measured on an Accuri C6.}
 
 \item{cleanFCS}{Indicate whether outlier removal should be conducted prior 
 to diversity assessment (flowAI package). Defaults to FALSE. I would 
@@ -33,20 +39,24 @@ recommend to make sure samples have > 500 cells. Will denoise based on
 the parameters specified in `param`.}
 
 \item{ncores}{How many cores should be used in case of parallel computation?
-Defaults to 2.}
+Defaults to 1.}
 
 \item{parallel}{Should the calculation be parallelized? Defaults to FALSE}
 
-\item{timesplit}{Fraction of timestep used in flowAI for denoising. Please consult the `flowAI::flow_auto_qc` function for more information.}
+\item{timesplit}{Fraction of timestep used in flowAI for denoising. Please 
+consult the `flowAI::flow_auto_qc` function for more information.}
 
-\item{TimeChannel}{Name of time channel in the FCS files. This can differ between flow cytometers. Defaults to "Time". You can check this by: colnames(flowSet).}
+\item{TimeChannel}{Name of time channel in the FCS files. This can differ 
+between flow cytometers. Defaults to "Time". You can check this by: 
+colnames(flowSet).}
 }
 \description{
-This function calculates Hill diversity metrics from FCM data. This function differs from
-the Diversity() function in that it resamples (with replacement) all individual samples and 
-averages out the diversity over all subsamples. This function is recommended in case there there are
-differences in sample size (nr. of cells). Analysis time is approximately 10s/resample run (R) on default
-settings for the flowData example.
+This function calculates Hill diversity metrics from FCM data. This function 
+differs from the Diversity() function in that it resamples (with replacement) 
+all individual samples and averages out the diversity over all subsamples. 
+This function is recommended in case there there are differences in sample 
+size (nr. of cells). Analysis time is approximately 10s/resample run (R) on
+default settings for the flowData example.
 }
 \examples{
 # Full data processing example
