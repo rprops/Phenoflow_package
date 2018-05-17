@@ -1,21 +1,28 @@
 #' Diversity_rf function for FCM data
 #'
-#' This function calculates Hill diversity metrics from FCM data. This function differs from
-#' the Diversity() function in that it resamples (with replacement) all individual samples and 
-#' averages out the diversity over all subsamples. This function is recommended in case there there are
-#' differences in sample size (nr. of cells). Analysis time is approximately 10s/resample run (R) on default
-#' settings for the flowData example.
+#' This function calculates Hill diversity metrics from FCM data. This function 
+#' differs from the Diversity() function in that it resamples (with replacement) 
+#' all individual samples and averages out the diversity over all subsamples. 
+#' This function is recommended in case there there are differences in sample 
+#' size (nr. of cells). Analysis time is approximately 10s/resample run (R) on
+#' default settings for the flowData example.
 #' @param x flowSet containing the samples to analyse.
 #' @param d Rounding factor for density values. Defaults to 4.
-#' @param R Number of resampling runs to conduct on individual samples. Defaults to 100
-#' @param R.b Number of bootstraps to conduct on the fingerprint (requires less). Defaults to 100
-#' @param bw Bandwidth used in the kernel density estimation. Defaults to 0.01 which is ideal for normalized
-#' FCM data (i.e., all parameter values are within [0,1]).
-#' @param nbin Resolution of the binning grid. Defaults to 128 bins which corresponds to a 128x128 binning grid.
-#' @param param Parameter vector indicating on which parameters the diversity should be estimated. An example input would be:
-#' c("FL1-H", "FL3-H", "SSC-H", "FSC-H"). In addition the first parameter in this vector will be used
-#' to normalize the data. Please make sure this is the primary fluorescence channel if available. For 
-#' example FL1-H for SYBR Green stained bacterial cells measured on an Accuri C6.
+#' @param R Number of resampling runs to conduct on individual samples. Defaults 
+#'  to 100
+#' @param R.b Number of bootstraps to conduct on the fingerprint (requires less). 
+#'  Defaults to 100
+#' @param bw Bandwidth used in the kernel density estimation. Defaults to 0.01 
+#'  which is ideal for normalized FCM data (i.e., all parameter values are 
+#'  within [0,1]).
+#' @param nbin Resolution of the binning grid. Defaults to 128 bins which 
+#'  corresponds to a 128x128 binning grid.
+#' @param param Parameter vector indicating on which parameters the diversity 
+#'  should be estimated. An example input would be: c("FL1-H", "FL3-H", "SSC-H", 
+#'  "FSC-H"). In addition the first parameter in this vector will be used to 
+#'  normalize the data. Please make sure this is the primary fluorescence 
+#'  channel if available. For example FL1-H for SYBR Green stained bacterial 
+#'  cells measured on an Accuri C6.
 #' @param parallel Should the calculation be parallelized? Defaults to FALSE
 #' @param ncores How many cores should be used in case of parallel computation?
 #' Defaults to 1.
@@ -23,10 +30,16 @@
 #'  to diversity assessment (flowAI package). Defaults to FALSE. I would 
 #'  recommend to make sure samples have > 500 cells. Will denoise based on 
 #'  the parameters specified in `param`.
-#' @param timesplit Fraction of timestep used in flowAI for denoising. Please consult the `flowAI::flow_auto_qc` function for more information.
-#' @param TimeChannel Name of time channel in the FCS files. This can differ between flow cytometers. Defaults to "Time". You can check this by: colnames(flowSet).
+#' @param timesplit Fraction of timestep used in flowAI for denoising. Please 
+#'  consult the `flowAI::flow_auto_qc` function for more information.
+#' @param TimeChannel Name of time channel in the FCS files. This can differ 
+#'  between flow cytometers. Defaults to "Time". You can check this by: 
+#'  colnames(flowSet).
 #' @keywords diversity, fcm, alpha
 #' @importFrom foreach %dopar%
+#' @importFrom flowCore fsApply
+#' @importFrom BiocGenerics unique colnames
+#' @importFrom flowAI flow_auto_qc
 #' @examples
 #' # Full data processing example
 #' 
@@ -71,13 +84,17 @@ Diversity_rf <- function(x, d = 4, R = 100, R.b = 100, bw = 0.01, nbin = 128,
                           TimeChannel = "Time") {
   
   ### Normalizing ##############################################################
-  summary_x <- flowCore::fsApply(x = x, FUN=function(x) apply(x, 2, max), use.exprs=TRUE)
+  summary_x <- flowCore::fsApply(x = x, FUN=function(x) apply(x, 2, max), 
+                                 use.exprs=TRUE)
   max <- base::max(summary_x[, param[1]])
   if(round(max,0) > 1){
     cat(paste0("-------------------------------------------------------------------------------------------------", "\n"))
-    cat(date(), paste0("--- Normalizing your FCS data based on maximum ", param[1]," value\n"))
-    for(i in 1:length(param)) cat(paste0("--- Maximum ", param[i]," before normalizing: ", 
-                                         round(base::max(summary_x[, param[i]]),2),"\n"))
+    cat(date(), paste0("--- Normalizing your FCS data based on maximum ", 
+                       param[1]," value\n"))
+    for(i in 1:length(param)) cat(paste0("--- Maximum ", param[i],
+                                         " before normalizing: ", 
+                                         round(base::max(summary_x[, param[i]]),
+                                               2),"\n"))
     cat(paste0("-------------------------------------------------------------------------------------------------", "\n"))
     for(pm in param){
       if(pm != TimeChannel){
@@ -85,9 +102,12 @@ Diversity_rf <- function(x, d = 4, R = 100, R.b = 100, bw = 0.01, nbin = 128,
         x <- flowCore::transform(x, myTrans)
       }
     }
-    summary_x <- flowCore::fsApply(x = x, FUN=function(x) apply(x, 2, max), use.exprs=TRUE)
-    for(i in 1:length(param)) cat(paste0("--- Maximum ", param[i]," after normalizing: ", 
-                                         round(base::max(summary_x[, param[i]]),2),"\n"))
+    summary_x <- flowCore::fsApply(x = x, FUN=function(x) apply(x, 2, max), 
+                                   use.exprs=TRUE)
+    for(i in 1:length(param)) cat(paste0("--- Maximum ", param[i],
+                                         " after normalizing: ", 
+                                         round(base::max(summary_x[, param[i]]),
+                                               2),"\n"))
     cat(paste0("-------------------------------------------------------------------------------------------------", "\n \n"))
     ##############################################################################
   } else cat(paste0("--- parameters are already normalized at: ", 
@@ -152,10 +172,13 @@ Diversity_rf <- function(x, d = 4, R = 100, R.b = 100, bw = 0.01, nbin = 128,
   if(parallel == FALSE){
     for (i in 1:R) {
       cat(date(), paste0("--- Starting resample run ", i, "\n"))
-      tmp <- Phenoflow::FCS_resample(x, rarefy = TRUE, replace = TRUE, progress = FALSE)
-      tmp.basis <- flowFDA::flowBasis(tmp, param = param[param != TimeChannel], nbin = nbin, bw = bw, 
+      tmp <- Phenoflow::FCS_resample(x, rarefy = TRUE, replace = TRUE, 
+                                     progress = FALSE)
+      tmp.basis <- flowFDA::flowBasis(tmp, param = param[param != TimeChannel], 
+                                      nbin = nbin, bw = bw, 
                                       normalize = function(x) x)
-      tmp.diversity <- Phenoflow::Diversity(tmp.basis, plot = FALSE, d = d, R = R.b, 
+      tmp.diversity <- Phenoflow::Diversity(tmp.basis, plot = FALSE, 
+                                            d = d, R = R.b, 
                                  progress = FALSE)
       rm(tmp, tmp.basis)
       if (i == 1) 
@@ -171,12 +194,17 @@ Diversity_rf <- function(x, d = 4, R = 100, R.b = 100, bw = 0.01, nbin = 128,
     cat(date(), "--- Using", ncores, "cores for calculations\n")
     # log.socket <- make.socket(port = 4000)
     
-    results <- foreach::foreach(i = 1:R, .combine = rbind, .packages = c("flowCore", "Phenoflow")) %dopar% {
+    results <- foreach::foreach(i = 1:R, .combine = rbind,
+                                .packages = c("flowCore", 
+                                              "Phenoflow")) %dopar% {
       # cat(date(), paste0("--- Starting resample run ", i, "\n"))
-      tmp <- Phenoflow::FCS_resample(x, rarefy = TRUE, replace = TRUE, progress = FALSE)
-      tmp.basis <- flowFDA::flowBasis(tmp, param = param[param != TimeChannel], nbin = nbin, bw = bw, 
+      tmp <- Phenoflow::FCS_resample(x, rarefy = TRUE, replace = TRUE, 
+                                     progress = FALSE)
+      tmp.basis <- flowFDA::flowBasis(tmp, param = param[param != TimeChannel], 
+                                      nbin = nbin, bw = bw, 
                                       normalize = function(x) x)
-      tmp.diversity <- Phenoflow::Diversity(tmp.basis, plot = FALSE, d = d, R = R.b, 
+      tmp.diversity <- Phenoflow::Diversity(tmp.basis, plot = FALSE, 
+                                            d = d, R = R.b, 
                                             progress = FALSE)
     }
   }
