@@ -18,7 +18,7 @@
 #' example FL1-H for SYBR Green stained bacterial cells measured on an Accuri C6.
 #' @param parallel Should the calculation be parallelized? Defaults to FALSE
 #' @param ncores How many cores should be used in case of parallel computation?
-#' Defaults to 2.
+#' Defaults to 1.
 #' @param cleanFCS Indicate whether outlier removal should be conducted prior 
 #'  to diversity assessment (flowAI package). Defaults to FALSE. I would 
 #'  recommend to make sure samples have > 500 cells. Will denoise based on 
@@ -65,7 +65,7 @@
 #' @export
 
 Diversity_rf <- function(x, d = 4, R = 100, R.b = 100, bw = 0.01, nbin = 128, 
-                          param, cleanFCS = FALSE, ncores,
+                          param, cleanFCS = FALSE, ncores=1,
                           parallel = FALSE, 
                           timesplit = 0.1,
                           TimeChannel = "Time") {
@@ -104,12 +104,18 @@ Diversity_rf <- function(x, d = 4, R = 100, R.b = 100, bw = 0.01, nbin = 128,
     cat(paste0("-------------------------------------------------------------------------------------------------", "\n \n"))
     
     # Extract parameters not to base denoising on
-    param_f <- BiocGenerics::unique(gsub(param, pattern = "-H|-A", replacement = ""))
+    param_f <- BiocGenerics::unique(gsub(param, 
+                                         pattern = "-H|-A|-W", 
+                                         replacement = ""))
     filter_param <- BiocGenerics::colnames(x)
-    filter_param <- BiocGenerics::unique(gsub(filter_param, pattern = "-H|-A", replacement = ""))
-    filter_param <- filter_param[!filter_param %in% param_f & filter_param!= TimeChannel]
-    filter_param <- c(filter_param, "FSC", "SSC")# Exclude all scatter information from denoising
-    add_measuredparam <- unique(do.call(rbind, strsplit(param,"-"))[,2])[1]
+    filter_param <- BiocGenerics::unique(gsub(filter_param, 
+                                              pattern = "-H|-A|-W", 
+                                              replacement = ""))
+    filter_param <- filter_param[!filter_param %in% param_f & 
+                                   filter_param!= TimeChannel]
+    filter_param <- c(filter_param, "FSC", "SSC")
+    # Exclude all scatter information from denoising
+    add_measuredparam <- base::unique(gsub("^.*-([A-Z])$","\\1",param))[1]
     
     # Denoise with flowAI
     x <- flowAI::flow_auto_qc(x, alphaFR = 0.01,
