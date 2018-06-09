@@ -22,6 +22,7 @@
 #' Defaults to FALSE.
 #' @importFrom BiocGenerics unique colnames
 #' @importFrom flowAI flow_auto_qc 
+#' @importFrom caret trainControl createDataPartition train confusionMatrix
 #' @keywords random forest, fcm
 #' @examples 
 #' 

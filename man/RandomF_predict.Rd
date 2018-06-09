@@ -5,7 +5,7 @@
 \title{Predict cell labels based on a model constructed using RandomF_FCS function.}
 \usage{
 RandomF_predict(x, new_data, cleanFCS = FALSE, param = c("FL1-H", "FL3-H",
-  "FSC-H", "SSC-H"), TimeChannel = "Time")
+  "FSC-H", "SSC-H"), timesplit = 0.1, TimeChannel = "Time")
 }
 \arguments{
 \item{x}{Random forest model outputted from the RandomF_FCS function.}
@@ -16,6 +16,8 @@ RandomF_predict(x, new_data, cleanFCS = FALSE, param = c("FL1-H", "FL3-H",
 Defaults to FALSE. I would recommend to make sure samples have > 500 cells. Will denoise based on the parameters specified in `param`.}
 
 \item{param}{Parameters required to denoise the new_data}
+
+\item{timesplit}{Fraction of timestep used in flowAI for denoising. Please consult the `flowAI::flow_auto_qc` function for more information.}
 
 \item{TimeChannel}{Name of time channel in the FCS files. This can differ between flow cytometers. Defaults to "Time". You can check this by: colnames(flowSet).}
 }
