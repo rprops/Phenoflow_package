@@ -143,10 +143,10 @@ Diversity_rf <- function(x, d = 4, R = 100, R.b = 100, bw = 0.01, nbin = 128,
                               fcs_highQ = "HighQ",
                               output = 1,
                               timeCh = TimeChannel,
-                              ChFM = paste0(param_f[!param_f %in% c("FSC",
+                              ChExcludeFM = paste0(param_f[param_f %in% c("FSC",
                                                                     "SSC")],
                                             "-", add_measuredparam),
-                              ChRemoveFS = filter_param,
+                              ChExcludeFS = filter_param,
                               second_fractionFR = timesplit
     )
     
