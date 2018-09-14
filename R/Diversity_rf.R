@@ -219,7 +219,7 @@ Diversity_rf <- function(x, d = 4, R = 100, R.b = 100, bw = 0.01, nbin = 128,
   results.m <- by(results[, c(2, 3, 5)], INDICES = factor(results$Sample_name), 
                   FUN = colMeans)
   results.m <- do.call(rbind, results.m)
-  results <- data.frame(Sample_names = factor(results$Sample_name), results.m, 
+  results <- data.frame(Sample_names = rownames(results.m), results.m, 
                         results.sd)
   # Add parameters as attributes to dataframe
   attr(results, "R") <- R
