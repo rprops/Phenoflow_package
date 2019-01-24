@@ -20,6 +20,7 @@ Apply existing GMM-fitted model to new FCS data.
 These data must contain the same parameters as those on which the model was constructed.
 }
 \examples{
+data(flowData_transformed)
 testGMM <- PhenoGMM(flowData_transformed, downsample = 1e3, nG = 128, param = c("FL1-H", "FL3-H"))
 testPred <- PhenoMaskGMM(flowData_transformed, gmm = testGMM)
 }

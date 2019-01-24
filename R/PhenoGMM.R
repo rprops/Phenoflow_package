@@ -8,6 +8,7 @@
 #' @importFrom BiocGenerics unique colnames
 #' @keywords fingerprint
 #' @examples
+#' data(flowData_transformed)
 #' testGMM <- PhenoGMM(flowData_transformed, downsample = 1e3, nG = 128, param = c("FL1-H", "FL3-H"))
 #' testPred <- PhenoMaskGMM(flowData_transformed, gmm = testGMM)
 #' @export

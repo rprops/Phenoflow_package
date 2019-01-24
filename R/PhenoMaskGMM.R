@@ -6,13 +6,9 @@
 #' @keywords fingerprint
 #' @importFrom mclust predict.Mclust
 #' @examples
-#' system.time(testx <- KytoGrid(flowData_transformed, param = c("FL1-H", "FL3-H")))
-#' system.time(test <- flowFDA::flowBasis(flowData_transformed, param=c("FL1-H", "FL3-H"),
-#'                                        nbin = 128, bw = 0.01, normalize = function(x) x))
-#' #D2.boot <- function(x, i) 1/sum((x[i]/sum(x[i]))^2)
-#' #D2_testx <- apply(testx, 1, FUN = D2.boot)
-#' #D2_test <- apply(test@basis, 1, FUN = D2.boot)
-#' #plot(D2_testx, D2_test)
+#' data(flowData_transformed)
+#' testGMM <- PhenoGMM(flowData_transformed, downsample = 1e3, nG = 128, param = c("FL1-H", "FL3-H"))
+#' testPred <- PhenoMaskGMM(flowData_transformed, gmm = testGMM)
 #' @export
 
 PhenoMaskGMM <- function(fcs_x, gmm){
