@@ -21,6 +21,7 @@ and D2 (inverse Simpson index) are respectively Hill order 1 and 2.
 Errors for D0, D1 and D2 are calculated by bootstrapping.
 }
 \examples{
+data(flowData_transformed)
 # Make model on training data
 testGMM <- PhenoGMM(flowData_transformed, downsample = 1e3, nG = 128, param = c("FL1-H", "FL3-H"))
 # Apply model to unseen/new data

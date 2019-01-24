@@ -12,6 +12,7 @@
 #' @keywords diversity, fcm, alpha, gmm, PhenoGMM
 #' @importFrom stats sd
 #' @examples 
+#' data(flowData_transformed)
 #' # Make model on training data
 #' testGMM <- PhenoGMM(flowData_transformed, downsample = 1e3, nG = 128, param = c("FL1-H", "FL3-H"))
 #' # Apply model to unseen/new data
