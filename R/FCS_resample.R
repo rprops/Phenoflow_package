@@ -8,6 +8,7 @@
 #' @param replace Do you want to resample with or without replacement? Defaults to FALSE, which is without replacement.
 #' @param rarefy Do you want each sample resampled without adjusting sample size? Default to FALSE.
 #' @param progress Should progress be reported? Defaults to yes.
+# #' @param keep Should samples with lower sample sizes than the specified `sample` be kept? Defaults to `FALSE`.
 #' @keywords resampling, fcm
 #' @examples 
 #' # Load raw data (imported using flowCore)
@@ -26,8 +27,8 @@ FCS_resample <- function(x, sample = 0, replace = FALSE, rarefy = FALSE,
   
   ## Remove all .fcs files with less observations than the specified
   ## sample
-  x <- x[flowCore::fsApply(x = x, FUN = function(x) nrow(x), use.exprs = TRUE) >= 
-           sample]
+    x <- x[flowCore::fsApply(x = x, FUN = function(x) nrow(x), use.exprs = TRUE) >= 
+                sample]
   
   if (rarefy == FALSE) {
     for (i in 1:length(x)) {

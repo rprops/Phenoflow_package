@@ -84,27 +84,27 @@ Diversity_rf <- function(x, d = 4, R = 100, R.b = 100, bw = 0.01, nbin = 128,
                           TimeChannel = "Time") {
   
   ### Normalizing ##############################################################
-  summary_x <- flowCore::fsApply(x = x, FUN=function(x) apply(x, 2, max), 
-                                 use.exprs=TRUE)
+  summary_x <- flowCore::fsApply(x = x, FUN = function(x) apply(x, 2, max), 
+                                 use.exprs = TRUE)
   max <- base::max(summary_x[, param[1]])
-  if(round(max,0) > 1){
+  if (round(max,0) > 1) { 
     cat(paste0("-------------------------------------------------------------------------------------------------", "\n"))
     cat(date(), paste0("--- Normalizing your FCS data based on maximum ", 
                        param[1]," value\n"))
-    for(i in 1:length(param)) cat(paste0("--- Maximum ", param[i],
+    for (i in 1:length(param)) cat(paste0("--- Maximum ", param[i],
                                          " before normalizing: ", 
                                          round(base::max(summary_x[, param[i]]),
                                                2),"\n"))
     cat(paste0("-------------------------------------------------------------------------------------------------", "\n"))
-    for(pm in param){
-      if(pm != TimeChannel){
+    for (pm in param) {
+      if (pm != TimeChannel) {
         myTrans <- flowCore::transformList(pm, function(x) x/max)
         x <- flowCore::transform(x, myTrans)
       }
     }
-    summary_x <- flowCore::fsApply(x = x, FUN=function(x) apply(x, 2, max), 
-                                   use.exprs=TRUE)
-    for(i in 1:length(param)) cat(paste0("--- Maximum ", param[i],
+    summary_x <- flowCore::fsApply(x = x, FUN = function(x) apply(x, 2, max), 
+                                   use.exprs = TRUE)
+    for (i in 1:length(param)) cat(paste0("--- Maximum ", param[i],
                                          " after normalizing: ", 
                                          round(base::max(summary_x[, param[i]]),
                                                2),"\n"))
@@ -113,7 +113,7 @@ Diversity_rf <- function(x, d = 4, R = 100, R.b = 100, bw = 0.01, nbin = 128,
   } else cat(paste0("--- parameters are already normalized at: ", 
                     base::max(summary_x[, param[1]]),"\n"))
   
-  if(cleanFCS == TRUE){
+  if (cleanFCS == TRUE) {
     cat(paste0("-------------------------------------------------------------------------------------------------", "\n"))
     cat(date(), paste0("--- Using the following parameters for removing errant collection events\n in samples:\n \n"))
     cat(paste0(param),"\n \n")
@@ -132,8 +132,9 @@ Diversity_rf <- function(x, d = 4, R = 100, R.b = 100, bw = 0.01, nbin = 128,
                                               pattern = "-H|-A|-W", 
                                               replacement = ""))
     filter_param <- filter_param[!filter_param %in% param_f & 
-                                   filter_param!= TimeChannel]
+                                   filter_param != TimeChannel]
     filter_param <- c(filter_param, "FSC", "SSC")
+    
     # Exclude all scatter information from denoising
     add_measuredparam <- base::unique(gsub("^.*-([A-Z])$","\\1",param))[1]
     
@@ -155,21 +156,21 @@ Diversity_rf <- function(x, d = 4, R = 100, R.b = 100, bw = 0.01, nbin = 128,
     
     # Change characters in parameter description from character back to numeric
     # Otherwise nothing that follows will work
-    for(i in 1:length(x)){
+    for (i in 1:length(x)) {
       x[[i]]@parameters@data[,3] <- as.numeric(x[[i]]@parameters@data[,3])
       x[[i]]@parameters@data[,4] <- as.numeric(x[[i]]@parameters@data[,4])
       x[[i]]@parameters@data[,5] <- as.numeric(x[[i]]@parameters@data[,5])
       
     }
     cat("\n", paste0("-----------------------------------------------------------------------------------------------------"), sep = "")
-    cat("\n", date(), paste0(" --- Done with cleaning data\n"), sep ="")
+    cat("\n", date(), paste0(" --- Done with cleaning data\n"), sep = "")
   }
   
   # Subset data
   x <- x[, param]
   
   # Calculate diversity
-  if(parallel == FALSE){
+  if (parallel == FALSE) {
     for (i in 1:R) {
       cat(date(), paste0("--- Starting resample run ", i, "\n"))
       tmp <- Phenoflow::FCS_resample(x, rarefy = TRUE, replace = TRUE, 
@@ -192,8 +193,7 @@ Diversity_rf <- function(x, d = 4, R = 100, R.b = 100, bw = 0.01, nbin = 128,
     cl <- parallel::makeCluster(ncores)
     doParallel::registerDoParallel(cl)
     cat(date(), "--- Using", ncores, "cores for calculations\n")
-    # log.socket <- make.socket(port = 4000)
-    
+
     results <- foreach::foreach(i = 1:R, .combine = rbind,
                                 .packages = c("flowCore", 
                                               "Phenoflow")) %dopar% {
@@ -208,7 +208,7 @@ Diversity_rf <- function(x, d = 4, R = 100, R.b = 100, bw = 0.01, nbin = 128,
                                             progress = FALSE)
     }
   }
-  if(parallel == TRUE){
+  if (parallel == TRUE) {
     cat(date(), "--- Closing workers\n")
     parallel::stopCluster(cl)
   }
@@ -228,7 +228,7 @@ Diversity_rf <- function(x, d = 4, R = 100, R.b = 100, bw = 0.01, nbin = 128,
   attr(results, "nbin") <- nbin
   attr(results, "d") <- d
   attr(results, "cleanFCS") <- cleanFCS
-  if(cleanFCS == TRUE) attr(results, "cleanparam") <- param
+  if (cleanFCS) attr(results, "cleanparam") <- param
   
   cat(date(), paste0("--- Alpha diversity metrics (D0,D1,D2) have been computed after ", 
                      R, " bootstraps\n"))
