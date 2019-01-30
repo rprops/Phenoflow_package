@@ -20,7 +20,11 @@ PhenoGMM <- function(fcs_x, param, downsample = 0, nG = 128){
   fcs_x <- fcs_x[, param]
   
   # Downsample if necessary
-  if(downsample != 0) fcs_x_sb <- Phenoflow::FCS_resample(fcs_x, sample = downsample, replace = TRUE)
+  if (downsample != 0)
+    fcs_x_sb <-
+      Phenoflow::FCS_resample(fcs_x, sample = downsample, replace = TRUE)
+  else
+    fcs_x_sb <- fcs_x
   
   # Merge all samples 
   fcs_m <- Phenoflow::FCS_pool(fcs_x_sb, stub = "*")
