@@ -2,7 +2,7 @@
 % Please edit documentation in R/PhenoMaskGMM.R
 \name{PhenoMaskGMM}
 \alias{PhenoMaskGMM}
-\title{Create sample fingerprints from FCM data}
+\title{Apply PhenoGMM made model to new data.}
 \usage{
 PhenoMaskGMM(fcs_x, gmm)
 }
@@ -12,7 +12,7 @@ PhenoMaskGMM(fcs_x, gmm)
 \item{gmm}{model mask used to assign cluster allocations}
 }
 \description{
-Create sample fingerprints from FCM data
+Apply PhenoGMM made model to new data.
 }
 \examples{
 data(flowData_transformed)

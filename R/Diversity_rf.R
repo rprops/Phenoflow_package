@@ -3,7 +3,7 @@
 #' This function calculates Hill diversity metrics from FCM data. This function 
 #' differs from the Diversity() function in that it resamples (with replacement) 
 #' all individual samples and averages out the diversity over all subsamples. 
-#' This function is recommended in case there there are differences in sample 
+#' This function is recommended in case there are differences in sample 
 #' size (nr. of cells). Analysis time is approximately 10s/resample run (R) on
 #' default settings for the flowData example.
 #' @param x flowSet containing the samples to analyse.

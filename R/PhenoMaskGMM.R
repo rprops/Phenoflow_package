@@ -1,4 +1,4 @@
-#' Create sample fingerprints from FCM data
+#' Apply PhenoGMM made model to new data.
 #'
 #' @param fcs_x flowSet object on which to apply the GMM mask
 #' @param gmm model mask used to assign cluster allocations

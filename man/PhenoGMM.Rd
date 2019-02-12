@@ -2,13 +2,14 @@
 % Please edit documentation in R/PhenoGMM.R
 \name{PhenoGMM}
 \alias{PhenoGMM}
-\title{Apply existing GMM-fitted model to new FCS data. 
-These data must contain the same parameters as those on which the model was constructed.}
+\title{Train GMM-fitted model to FCS data.}
 \usage{
 PhenoGMM(fcs_x, param, downsample = 0, nG = 128)
 }
 \arguments{
 \item{fcs_x}{flowSet object with input data on which the model should be built}
+
+\item{param}{parameters to be used in the mixture modeling.}
 
 \item{downsample}{Indicate to which sample size individual samples should be downsampled. 
 By default no downsampling is performed}
@@ -16,8 +17,7 @@ By default no downsampling is performed}
 \item{nG}{Number of mixtures to use. Defaults to 128.}
 }
 \description{
-Apply existing GMM-fitted model to new FCS data. 
-These data must contain the same parameters as those on which the model was constructed.
+Train GMM-fitted model to FCS data.
 }
 \examples{
 data(flowData_transformed)
