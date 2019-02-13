@@ -4,8 +4,8 @@
 \alias{RandomF_predict}
 \title{Predict cell labels based on a model constructed using RandomF_FCS function.}
 \usage{
-RandomF_predict(x, new_data, cleanFCS = FALSE, param = c("FL1-H", "FL3-H",
-  "FSC-H", "SSC-H"), timesplit = 0.1, TimeChannel = "Time")
+RandomF_predict(x, new_data, cleanFCS = FALSE, param = c("FL1-H",
+  "FL3-H", "FSC-H", "SSC-H"), timesplit = 0.1, TimeChannel = "Time")
 }
 \arguments{
 \item{x}{Random forest model outputted from the RandomF_FCS function.}

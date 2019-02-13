@@ -1,11 +1,12 @@
-#' Apply existing GMM-fitted model to new FCS data. 
-#' These data must contain the same parameters as those on which the model was constructed.
+#' Train GMM-fitted model to FCS data. 
 #'
 #' @param fcs_x flowSet object with input data on which the model should be built 
 #' @param downsample Indicate to which sample size individual samples should be downsampled. 
 #' By default no downsampling is performed
 #' @param nG Number of mixtures to use. Defaults to 128.
+#' @param param parameters to be used in the mixture modeling.
 #' @importFrom BiocGenerics unique colnames
+#' @importFrom mclust Mclust predict.Mclust
 #' @keywords fingerprint
 #' @examples
 #' data(flowData_transformed)
@@ -20,7 +21,11 @@ PhenoGMM <- function(fcs_x, param, downsample = 0, nG = 128){
   fcs_x <- fcs_x[, param]
   
   # Downsample if necessary
-  if(downsample != 0) fcs_x_sb <- Phenoflow::FCS_resample(fcs_x, sample = downsample, replace = TRUE)
+  if (downsample != 0)
+    fcs_x_sb <-
+      Phenoflow::FCS_resample(fcs_x, sample = downsample, replace = TRUE)
+  else
+    fcs_x_sb <- fcs_x
   
   # Merge all samples 
   fcs_m <- Phenoflow::FCS_pool(fcs_x_sb, stub = "*")
@@ -37,12 +42,12 @@ PhenoGMM <- function(fcs_x, param, downsample = 0, nG = 128){
   fcs_m <- flowCore::fsApply(fcs_m, FUN = function(x) scale(x), use.exprs = TRUE)
 
   # Start performing MClust for GMM estimation
-  gmm_clust <- mclust::Mclust(data = fcs_m, G = nG)
+  gmm_clust <- Mclust(data = fcs_m, G = nG)
   
   # Normalize input data and assign cluster allocations
   fcs_x_t <- flowCore::fsApply(fcs_x, FUN = function(x) {
     tmp_nm <- base::sweep(x, 2, fcs_m_colM)/c(fcs_m_sd)
-    data.frame(table(mclust::predict.Mclust(gmm_clust, tmp_nm)$classification))
+    data.frame(table(predict.Mclust(gmm_clust, tmp_nm)$classification))
     }, use.exprs = TRUE, simplify = FALSE)
   
   # Make mixture contigency table
