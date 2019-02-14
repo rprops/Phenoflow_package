@@ -20,6 +20,13 @@ FCS_pool <- function(x, stub){
     index <- grep(stub[i], flowCore::sampleNames(x))
     temp <- flowCore::flowSet(as(x[index], "flowFrame"))
     flowCore::sampleNames(temp) <- as.character(stub[i])
+    if (length(index) == 1) {
+      Original <- matrix(rep(1, dim(x[[index]])[1]))
+      colnames(Original) <- "Original"
+      temp <- fr_append_cols(x[[index]], cols = Original)
+      temp <- as(temp, "flowSet")
+      flowCore::sampleNames(temp) <- as.character(stub[i])
+    }
     if(stub[i] == stub[1]){
       concat_x <- temp
     } else {
