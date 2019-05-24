@@ -7,14 +7,14 @@ Authors@R: c(
 BugReports: https://github.com/rprops/PhenoFlow/issues
 Description: Set of functions to calculate diversity estimates of microbial
     communities from FCM data (described in: doi: 10.1111/2041-210X.12607).
-Remotes: github::lievenclement/flowFDA
+Remotes: github::FMKerckhof/flowFDA
 Suggests: 
     phyloseq,
     testthat,
     knitr,
     rmarkdown
 Depends:
-    R (>= 3.3.0), flowCore, flowClean, flowFDA, flowAI, foreach
+    R (>= 3.5.0), flowCore, flowClean, flowFDA, flowAI, foreach
 Imports:
     vegan,
     MESS,
