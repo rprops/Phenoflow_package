@@ -26,6 +26,8 @@ By default samples are downsampled to the sample size of the sample with the
 lowest number of cells.
 Defaults to sample level.}
 
+\item{classification_type}{whether to perform sample-level or single-cell level classification (defaults to sample-level)}
+
 \item{param}{Parameters to base classification on.}
 
 \item{p_train}{Percentage of the data set that should be used for training the model.}
@@ -41,6 +43,8 @@ Defaults to FALSE. I would recommend to make sure samples have > 500 cells. Will
 
 \item{plot_fig}{Should the confusion matrix and the overall performance statistics on the test data partition be visualized?
 Defaults to FALSE.}
+
+\item{method}{method used by caret::train for learning (defaults to Random forests)}
 }
 \description{
 Random Forest classifier for supervised demarcation of groups using flow cytometry data.

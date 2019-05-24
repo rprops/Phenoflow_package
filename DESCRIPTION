@@ -46,6 +46,7 @@ Imports:
     utils,
     methods,
     flowFP,
+    tidyr,
     BiocGenerics
 biocViews: CellBasedAssays, FlowCytometry, Infrastructure, Software, Clustering
 License: GPL-2

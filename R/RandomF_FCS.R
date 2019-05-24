@@ -20,6 +20,8 @@
 #' @param TimeChannel Name of time channel in the FCS files. This can differ between flow cytometers. Defaults to "Time". You can check this by: colnames(flowSet).
 #' @param plot_fig Should the confusion matrix and the overall performance statistics on the test data partition be visualized?
 #' Defaults to FALSE.
+#' @param method method used by caret::train for learning (defaults to Random forests)
+#' @param classification_type whether to perform sample-level or single-cell level classification (defaults to sample-level)
 #' @importFrom BiocGenerics unique colnames
 #' @importFrom flowAI flow_auto_qc 
 #' @importFrom caret trainControl createDataPartition train confusionMatrix
@@ -104,14 +106,14 @@ RandomF_FCS <- function(x, sample_info, target_label, downsample = 0,
     
     # Denoise with flowAI
     x <- flowAI::flow_auto_qc(x, alphaFR = 0.01,
-                              folder_results = "QC_flowAI",
+                              folder_results = "QC_flowA",
                               fcs_highQ = "HighQ",
                               output = 1,
-                              ChFM = paste0(param_f[!param_f %in% 
-                                                      c("FSC","SSC")],"-",
-                                            add_measuredparam),
-                              timeCh=TimeChannel,
-                              ChRemoveFS = filter_param,
+                              timeCh = TimeChannel,
+                              ChExcludeFM = paste0(param_f[param_f %in% c("FSC",
+                                                                          "SSC")],
+                                                   "-", add_measuredparam),
+                              ChExcludeFS = filter_param,
                               second_fractionFR = timesplit
     )
     

@@ -2,6 +2,7 @@
 #'
 #' @param text Input text
 #' @param ... additional parameters passed on to sprintf
+#' @importFrom utils write.socket
 #' @keywords resampling, fcm
 #' Log(x)
 

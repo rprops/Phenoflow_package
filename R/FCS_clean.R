@@ -44,11 +44,11 @@ FCS_clean <- function(x,
                             folder_results = "QC_flowAI",
                             fcs_highQ = "HighQ",
                             output = 1,
-                            ChFM = paste0(param_f[!param_f %in% 
+                            ChExcludeFM = paste0(param_f[!param_f %in% 
                                                     c("FSC","SSC")],"-",
                                           add_measuredparam),
                             timeCh=TimeChannel,
-                            ChRemoveFS = filter_param,
+                            ChExcludeFS = filter_param,
                             second_fractionFR = timesplit
   )
   return(x)
