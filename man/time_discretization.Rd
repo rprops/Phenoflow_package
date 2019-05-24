@@ -5,7 +5,8 @@
 \title{Time discretization function for FCM data}
 \usage{
 time_discretization(x, analysis.length, create = FALSE, start = 0,
-  time.interval, height = c(0, 200), trigger = "FL1-H", time.step = 0.1)
+  time.interval, height = c(0, 200), trigger = "FL1-H",
+  time.step = 0.1)
 }
 \arguments{
 \item{x}{flowSet of FCM data}
