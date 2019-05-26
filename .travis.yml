@@ -20,7 +20,7 @@ after_success:
   - Rscript -e 'covr::codecov()'
 
 r_github_packages:
-  - lievenclement/flowFDA
+  - FMKerckhof/flowFDA
   
 r_check_args: "--no-vignettes"
   
