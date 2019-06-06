@@ -30,6 +30,7 @@ Imports:
     MASS,
     flowViz,
     caret,
+    magrittr,
     randomForest,
     flowCore,
     breakaway,
