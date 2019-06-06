@@ -16,15 +16,13 @@ before_deploy:
   - R -e "install.packages('roxygen2', repos = 'http://cran.rstudio.com')"
   - R -e "staticdocs::build_site(examples = TRUE)"
 
-after_success:
-  - Rscript -e 'covr::codecov()'
 
 r_github_packages:
-  - lievenclement/flowFDA
+  - FMKerckhof/flowFDA
   
 r_check_args: "--no-vignettes"
   
 script: 
   - |
-    travis_wait 45 R CMD build --no-build-vignettes .
-    travis_wait 45 R CMD check --no-examples Phenoflow*tar.gz
+    travis_wait 30 R CMD build --no-build-vignettes .
+    travis_wait 20 R CMD check --no-examples --no-build-vignettes Phenoflow*tar.gz

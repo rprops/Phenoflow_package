@@ -9,6 +9,8 @@
 #' in case you want the full flowSet merged. For example: for stub = c("CYCLUS1_BEKKEN_0_4h_SYBR_START", 
 #' "CYCLUS1_BEKKEN_0_10h_SYBR_START") `FCS_pool`` will **only** merge the samples containing those patterns, and it will
 #' merge them per unique pattern.
+#' @importFrom methods as
+#' @importFrom flowCore sampleNames rbind2 flowSet fr_append_cols
 #' @keywords pool, merge, FCS, preprocess
 #' @examples 
 #' 

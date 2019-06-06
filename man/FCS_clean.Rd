@@ -4,8 +4,8 @@
 \alias{FCS_clean}
 \title{FCS_clean function for FCM data}
 \usage{
-FCS_clean(x, param = c("FL1-H", "FL3-H", "FSC-H", "SSC-H"), timesplit = 0.1,
-  TimeChannel = "Time")
+FCS_clean(x, param = c("FL1-H", "FL3-H", "FSC-H", "SSC-H"),
+  timesplit = 0.1, TimeChannel = "Time")
 }
 \arguments{
 \item{x}{flowSet containing the samples to analyse. 

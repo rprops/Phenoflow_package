@@ -40,6 +40,7 @@
 #' @importFrom flowCore fsApply
 #' @importFrom BiocGenerics unique colnames
 #' @importFrom flowAI flow_auto_qc
+#' @importFrom flowFDA flowBasis
 #' @examples
 #' # Full data processing example
 #' 

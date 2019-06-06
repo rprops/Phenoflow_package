@@ -6,6 +6,9 @@
 #' @param location absolute or relative path to where the resulting csv files 
 #' are written to. If it does not exist, it will be created (provided the user
 #' has write persmissions in that directory). Defaults to working directory.
+#' @importFrom utils write.csv
+#' @importFrom methods .hasSlot
+#' @importFrom flowCore keyword
 #' @keywords machine learning, fcm
 #' @examples
 #' 

@@ -39,6 +39,7 @@ PhenoMaskGMM <- function(fcs_x, gmm){
   fp_return <- list()
   fp_return[[1]] <- gmm_pred # model applied to input sample data
   fp_return[[2]] <- gmm[[2]] # model for future predictions
+
   
   # Add GMM parameters as attributes to data.table object
   attr(fp_return[[1]], "nG") <- attributes(gmm[[1]])$nG
