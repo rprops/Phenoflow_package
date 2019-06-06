@@ -5,6 +5,7 @@
 #' @importFrom BiocGenerics unique colnames
 #' @keywords fingerprint
 #' @importFrom mclust predict.Mclust
+#' @importFrom magrittr %>%
 #' @examples
 #' data(flowData_transformed)
 #' testGMM <- PhenoGMM(flowData_transformed, downsample = 1e3, nG = 128, param = c("FL1-H", "FL3-H"))
@@ -38,7 +39,8 @@ PhenoMaskGMM <- function(fcs_x, gmm){
   # Use model to predict cluster abundances of all data
   fp_return <- list()
   fp_return[[1]] <- gmm_pred # model applied to input sample data
-  fp_return[[2]] <- gmm # model for future predictions
+  fp_return[[2]] <- gmm[[2]] # model for future predictions
+
   
   # Add GMM parameters as attributes to data.table object
   attr(fp_return[[1]], "nG") <- attributes(gmm[[1]])$nG
