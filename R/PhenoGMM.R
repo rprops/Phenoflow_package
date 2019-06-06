@@ -7,7 +7,7 @@
 #' @param param parameters to be used in the mixture modeling.
 #' @importFrom BiocGenerics unique colnames
 #' @importFrom mclust Mclust predict.Mclust
-#' @importFrom tidyr "%>%"
+#' @importFrom magrittr %>%
 #' @keywords fingerprint
 #' @examples
 #' data(flowData_transformed)
