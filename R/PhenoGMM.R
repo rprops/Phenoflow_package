@@ -5,17 +5,19 @@
 #' By default no downsampling is performed
 #' @param nG Number of mixtures to use. Defaults to 128.
 #' @param param parameters to be used in the mixture modeling.
+#' @param fcs_scale Should data be scaled/normalized by row and column before running GMM? Defaults to FALSE.
 #' @importFrom BiocGenerics unique colnames
 #' @importFrom mclust Mclust predict.Mclust
 #' @importFrom magrittr %>%
+#' @importFrom flowCore exprs
 #' @keywords fingerprint
 #' @examples
 #' data(flowData_transformed)
-#' testGMM <- PhenoGMM(flowData_transformed, downsample = 1e3, nG = 128, param = c("FL1-H", "FL3-H"))
+#' testGMM <- PhenoGMM(flowData_transformed, downsample = 1e3, nG = 12, param = c("FL1-H", "FL3-H"))
 #' testPred <- PhenoMaskGMM(flowData_transformed, gmm = testGMM)
 #' @export
 
-PhenoGMM <- function(fcs_x, param, downsample = 0, nG = 128){
+PhenoGMM <- function(fcs_x, param, downsample = 0, nG = 128, fcs_scale = FALSE){
   # profvis({ # for profiling performance
   
   # Select parameters of interest
@@ -39,22 +41,29 @@ PhenoGMM <- function(fcs_x, param, downsample = 0, nG = 128){
   fcs_m_sd <- flowCore::fsApply(fcs_m, FUN = function(x) apply(x, 2, sd), 
     use.exprs = TRUE)
   
-  # Standardize data (center & scale)
-  fcs_m <- flowCore::fsApply(fcs_m, FUN = function(x) scale(x), use.exprs = TRUE)
-
-  # Start performing MClust for GMM estimation
-  gmm_clust <- Mclust(data = fcs_m, G = nG)
-  
-  # Normalize input data and assign cluster allocations
-  fcs_x_t <- flowCore::fsApply(fcs_x, FUN = function(x) {
-    tmp_nm <- base::sweep(x, 2, fcs_m_colM)/c(fcs_m_sd)
-    data.frame(table(predict.Mclust(gmm_clust, tmp_nm)$classification))
+  if(fcs_scale){
+    # Standardize data (center & scale)
+    fcs_m <- flowCore::fsApply(fcs_m, FUN = function(x) scale(x), use.exprs = TRUE)
+    # Start performing MClust for GMM estimation
+    gmm_clust <- Mclust(data = fcs_m, G = nG)
+    # Normalize input data and assign cluster allocations
+    fcs_x_t <- flowCore::fsApply(fcs_x, FUN = function(x) {
+      tmp_nm <- base::sweep(x, 2, fcs_m_colM)/c(fcs_m_sd)
+      data.frame(table(predict.Mclust(gmm_clust, tmp_nm)$classification))
     }, use.exprs = TRUE, simplify = FALSE)
-  
+  } else {
+    # Start performing MClust for GMM estimation
+    gmm_clust <- Mclust(data = exprs(fcs_m[[1]]), G = nG)
+    # Normalize input data and assign cluster allocations
+    fcs_x_t <- flowCore::fsApply(fcs_x, FUN = function(x) {
+      data.frame(table(predict.Mclust(gmm_clust, x)$classification))
+    }, use.exprs = TRUE, simplify = FALSE)
+  }
+
   # Make mixture contigency table
   gmm_pred <- suppressWarnings(dplyr::bind_rows(fcs_x_t, .id = "id") %>%
     tidyr::spread(Var1, Freq))
-  colnames(gmm_pred)[1] <- "sample_names"
+  colnames(gmm_pred)[1] <- "Sample_names"
   
   # Replace NAs with zeros
   gmm_pred[is.na(gmm_pred)] <- 0L
