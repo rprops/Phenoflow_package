@@ -4,7 +4,7 @@
 \alias{PhenoGMM}
 \title{Train GMM-fitted model to FCS data.}
 \usage{
-PhenoGMM(fcs_x, param, downsample = 0, nG = 128)
+PhenoGMM(fcs_x, param, downsample = 0, nG = 128, fcs_scale = FALSE)
 }
 \arguments{
 \item{fcs_x}{flowSet object with input data on which the model should be built}
@@ -15,13 +15,15 @@ PhenoGMM(fcs_x, param, downsample = 0, nG = 128)
 By default no downsampling is performed}
 
 \item{nG}{Number of mixtures to use. Defaults to 128.}
+
+\item{fcs_scale}{Should data be scaled/normalized by row and column before running GMM? Defaults to FALSE.}
 }
 \description{
 Train GMM-fitted model to FCS data.
 }
 \examples{
 data(flowData_transformed)
-testGMM <- PhenoGMM(flowData_transformed, downsample = 1e3, nG = 128, param = c("FL1-H", "FL3-H"))
+testGMM <- PhenoGMM(flowData_transformed, downsample = 1e3, nG = 12, param = c("FL1-H", "FL3-H"))
 testPred <- PhenoMaskGMM(flowData_transformed, gmm = testGMM)
 }
 \keyword{fingerprint}

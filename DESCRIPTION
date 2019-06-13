@@ -1,6 +1,6 @@
 Package: Phenoflow
 Title: Advanced analysis of microbial flow cytometry data
-Version: 1.1.1
+Version: 1.1.2
 Authors@R: c(
     person("Ruben", "Props", email = "Ruben.Props@UGent.be", role = c("aut", "cre")),
     person("Frederiek-Maarten", "Kerckhof", email = "FrederiekMaarten.Kerckhof@UGent.be", role = "ctb"))

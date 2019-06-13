@@ -4,12 +4,15 @@
 \alias{PhenoMaskGMM}
 \title{Apply PhenoGMM made model to new data.}
 \usage{
-PhenoMaskGMM(fcs_x, gmm)
+PhenoMaskGMM(fcs_x, gmm, fcs_scale = FALSE)
 }
 \arguments{
 \item{fcs_x}{flowSet object on which to apply the GMM mask}
 
 \item{gmm}{model mask used to assign cluster allocations}
+
+\item{fcs_scale}{Should data be scaled/normalized by row and column before running GMM? Defaults to FALSE. 
+Be aware that if input modelled used rescaled data as input/option this should be set to TRUE for predicting on new data.}
 }
 \description{
 Apply PhenoGMM made model to new data.
