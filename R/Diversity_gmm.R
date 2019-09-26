@@ -11,10 +11,11 @@
 #' @param verbose Progress of function is reported. Defaults to FALSE
 #' @keywords diversity, fcm, alpha, gmm, PhenoGMM
 #' @importFrom stats sd
+#' @importFrom phyloseq rarefy_even_depth otu_table
 #' @examples 
 #' data(flowData_transformed)
 #' # Make model on training data
-#' testGMM <- PhenoGMM(flowData_transformed, downsample = 1e3, nG = 128, param = c("FL1-H", "FL3-H"))
+#' testGMM <- PhenoGMM(flowData_transformed[1:2], downsample = 1e3, nG = 128, param = c("FL1-H", "FL3-H"))
 #' # Apply model to unseen/new data
 #' testPred <- PhenoMaskGMM(flowData_transformed, gmm = testGMM)
 #' # Calculate diversity for both contigency tables
@@ -27,7 +28,7 @@ Diversity_gmm <- function(gmm, R = 100, verbose = FALSE) {
   n_samples <-  nrow(gmm)
   # Matrix for storing data
   DIV <- matrix(nrow = n_samples, ncol = 6)
-  row.names(DIV) <- gmm$sample_names
+  row.names(DIV) <- gmm$Sample_names
   
   # Diversity functions
   D0.boot <- function(x) sum(x != 0)
@@ -53,8 +54,8 @@ Diversity_gmm <- function(gmm, R = 100, verbose = FALSE) {
         )
       )
     for (j in 1:R) {
-      temp <- phyloseq::rarefy_even_depth(
-          phyloseq::otu_table(temp.gmm[,-1], taxa_are_rows = FALSE),
+      temp <- rarefy_even_depth(
+          otu_table(temp.gmm[,-1], taxa_are_rows = FALSE),
           verbose = FALSE,
           replace = TRUE
         )
@@ -76,7 +77,7 @@ Diversity_gmm <- function(gmm, R = 100, verbose = FALSE) {
       }
     }
   }
-  DIV <- data.frame(sample_names = rownames(DIV), DIV)
+  DIV <- data.frame(Sample_names = row.names(DIV), DIV)
   colnames(DIV) = c("Sample_names", "D0", "sd.D0", "D1", "sd.D1", "D2", "sd.D2")
   cat(date(), "\tDone with all", n_samples, "samples\n")
   return(DIV)
