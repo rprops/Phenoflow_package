@@ -26,6 +26,7 @@ Imports:
     data.table,
     gridExtra,
     multcomp,
+	phyloseq,
     mclust,
     MASS,
     flowViz,
