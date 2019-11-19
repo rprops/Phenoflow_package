@@ -5,6 +5,7 @@
 #' @param sample_info Sample information necessary for the classification, has to 
 #' contain a column named "name"
 #' which matches the samplenames of the FCS files stored in the flowSet.
+#' @param sample_col Column name of the sample names in sample_info.
 #' @param target_label column name of the sample_info dataframe that should be 
 #' predicted based on the flow cytometry data.
 #' @param downsample Indicate to which sample size should be downsampled. 
@@ -36,12 +37,13 @@
 #' # Format necessary metadata
 #' metadata <- data.frame(names = flowCore::sampleNames(flowData), 
 #' do.call(rbind, lapply(strsplit(flowCore::sampleNames(flowData),"_"), rbind)))
-#' colnames(metadata) <- c("name", "Cycle_nr", "Location", "day", 
+#' colnames(metadata) <- c("Sample_names", "Cycle_nr", "Location", "day", 
 #' "timepoint", "Staining", "Reactor_phase", "replicate")
 #' 
 #' # Run Random Forest classifier to predict the Reactor phase based on the
 #' # single-cell FCM data
-#' model_rf <- RandomF_FCS(flowData, sample_info = metadata, target_label = "Reactor_phase",
+#' model_rf <- RandomF_FCS(flowData, sample_info = metadata, sample_col = "Sample_names", 
+#' target_label = "Reactor_phase",
 #' downsample = 10)
 #' 
 #' # Make a model prediction on new data and report contigency table of predictions
@@ -57,8 +59,15 @@
 #'                        labels = flowCore::sampleNames(flowData_ax))
 #' 
 #' # Run Random forest model on 100 cells of each strain
-#' model_rf_syn <- RandomF_FCS(flowData_ax, sample_info = metadata_syn, target_label = "labels",
-#'                         downsample = 100, plot_fig = TRUE)
+#' model_rf_syn <-
+#'   RandomF_FCS(
+#'     flowData_ax,
+#'     sample_info = metadata_syn,
+#'     sample_col = "name",
+#'     target_label = "labels",
+#'     downsample = 100,
+#'     plot_fig = TRUE
+#'   )
 #'                         
 #' # Make predictions on each of the samples or on new data of the mixed communities
 #' model_pred_syn <- RandomF_predict(x = model_rf_syn[[1]], new_data =  flowData_ax, cleanFCS = FALSE)
@@ -66,15 +75,21 @@
 
 #' @export
 
-RandomF_FCS <- function(x, sample_info, target_label, downsample = 0, 
-                       classification_type = "sample",
-                       param = c("FL1-H", "FL3-H", "FSC-H", "SSC-H"),
-                       p_train = 0.75, seed = 777,
-                       cleanFCS = FALSE,
-                       timesplit = 0.1,
-                       TimeChannel = "Time",
-                       plot_fig = FALSE,
-                       method = "rf") {
+RandomF_FCS <- function(x,
+  sample_info,
+  sample_col,
+  target_label,
+  downsample = 0,
+  classification_type = "sample",
+  param = c("FL1-H", "FL3-H", "FSC-H", "SSC-H"),
+  p_train = 0.75,
+  seed = 777,
+  cleanFCS = FALSE,
+  timesplit = 0.1,
+  TimeChannel = "Time",
+  plot_fig = FALSE,
+  method = "rf") {
+  
   # Set seed
   set.seed(seed)
   
@@ -135,7 +150,7 @@ RandomF_FCS <- function(x, sample_info, target_label, downsample = 0,
   }
   # Step 0: Format metadata
   Biobase::pData(x) <- base::cbind( Biobase::pData(x), 
-                    sample_info[base::order(base::match(as.character(sample_info[, "name"]),
+                    sample_info[base::order(base::match(as.character(sample_info[, sample_col]),
                                             as.character(Biobase::pData(x)[, "name"]))), 
                                 target_label])
   base::colnames(Biobase::pData(x))[2] <- target_label

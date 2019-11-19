@@ -54,6 +54,6 @@ biocViews: CellBasedAssays, FlowCytometry, Infrastructure, Software, Clustering
 License: GPL-2
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 6.1.1
+RoxygenNote: 7.0.0
 Date: 2018
 VignetteBuilder: knitr

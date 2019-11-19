@@ -4,8 +4,7 @@
 \alias{FCS_resample}
 \title{Resampling function for flowSet objects}
 \usage{
-FCS_resample(x, sample = 0, replace = FALSE, rarefy = FALSE,
-  progress = TRUE)
+FCS_resample(x, sample = 0, replace = FALSE, rarefy = FALSE, progress = TRUE)
 }
 \arguments{
 \item{x}{flowSet object.}
