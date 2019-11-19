@@ -4,9 +4,20 @@
 \alias{Diversity_rf}
 \title{Diversity_rf function for FCM data}
 \usage{
-Diversity_rf(x, d = 4, R = 100, R.b = 100, bw = 0.01, nbin = 128,
-  param, cleanFCS = FALSE, ncores = 1, parallel = FALSE,
-  timesplit = 0.1, TimeChannel = "Time")
+Diversity_rf(
+  x,
+  d = 4,
+  R = 100,
+  R.b = 100,
+  bw = 0.01,
+  nbin = 128,
+  param,
+  cleanFCS = FALSE,
+  ncores = 1,
+  parallel = FALSE,
+  timesplit = 0.1,
+  TimeChannel = "Time"
+)
 }
 \arguments{
 \item{x}{flowSet containing the samples to analyse.}
