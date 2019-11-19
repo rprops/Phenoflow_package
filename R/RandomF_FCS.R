@@ -5,7 +5,7 @@
 #' @param sample_info Sample information necessary for the classification, has to 
 #' contain a column named "name"
 #' which matches the samplenames of the FCS files stored in the flowSet.
-#' @param sample_col Column name of the sample names in sample_info.
+#' @param sample_col Column name of the sample names in sample_info. Defaults to "name".
 #' @param target_label column name of the sample_info dataframe that should be 
 #' predicted based on the flow cytometry data.
 #' @param downsample Indicate to which sample size should be downsampled. 
@@ -77,7 +77,7 @@
 
 RandomF_FCS <- function(x,
   sample_info,
-  sample_col,
+  sample_col = "name",
   target_label,
   downsample = 0,
   classification_type = "sample",
