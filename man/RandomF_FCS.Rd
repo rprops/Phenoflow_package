@@ -7,7 +7,7 @@
 RandomF_FCS(
   x,
   sample_info,
-  sample_col,
+  sample_col = "name",
   target_label,
   downsample = 0,
   classification_type = "sample",
@@ -29,7 +29,7 @@ included in the phenoData.}
 contain a column named "name"
 which matches the samplenames of the FCS files stored in the flowSet.}
 
-\item{sample_col}{Column name of the sample names in sample_info.}
+\item{sample_col}{Column name of the sample names in sample_info. Defaults to "name".}
 
 \item{target_label}{column name of the sample_info dataframe that should be 
 predicted based on the flow cytometry data.}
@@ -77,7 +77,7 @@ colnames(metadata) <- c("Sample_names", "Cycle_nr", "Location", "day",
 
 # Run Random Forest classifier to predict the Reactor phase based on the
 # single-cell FCM data
-model_rf <- RandomF_FCS(flowData, sample_info = metadata, sample_col = "Sample_names", 
+model_rf <- RandomF_FCS(flowData, sample_info = metadata[1:10, ], sample_col = "Sample_names", 
 target_label = "Reactor_phase",
 downsample = 10)
 

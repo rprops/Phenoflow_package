@@ -42,7 +42,7 @@
 #' 
 #' # Run Random Forest classifier to predict the Reactor phase based on the
 #' # single-cell FCM data
-#' model_rf <- RandomF_FCS(flowData, sample_info = metadata, sample_col = "Sample_names", 
+#' model_rf <- RandomF_FCS(flowData, sample_info = metadata[1:10, ], sample_col = "Sample_names", 
 #' target_label = "Reactor_phase",
 #' downsample = 10)
 #' 
@@ -102,6 +102,9 @@ RandomF_FCS <- function(x,
     cat("\n", paste0("Please cite:", "\n"))
     cat("\n", paste0("Monaco et al., flowAI: automatic and interactive anomaly discerning tools for flow cytometry data,\n Bioinformatics, Volume 32, Issue 16, 15 August 2016, Pages 2473-2480, \n https://doi.org/10.1093/bioinformatics/btw191", "\n"))
     cat(paste0("-------------------------------------------------------------------------------------------------", "\n \n"))
+
+    # Subset flowset to only samples in sample data
+    x <- x[sample_info[, sample_col]]
     
     # Extract sample names
     sam_names <- flowCore::sampleNames(x) 
@@ -121,7 +124,7 @@ RandomF_FCS <- function(x,
     
     # Denoise with flowAI
     x <- flowAI::flow_auto_qc(x, alphaFR = 0.01,
-                              folder_results = "QC_flowA",
+                              folder_results = "QC_flowAI",
                               fcs_highQ = "HighQ",
                               output = 1,
                               timeCh = TimeChannel,
@@ -148,8 +151,12 @@ RandomF_FCS <- function(x,
       
     }
   }
+  
+  # Subset flowset to only samples in sample data
+  x <- x[as.character(sample_info[, sample_col])]
+  
   # Step 0: Format metadata
-  Biobase::pData(x) <- base::cbind( Biobase::pData(x), 
+  Biobase::pData(x) <- base::cbind(Biobase::pData(x), 
                     sample_info[base::order(base::match(as.character(sample_info[, sample_col]),
                                             as.character(Biobase::pData(x)[, "name"]))), 
                                 target_label])
