@@ -17,7 +17,7 @@ Props R, Monsieurs P, Mysara M, Clement L, Boon N (2016). **Measuring the biodiv
 Install the package:
 ```R
 library("devtools")
-install_github("rprops/Phenoflow_package")
+install_github("CMET-UGent/Phenoflow_package")
 ```
 *******************
 
