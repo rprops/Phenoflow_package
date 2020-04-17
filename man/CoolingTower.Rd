@@ -4,7 +4,8 @@
 \name{CoolingTower}
 \alias{CoolingTower}
 \title{Flow cytometric fingerprint of cooling water microbial community}
-\format{fbasis object
+\format{
+fbasis object
 \describe{
   \item{"@basis"}{Actual fingerprint - concatenated kernel density estimations}
   \item{"@param"}{Parameters used to generate the fingerprint}
@@ -12,7 +13,8 @@
   estimations}
   \item{"@nbin}{Number of bins used in kernel density estimation}
   \item{"@bw"}{Bandwidth used in kernel density estimation}
-}}
+}
+}
 \source{
 \url{http://dx.doi.org/10.5061/dryad.m1c04}
 }

@@ -4,7 +4,9 @@
 \name{flowData_ax}
 \alias{flowData_ax}
 \title{Flow cytometry test data of 2 axenic bacterial strains}
-\format{A flowSet with 2 experiments}
+\format{
+A flowSet with 2 experiments
+}
 \source{
 \url{http://flowrepository.org/id/FR-FCM-ZZSH}
 }

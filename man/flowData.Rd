@@ -4,7 +4,9 @@
 \name{flowData}
 \alias{flowData}
 \title{Flow cytometry test data of a cooling water microbial community}
-\format{A flowSet with 41 experiments}
+\format{
+A flowSet with 41 experiments
+}
 \source{
 \url{http://dx.doi.org/10.5061/dryad.m1c04}
 }
