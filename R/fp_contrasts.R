@@ -47,7 +47,7 @@ fp_contrasts <- function(x, comp1, comp2, param = c("FL1-H", "FL3-H"),
                          d = 3, thresh = 0.1) {
   nbin <- x@nbin
   Y <- c()
-  for (i in 1:nbin) Y <- c(Y, rep(i, 128))
+  for (i in 1:nbin) Y <- c(Y, rep(i, nbin))
   
   ### Calculate max. density over total data
   max.total <- max(x@basis)
