@@ -7,7 +7,7 @@ Authors@R: c(
 BugReports: https://github.com/rprops/PhenoFlow/issues
 Description: Set of functions to calculate diversity estimates of microbial
     communities from FCM data (described in: doi: 10.1111/2041-210X.12607).
-Remotes: github::FMKerckhof/flowFDA
+Remotes: github::FMKerckhof/flowFDA, github::adw96/breakaway
 Suggests: 
     phyloseq,
     testthat,
@@ -34,7 +34,6 @@ Imports:
     magrittr,
     randomForest,
     flowCore,
-    breakaway,
     lattice,
     devtools,
     scales,
