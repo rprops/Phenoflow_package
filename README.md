@@ -1,7 +1,8 @@
 [![Build Status](https://travis-ci.org/rprops/Phenoflow_package.svg?branch=master)](https://travis-ci.org/rprops/Phenoflow_package)
 # Phenoflow
 *******************
-- **Authors**: Ruben Props [Ruben.Props@UGent.be], Frederiek-Maarten Kerckhof [FrederiekMaarten.Kerckhof@UGent.be]
+- **Author**: Ruben Props [Ruben.Props@UGent.be]
+- **Contributor**: Frederiek-Maarten Kerckhof [FrederiekMaarten.Kerckhof@UGent.be]
 
 The goal of this package is to provide functions for advanced analysis of microbial flow cytometry data. One of the applications is the derivation of phenotypic diversity estimates, such as depicted below (data available at <a href="http://datadryad.org/resource/doi:10.5061/dryad.m1c04"> doi:10.5061/dryad.m1c04</a>), which can be compared with 16S rRNA gene amplicon data sets. 
 
@@ -16,7 +17,7 @@ Props R, Monsieurs P, Mysara M, Clement L, Boon N (2016). **Measuring the biodiv
 Install the package:
 ```R
 library("devtools")
-install_github("rprops/Phenoflow_package")
+install_github("CMET-UGent/Phenoflow_package")
 ```
 *******************
 
