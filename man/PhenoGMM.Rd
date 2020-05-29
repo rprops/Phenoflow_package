@@ -4,7 +4,16 @@
 \alias{PhenoGMM}
 \title{Train GMM-fitted model to FCS data.}
 \usage{
-PhenoGMM(fcs_x, param, downsample = 0, nG = 128, fcs_scale = FALSE)
+PhenoGMM(
+  fcs_x,
+  param,
+  downsample = 0,
+  nG = 128,
+  auto_nG = FALSE,
+  nG_interval = 4,
+  fcs_scale = FALSE,
+  diagnostic_plot = FALSE
+)
 }
 \arguments{
 \item{fcs_x}{flowSet object with input data on which the model should be built}
@@ -16,14 +25,27 @@ By default no downsampling is performed}
 
 \item{nG}{Number of mixtures to use. Defaults to 128.}
 
+\item{auto_nG}{TRUE/FALSE. Option to choose best number of mixtures from 1:nG based on BIC. 
+Defaults to FALSE which forces nG clusters.}
+
+\item{nG_interval}{if auto_nG = TRUE, specify the intervals from nG_interval:nG 
+to calculate BIC for. Defaults to 4.}
+
 \item{fcs_scale}{Should data be scaled/normalized by row and column before running GMM? Defaults to FALSE.}
+
+\item{diagnostic_plot}{Specify whether a diagnostic plot should be made showing the cluster allocation
+of each cell in the specified parameter space.}
 }
 \description{
 Train GMM-fitted model to FCS data.
 }
 \examples{
 data(flowData_transformed)
-testGMM <- PhenoGMM(flowData_transformed, downsample = 1e3, nG = 12, param = c("FL1-H", "FL3-H"))
+testGMM <- PhenoGMM(flowData_transformed, downsample = 1e3, 
+nG = 30,
+auto_nG = TRUE,
+nG_interval = 10,
+param = c("FL1-H", "FL3-H"))
 testPred <- PhenoMaskGMM(flowData_transformed, gmm = testGMM)
 }
 \keyword{fingerprint}
