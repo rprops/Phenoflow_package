@@ -238,7 +238,7 @@ RandomF_FCS <- function(x,
   cat(paste0("-----------------------------------------------------------------------------------------------------\n"))
   performance_metrics <- data.frame(metric = 1, 
                                     n_cells = c(table(test_data$label)), 
-                                    label = levels(test_data$label))
+                                    label = levels(as.factor(test_data$label)))
   for(n_label in 1:length(unique(test_data$label))){
     tmp <- test_data[test_data$label == unique(test_data$label)[n_label], ]
     tmp_pred <- stats::predict(RF_train, newdata = tmp)
@@ -280,7 +280,7 @@ RandomF_FCS <- function(x,
   # Make list containing model, confusion matrix, summary statistics and descision boundary
   results_list <- list()
   results_list[[1]] <- RF_train
-  results_list[[2]] <- caret::confusionMatrix(data = RF_pred, test_data$label)
+  results_list[[2]] <- caret::confusionMatrix(data = RF_pred, as.factor(test_data$label))
   # results_list[[3]] <- RF_pred_desc
 
   # Return diagnostic plots (confusion matrix + descision boundary)
