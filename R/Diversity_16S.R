@@ -95,7 +95,7 @@ Diversity_16S <- function(x, R = 999, brea = TRUE, thresh = 200, parallel = FALS
         }
       }
       if(phyloseq::sample_sums(temp.phy) >= thresh){
-        rich.chao <- breakaway::chao1(temp, print = FALSE, answers = TRUE)
+        rich.chao <- breakaway::chao1(temp, output = FALSE, answers = TRUE)
         DIV[i, 5] <- rich.chao$est
         DIV[i, 6] <- rich.chao$seest
       } else {
@@ -145,7 +145,7 @@ Diversity_16S <- function(x, R = 999, brea = TRUE, thresh = 200, parallel = FALS
         }
       }
       if(phyloseq::sample_sums(temp.phy) >= thresh){
-        rich.chao <- breakaway::chao1(temp, print = FALSE, answers = TRUE)
+        rich.chao <- breakaway::chao1(temp, output = FALSE, answers = TRUE)
         DIV[i, 5] <- rich.chao$est
         DIV[i, 6] <- rich.chao$seest
       } else {
